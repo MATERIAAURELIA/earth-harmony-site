@@ -329,7 +329,7 @@ img[data-photo^="svc-slot"]{filter:sepia(.20) hue-rotate(-8deg) saturate(1.16) b
     #wisdom-deck .wk-face{display:block;width:100%;border-radius:12px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 1px rgba(210,164,78,.25)}
     #wisdom-deck .wk-front{position:absolute;inset:0;transform:rotateY(180deg)}
     #wisdom-deck .wk-hint{text-align:center;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-top:16px;opacity:.85;transition:opacity .6s}
-    @media (max-width:760px){#wisdom-deck .wk-flex{flex-direction:column;text-align:center}#wisdom-deck .wk-quote{border-left:none!important;padding-left:0!important;border-top:1px solid rgba(210,164,78,.3);padding-top:26px;text-align:center!important}}
+    @media (max-width:760px){#wisdom-deck .wk-flex{flex-direction:column;align-items:center;text-align:center}#wisdom-deck .wk-flex>div{margin:0 auto;width:100%}#wisdom-deck .wk-flip{width:min(68vw,300px);margin:0 auto}#wisdom-deck .wk-quote{max-width:none!important;border-left:none!important;padding-left:0!important;border-top:1px solid rgba(210,164,78,.3);padding-top:26px;text-align:center!important}}
   </style>
   <section id="wisdom-deck" style="position: relative; padding: clamp(70px, 9vw, 120px) clamp(20px, 5vw, 64px); background: var(--bg-2);">
     <div data-reveal="" style="max-width: 980px; margin: 0 auto; opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(0.2, 0.7, 0.2, 1), transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);">
@@ -340,8 +340,8 @@ img[data-photo^="svc-slot"]{filter:sepia(.20) hue-rotate(-8deg) saturate(1.16) b
         <div style="flex:0 0 auto;">
           <div class="wk-flip" onclick="this.classList.toggle('flipped');this.nextElementSibling.style.opacity=this.classList.contains('flipped')?'0':'.85'" role="button" aria-label="Reveal this month's card" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
             <div class="wk-inner">
-              <img class="wk-face wk-back" src="images/uploads/card-wisdom-back.jpg" alt="Wisdom Keeper card — face down">
-              <img class="wk-face wk-front" src="images/uploads/card-2026-08-reverence-v3.jpg" alt="Wisdom Keeper Card 01 — Reverence">
+              <img class="wk-face wk-back" src="images/uploads/card-wisdom-back-v2.jpg" alt="Wisdom Keeper card — face down">
+              <img class="wk-face wk-front" src="images/uploads/card-2026-08-reverence-v4.jpg" alt="Wisdom Keeper Card 01 — Reverence">
             </div>
           </div>
           <div class="wk-hint">tap to reveal August&rsquo;s card</div>
