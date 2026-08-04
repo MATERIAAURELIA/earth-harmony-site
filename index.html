@@ -321,29 +321,6 @@ img[data-photo^="svc-slot"]{filter:sepia(.20) hue-rotate(-8deg) saturate(1.16) b
 
   
 
-<script id="wk-chime">
-function wkChime(){try{
-  window.__wkAC=window.__wkAC||new (window.AudioContext||window.webkitAudioContext)();
-  const ac=window.__wkAC; if(ac.state==='suspended')ac.resume();
-  const t0=ac.currentTime, out=ac.createGain(); out.gain.value=.55; out.connect(ac.destination);
-  const lp=ac.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=4200; lp.connect(out);
-  [523.25,659.25,783.99,1046.5,1318.5].forEach((f,i)=>{
-    const t=t0+i*.07;
-    [0,3].forEach(det=>{
-      const o=ac.createOscillator(), g=ac.createGain();
-      o.type='sine'; o.frequency.value=f; o.detune.value=det;
-      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.09,t+.02);
-      g.gain.exponentialRampToValueAtTime(.0001,t+1.6);
-      o.connect(g); g.connect(lp); o.start(t); o.stop(t+1.7);
-    });
-  });
-  const sh=ac.createOscillator(), shg=ac.createGain();
-  sh.type='sine'; sh.frequency.setValueAtTime(2093,t0+.28);
-  shg.gain.setValueAtTime(0,t0+.28); shg.gain.linearRampToValueAtTime(.04,t0+.34);
-  shg.gain.exponentialRampToValueAtTime(.0001,t0+2.2);
-  sh.connect(shg); shg.connect(lp); sh.start(t0+.28); sh.stop(t0+2.3);
-}catch(e){}}
-</script>
   <style id="wisdom-card-month">
     #wisdom-deck .wk-flip{perspective:1400px;cursor:pointer;width:clamp(210px,24vw,270px);flex:0 0 auto;animation:cardbreathe 7s ease-in-out infinite}
     @keyframes cardbreathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
@@ -361,10 +338,10 @@ function wkChime(){try{
       <p style="text-align:center; color: var(--ink-dim); font-size: 15.5px; margin: 0 0 46px;">At the end of each session, draw one of the twelve &mdash; collect them all.</p>
       <div class="wk-flex" style="display:flex; align-items:center; justify-content:center; gap: clamp(30px,5vw,64px);">
         <div style="flex:0 0 auto;">
-          <div class="wk-flip" onclick="this.classList.toggle('flipped');if(this.classList.contains('flipped'))wkChime();this.nextElementSibling.style.opacity=this.classList.contains('flipped')?'0':'.85'" role="button" aria-label="Reveal this month's card" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
+          <div class="wk-flip" onclick="this.classList.toggle('flipped');this.nextElementSibling.style.opacity=this.classList.contains('flipped')?'0':'.85'" role="button" aria-label="Reveal this month's card" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
             <div class="wk-inner">
               <img class="wk-face wk-back" src="images/uploads/card-wisdom-back.jpg" alt="Wisdom Keeper card — face down">
-              <img class="wk-face wk-front" src="images/uploads/card-2026-08-reverence-v2.jpg" alt="Wisdom Keeper Card 01 — Reverence">
+              <img class="wk-face wk-front" src="images/uploads/card-2026-08-reverence-v3.jpg" alt="Wisdom Keeper Card 01 — Reverence">
             </div>
           </div>
           <div class="wk-hint">tap to reveal August&rsquo;s card</div>
