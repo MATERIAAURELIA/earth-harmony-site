@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Mix Your Own Sound Bath — Earth Harmony</title>
+<meta name="description" content="Five of Marcus's therapeutic instruments, tuned to F. Slide, breathe, listen — mix your own sound bath.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1522;--bg2:#132033;--panel:#152238;--ink:#f3ebdd;--ink-dim:#c6c2b2;--faint:#8e94a1;--accent:#d2a44e;--accent2:#b8863b;--line:rgba(210,164,78,.22)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(120% 90% at 50% 0%,#132033 0%,#0e1522 55%,#0a0f1a 100%);color:var(--ink);font-family:Marcellus,Georgia,serif;min-height:100svh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden}
+.eyebrow{font-family:Arial,Helvetica,sans-serif;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent);margin:clamp(28px,6vh,64px) 0 14px;text-align:center}
+h1{font-weight:400;font-size:clamp(27px,6vw,46px);line-height:1.1;text-align:center;padding:0 20px}
+.sub{color:var(--ink-dim);font-size:clamp(13.5px,2.8vw,16px);margin:12px 20px 0;text-align:center;font-family:Georgia,serif;font-style:italic}
+/* master button */
+#master{margin:clamp(22px,4vh,40px) 0 clamp(10px,2vh,20px);display:inline-flex;align-items:center;gap:12px;padding:15px 34px;border-radius:999px;background:var(--accent);color:#0e1522;border:none;font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:transform .3s,box-shadow .3s;box-shadow:0 12px 34px -12px rgba(210,164,78,.55)}
+#master:active{transform:scale(.97)}
+#master.playing{background:var(--bg2);color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+#status{font-family:Arial,Helvetica,sans-serif;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);height:16px;margin-bottom:clamp(8px,2vh,18px)}
+/* mixer */
+#mixer{display:flex;gap:clamp(10px,3vw,30px);align-items:flex-end;justify-content:center;padding:10px 14px clamp(26px,5vh,50px)}
+.ch{display:flex;flex-direction:column;align-items:center;gap:12px;user-select:none;-webkit-user-select:none}
+.glyph{font-size:clamp(17px,4.4vw,24px);line-height:1;filter:grayscale(.15)}
+.track{position:relative;width:clamp(44px,11vw,58px);height:clamp(200px,38svh,300px);border-radius:999px;background:linear-gradient(180deg,rgba(243,235,221,.05),rgba(0,0,0,.35));box-shadow:inset 0 2px 10px rgba(0,0,0,.6),0 1px 0 rgba(243,235,221,.06);cursor:pointer;touch-action:none}
+.fill{position:absolute;left:4px;right:4px;bottom:4px;border-radius:999px;background:linear-gradient(180deg,var(--accent) 0%,var(--accent2) 100%);opacity:.9;transition:height .06s linear;min-height:8px;box-shadow:0 0 18px -2px rgba(210,164,78,.5)}
+.playing .fill{animation:glowpulse 5s ease-in-out infinite}
+@keyframes glowpulse{0%,100%{opacity:.85}50%{opacity:1}}
+.thumb{position:absolute;left:50%;transform:translate(-50%,50%);width:clamp(30px,8vw,38px);height:clamp(30px,8vw,38px);border-radius:50%;background:radial-gradient(circle at 35% 30%,#f2d492,#d2a44e 60%,#8a6a28);box-shadow:0 4px 14px rgba(0,0,0,.6),inset 0 1px 2px rgba(255,255,255,.5);pointer-events:none}
+.lbl{font-family:Arial,Helvetica,sans-serif;font-size:clamp(9px,2.2vw,11px);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim);text-align:center}
+.pct{font-family:Arial,Helvetica,sans-serif;font-size:9.5px;color:var(--faint);height:12px}
+/* footer */
+footer{margin-top:auto;padding:22px 20px calc(26px + env(safe-area-inset-bottom));text-align:center;border-top:1px solid rgba(243,235,221,.07);width:100%;background:rgba(10,15,26,.5)}
+footer .love{font-family:Georgia,serif;font-style:italic;color:var(--ink-dim);font-size:13.5px;margin-bottom:14px}
+footer a.pill{display:inline-block;padding:12px 24px;border-radius:999px;border:1.5px solid var(--accent);color:var(--accent);text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+footer .home{display:block;margin-top:14px;color:var(--faint);font-size:11.5px;text-decoration:none;font-family:Arial,Helvetica,sans-serif;letter-spacing:.08em}
+#loading{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(14,21,34,.7);backdrop-filter:blur(3px);z-index:50;font-family:Arial,sans-serif;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="eyebrow">◦ &nbsp;Earth Harmony &middot; Sound Playground</div>
+<h1>Mix Your Own Sound Bath</h1>
+<p class="sub">Five instruments from Marcus's studio, tuned to F. Slide, breathe, listen.</p>
+
+<button id="master">▶ &nbsp;Begin</button>
+<div id="status"></div>
+
+<div id="mixer">
+  <!-- channels injected -->
+</div>
+
+<div id="loading">tuning the room…</div>
+
+<footer>
+  <div class="love">If this settles something in you, imagine the real room — gongs you can feel in your chest.</div>
+  <a class="pill" href="https://events.earthharmonysoundwellness.com">Experience it live</a>
+  <a class="home" href="https://www.earthharmonysoundwellness.com">← earthharmonysoundwellness.com</a>
+</footer>
+
+<script>
+const LAYERS = [
+  {id:'drone',  file:'audio/mixer/drone.mp3',   name:'Crystal Drone', glyph:'◉', vol:.72},
+  {id:'bowls',  file:'audio/mixer/bowls.mp3',   name:'Tibetan Bowls', glyph:'⊙', vol:.55},
+  {id:'gong',   file:'audio/mixer/gong.mp3',    name:'Gong',          glyph:'◎', vol:.34},
+  {id:'handpan',file:'audio/mixer/handpan.mp3', name:'Handpan',       glyph:'✦', vol:.6},
+  {id:'stream', file:'audio/mixer/stream.mp3',  name:'Stream',        glyph:'≈', vol:.4},
+];
+const mixer = document.getElementById('mixer');
+const masterBtn = document.getElementById('master');
+const statusEl = document.getElementById('status');
+const loadingEl = document.getElementById('loading');
+let ac=null, playing=false, loaded=false;
+
+LAYERS.forEach(L=>{
+  const ch=document.createElement('div'); ch.className='ch'; ch.id='ch-'+L.id;
+  ch.innerHTML = `<div class="glyph">${L.glyph}</div>
+    <div class="track"><div class="fill"></div><div class="thumb"></div></div>
+    <div class="lbl">${L.name}</div><div class="pct"></div>`;
+  mixer.appendChild(ch);
+  L.el=ch; L.fill=ch.querySelector('.fill'); L.thumb=ch.querySelector('.thumb');
+  L.pctEl=ch.querySelector('.pct'); L.trackEl=ch.querySelector('.track');
+  setVol(L, L.vol, true);
+  const move=e=>{
+    const r=L.trackEl.getBoundingClientRect();
+    const y=(e.touches?e.touches[0].clientY:e.clientY);
+    setVol(L, Math.min(1,Math.max(0,1-(y-r.top)/r.height)));
+  };
+  L.trackEl.addEventListener('pointerdown',e=>{L.trackEl.setPointerCapture(e.pointerId);move(e);
+    const mv=ev=>move(ev), up=()=>{L.trackEl.removeEventListener('pointermove',mv);L.trackEl.removeEventListener('pointerup',up)};
+    L.trackEl.addEventListener('pointermove',mv); L.trackEl.addEventListener('pointerup',up);});
+});
+
+function setVol(L,v,silent){
+  L.vol=v;
+  const h=Math.max(0.03,v)*100;
+  L.fill.style.height=h+'%';
+  L.thumb.style.bottom=`calc(${h}% - 2px)`;
+  L.pctEl.textContent=Math.round(v*100);
+  if(L.gain) L.gain.gain.setTargetAtTime(v*v, ac.currentTime, .05); // perceptual curve
+}
+
+async function loadAll(){
+  loadingEl.style.display='flex';
+  ac = new (window.AudioContext||window.webkitAudioContext)();
+  await Promise.all(LAYERS.map(async L=>{
+    const buf = await fetch(L.file).then(r=>r.arrayBuffer());
+    L.buffer = await new Promise((res,rej)=>ac.decodeAudioData(buf,res,rej));
+    L.gain = ac.createGain(); L.gain.gain.value=L.vol*L.vol; L.gain.connect(ac.destination);
+  }));
+  loadingEl.style.display='none'; loaded=true;
+}
+
+function startAll(){
+  LAYERS.forEach(L=>{
+    L.src = ac.createBufferSource();
+    L.src.buffer=L.buffer; L.src.loop=true; L.src.connect(L.gain); L.src.start();
+    L.el.classList.add('playing');
+  });
+}
+function stopAll(){
+  LAYERS.forEach(L=>{ try{L.src&&L.src.stop()}catch(e){}; L.el.classList.remove('playing'); });
+}
+
+masterBtn.addEventListener('click', async ()=>{
+  if(!loaded){ try{ await loadAll(); }catch(e){ loadingEl.style.display='none'; statusEl.textContent='audio failed to load — try again'; return; } }
+  if(ac.state==='suspended') await ac.resume();
+  playing=!playing;
+  if(playing){ startAll(); masterBtn.classList.add('playing'); masterBtn.innerHTML='❚❚ &nbsp;Rest'; statusEl.textContent='playing — all in the key of F'; }
+  else { stopAll(); masterBtn.classList.remove('playing'); masterBtn.innerHTML='▶ &nbsp;Begin'; statusEl.textContent=''; }
+});
+</script>
+</body>
+</html>
