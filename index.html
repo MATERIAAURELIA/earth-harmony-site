@@ -320,6 +320,42 @@ img[data-photo^="svc-slot"]{filter:sepia(.20) hue-rotate(-8deg) saturate(1.16) b
   </header>
 
   
+
+  <style id="wisdom-card-month">
+    #wisdom-deck .wk-flip{perspective:1400px;cursor:pointer;width:clamp(210px,24vw,270px);flex:0 0 auto;animation:cardbreathe 7s ease-in-out infinite}
+    @keyframes cardbreathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+    #wisdom-deck .wk-inner{position:relative;width:100%;transform-style:preserve-3d;transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
+    #wisdom-deck .wk-flip.flipped .wk-inner{transform:rotateY(180deg)}
+    #wisdom-deck .wk-face{display:block;width:100%;border-radius:12px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 1px rgba(210,164,78,.25)}
+    #wisdom-deck .wk-front{position:absolute;inset:0;transform:rotateY(180deg)}
+    #wisdom-deck .wk-hint{text-align:center;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-top:16px;opacity:.85;transition:opacity .6s}
+    @media (max-width:760px){#wisdom-deck .wk-flex{flex-direction:column;text-align:center}#wisdom-deck .wk-quote{border-left:none!important;padding-left:0!important;border-top:1px solid rgba(210,164,78,.3);padding-top:26px;text-align:center!important}}
+  </style>
+  <section id="wisdom-deck" style="position: relative; padding: clamp(70px, 9vw, 120px) clamp(20px, 5vw, 64px); background: var(--bg-2);">
+    <div data-reveal="" style="max-width: 980px; margin: 0 auto; opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(0.2, 0.7, 0.2, 1), transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);">
+      <div style="text-align:center; font-size: 13.5px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px;">◦ &nbsp;The Wisdom Keeper Deck</div>
+      <h2 style="text-align:center; font-family: Marcellus, serif; font-weight: 400; font-size: clamp(26px, 3.4vw, 42px); line-height: 1.1; margin: 0 0 10px;">12 collectible cards for your soul&rsquo;s journey</h2>
+      <p style="text-align:center; color: var(--ink-dim); font-size: 15.5px; margin: 0 0 46px;">Receive the month&rsquo;s card at the end of each session &mdash; collect all twelve.</p>
+      <div class="wk-flex" style="display:flex; align-items:center; justify-content:center; gap: clamp(30px,5vw,64px);">
+        <div style="flex:0 0 auto;">
+          <div class="wk-flip" onclick="this.classList.toggle('flipped');this.nextElementSibling.style.opacity=this.classList.contains('flipped')?'0':'.85'" role="button" aria-label="Reveal this month's card" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
+            <div class="wk-inner">
+              <img class="wk-face wk-back" src="images/uploads/card-wisdom-back.jpg" alt="Wisdom Keeper card — face down">
+              <img class="wk-face wk-front" src="images/uploads/card-2026-08-reverence.jpg" alt="Wisdom Keeper Card 01 — Reverence">
+            </div>
+          </div>
+          <div class="wk-hint">tap to reveal August&rsquo;s card</div>
+        </div>
+        <div class="wk-quote" style="max-width: 440px; text-align:left; border-left: 1px solid rgba(210,164,78,0.3); padding-left: 34px;">
+          <div style="font-size: 11.5px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent-2); margin-bottom: 12px;">August &middot; Card 01 of 12</div>
+          <p style="font-family: Marcellus, serif; font-size: clamp(19px, 2vw, 24px); line-height: 1.5; margin: 0 0 16px; color: var(--ink);">Each month, one card steps forward from the deck.</p>
+          <p style="color: var(--ink-dim); font-size: 15.5px; line-height: 1.7; margin: 0 0 20px;">Turn it over. Sit with what it asks of you. Then come collect the card itself &mdash; it&rsquo;s waiting for you at the end of every session this month.</p>
+          <a href="https://events.earthharmonysoundwellness.com" class="scp6" style="font-family: Marcellus, serif; font-size: 17px; color: var(--ink);">Collect it at an August session &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="approach" style="position: relative; padding: clamp(56px, 7vw, 96px) clamp(20px, 5vw, 64px);">
       <div style="max-width: 1160px; margin: 0 auto; ">
         <div data-reveal="" style="text-align: center; font-size: 13.5px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent); margin-bottom: clamp(30px, 4vw, 46px); opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(0.2, 0.7, 0.2, 1), transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);" data-text="t-32">◦ &nbsp;Our Approach</div>
@@ -419,44 +455,6 @@ img[data-photo^="svc-slot"]{filter:sepia(.20) hue-rotate(-8deg) saturate(1.16) b
       <p data-dc-tpl="102" style="font-family: Marcellus, serif; font-weight: 400; font-size: clamp(24px, 3.2vw, 40px); line-height: 1.34; margin: 0px;" data-text="t-1">To educate and empower holistic, personal and planetary well-being through the power of <span data-dc-tpl="103" style="color: var(--accent);" data-text="t-42">sound</span>, <span data-dc-tpl="104" style="color: var(--accent-2);" data-text="t-43">rhythm</span> and related therapeutic practices.</p>
     </div>
   </section>
-
-
-  <style id="wisdom-card-month">
-    #wisdom-deck .wk-flip{perspective:1400px;cursor:pointer;width:clamp(210px,24vw,270px);flex:0 0 auto;animation:cardbreathe 7s ease-in-out infinite}
-    @keyframes cardbreathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-    #wisdom-deck .wk-inner{position:relative;width:100%;transform-style:preserve-3d;transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
-    #wisdom-deck .wk-flip.flipped .wk-inner{transform:rotateY(180deg)}
-    #wisdom-deck .wk-face{display:block;width:100%;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 1px rgba(210,164,78,.25)}
-    #wisdom-deck .wk-front{position:absolute;inset:0;transform:rotateY(180deg)}
-    #wisdom-deck .wk-hint{text-align:center;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-top:16px;opacity:.85}
-    #wisdom-deck .wk-flip.flipped + .wk-hint{opacity:0;transition:opacity .6s}
-    @media (max-width:760px){#wisdom-deck .wk-flex{flex-direction:column;text-align:center}#wisdom-deck .wk-quote{border-left:none!important;padding-left:0!important;border-top:1px solid rgba(210,164,78,.3);padding-top:26px}}
-  </style>
-  <section id="wisdom-deck" style="position: relative; padding: clamp(70px, 9vw, 120px) clamp(20px, 5vw, 64px); background: var(--bg-2);">
-    <div data-reveal="" style="max-width: 980px; margin: 0 auto; opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(0.2, 0.7, 0.2, 1), transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);">
-      <div style="text-align:center; font-size: 13.5px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px;">◦ &nbsp;The Wisdom Keeper Deck</div>
-      <h2 style="text-align:center; font-family: Marcellus, serif; font-weight: 400; font-size: clamp(26px, 3.4vw, 42px); line-height: 1.1; margin: 0 0 10px;">12 collectible cards for your soul&rsquo;s journey</h2>
-      <p style="text-align:center; color: var(--ink-dim); font-size: 15.5px; margin: 0 0 46px;">Receive the month&rsquo;s card at the end of each session &mdash; collect all twelve.</p>
-      <div class="wk-flex" style="display:flex; align-items:center; justify-content:center; gap: clamp(30px,5vw,64px);">
-        <div style="flex:0 0 auto;">
-          <div class="wk-flip" onclick="this.classList.toggle('flipped')" role="button" aria-label="Reveal this month's card" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.classList.toggle('flipped')}">
-            <div class="wk-inner">
-              <img class="wk-face wk-back" src="images/uploads/card-wisdom-back.jpg" alt="Wisdom Keeper card — face down">
-              <img class="wk-face wk-front" src="images/uploads/card-2026-08-reverence.jpg" alt="Wisdom Keeper Card 01 — Reverence">
-            </div>
-          </div>
-          <div class="wk-hint">tap to reveal August&rsquo;s card</div>
-        </div>
-        <div class="wk-quote" style="max-width: 460px; text-align:left; border-left: 1px solid rgba(210,164,78,0.3); padding-left: 34px;">
-          <div style="font-size: 11.5px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent-2); margin-bottom: 12px;">August &middot; Card 01 &mdash; Reverence</div>
-          <p style="font-family: Marcellus, serif; font-size: clamp(19px, 2vw, 24px); line-height: 1.5; margin: 0 0 14px; color: var(--ink);">&ldquo;What we discover depends largely on our approach. When we approach things with great reverence, great things approach us.&rdquo;</p>
-          <div style="font-size: 13px; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 20px;">&mdash; JOHN O&rsquo;DONOHUE</div>
-          <a href="https://events.earthharmonysoundwellness.com" class="scp6" style="font-family: Marcellus, serif; font-size: 17px; color: var(--ink);">Collect it at an August session &rarr;</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section id="article-teaser" style="position: relative; padding: clamp(36px, 5vw, 56px) clamp(20px, 5vw, 64px);">
       <div data-dc-tpl="185" data-reveal="" style="margin: 0 auto; display: flex; align-items: center; gap: 20px; padding: 30px 34px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); max-width: 780px; margin-left: auto; margin-right: auto; opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(0.2, 0.7, 0.2, 1), transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);">
         <div data-dc-tpl="186" style="flex: 0 0 auto; width: 132px; height: 96px; border-radius: 10px; overflow: hidden;"><img data-dc-tpl="187" src="photo-library/g12.jpg" alt="Sound bath setup" style="display: block; width: 100%; height: 100%; object-fit: contain; transform-origin: center center; transform: translate(3%, -21%) scale(1.46); transition: transform 0.12s;" data-photo="img-4"></div>
