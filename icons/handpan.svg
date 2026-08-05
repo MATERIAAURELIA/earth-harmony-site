@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="#d2a44e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+  <!-- steel lens body, from above -->
+  <circle cx="60" cy="60" r="46"/>
+  <!-- centre dome -->
+  <circle cx="60" cy="60" r="13" fill="rgba(210,164,78,0.12)"/>
+  <!-- ring of 8 tone-field dimples -->
+  <circle cx="90" cy="60" r="7"/>
+  <circle cx="81.2" cy="81.2" r="7"/>
+  <circle cx="60" cy="90" r="7"/>
+  <circle cx="38.8" cy="81.2" r="7"/>
+  <circle cx="30" cy="60" r="7"/>
+  <circle cx="38.8" cy="38.8" r="7"/>
+  <circle cx="60" cy="30" r="7"/>
+  <circle cx="81.2" cy="38.8" r="7"/>
+</svg>

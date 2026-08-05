@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="#d2a44e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+  <g transform="rotate(-10 60 60)">
+    <!-- tapered wooden body -->
+    <path d="M16 56 L100 53 A7 7 0 0 1 100 67 L16 64 A4.5 4.5 0 0 1 16 56 Z"/>
+    <!-- bird / block near the mouth end -->
+    <path d="M30 55 V47 Q30 44 34 44 H38 Q42 44 42 47 V55"/>
+    <!-- finger holes -->
+    <g fill="#d2a44e" stroke="none">
+      <circle cx="56" cy="60" r="2.5"/>
+      <circle cx="65" cy="60" r="2.5"/>
+      <circle cx="74" cy="60" r="2.5"/>
+      <circle cx="83" cy="60" r="2.5"/>
+      <circle cx="92" cy="60" r="2.5"/>
+    </g>
+  </g>
+</svg>

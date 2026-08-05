@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="#d2a44e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+  <!-- didgeridoo: long tapering drone pipe on the diagonal, flared bell, wax mouthpiece -->
+  <!-- upper edge: narrow mouth (top-left) to flared bell (bottom-right) -->
+  <path d="M 24.5 19.5 C 45 38, 70 62, 91.4 81.8 C 97 86.5, 101 86, 105.8 90.2"/>
+  <!-- lower edge -->
+  <path d="M 19.5 24.5 C 38 45, 62 70, 81.8 91.4 C 86.5 97, 86 101, 90.2 105.8"/>
+  <!-- bell opening rim -->
+  <path d="M 105.8 90.2 Q 103.5 103.5, 90.2 105.8"/>
+  <!-- beeswax mouthpiece rim -->
+  <ellipse cx="22" cy="22" rx="4.8" ry="2.8" transform="rotate(-45 22 22)" fill="rgba(210,164,78,0.12)"/>
+  <!-- subtle wood-grain ring bands along the length -->
+  <g stroke-width="3" opacity="0.75">
+    <path d="M 48.3 41.3 Q 46.5 46.5, 41.3 48.3"/>
+    <path d="M 67.8 59.8 Q 65.8 65.8, 59.8 67.8"/>
+    <path d="M 83.5 74.5 Q 81.3 81.3, 74.5 83.5"/>
+  </g>
+</svg>

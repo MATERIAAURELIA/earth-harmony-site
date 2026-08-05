@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="#d2a44e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+  <!-- drum head, tilted toward viewer -->
+  <ellipse cx="60" cy="50" rx="44" ry="36" fill="rgba(210,164,78,0.12)"/>
+  <!-- frame depth below the rim -->
+  <path d="M16 50 V59 A44 36 0 0 0 104 59 V50"/>
+  <!-- beater resting on the head -->
+  <path d="M42 72 L76 44"/>
+  <circle cx="82" cy="39" r="6" fill="rgba(210,164,78,0.12)"/>
+</svg>
