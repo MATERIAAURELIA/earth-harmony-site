@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="#d2a44e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+  <!-- tilted tube -->
+  <rect x="10" y="51" width="100" height="18" rx="9" transform="rotate(47 60 60)" fill="rgba(210,164,78,0.12)"/>
+  <!-- seeds cascading inside -->
+  <g fill="#d2a44e" stroke="none">
+    <circle cx="40" cy="37" r="2.2"/>
+    <circle cx="47" cy="47" r="2.2"/>
+    <circle cx="56" cy="53" r="2.2"/>
+    <circle cx="63" cy="66" r="2.2"/>
+    <circle cx="71" cy="71" r="2.2"/>
+    <circle cx="79" cy="84" r="2.2"/>
+    <circle cx="85" cy="89" r="2.2"/>
+  </g>
+</svg>

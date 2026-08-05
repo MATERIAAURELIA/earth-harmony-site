@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="#d2a44e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+  <!-- stand: top bar, posts, feet -->
+  <path d="M14 22 H106"/>
+  <path d="M20 22 V102"/>
+  <path d="M100 22 V102"/>
+  <path d="M12 102 H28"/>
+  <path d="M92 102 H108"/>
+  <!-- hanging cords -->
+  <path d="M43 22 L46 42"/>
+  <path d="M77 22 L74 42"/>
+  <!-- gong disc -->
+  <circle cx="60" cy="66" r="28" fill="rgba(210,164,78,0.12)"/>
+  <!-- raised centre nipple -->
+  <circle cx="60" cy="66" r="8" fill="rgba(210,164,78,0.12)"/>
+</svg>

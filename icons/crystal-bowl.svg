@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="#d2a44e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+  <!-- frosted body fill -->
+  <path d="M24 38 A28 8 0 0 1 80 38 V84 Q80 96 68 96 H36 Q24 96 24 84 Z" fill="rgba(210,164,78,0.12)" stroke="none"/>
+  <!-- tall cylinder body -->
+  <path d="M24 38 V84 Q24 96 36 96 H68 Q80 96 80 84 V38"/>
+  <!-- open rim -->
+  <ellipse cx="52" cy="38" rx="28" ry="8"/>
+  <!-- suede wand resting on rim -->
+  <rect x="57" y="23.5" width="44" height="7" rx="3.5" transform="rotate(-33 79 27)"/>
+</svg>

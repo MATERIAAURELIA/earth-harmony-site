@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="#d2a44e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+  <!-- hanger cord -->
+  <path d="M52 24 L60 12 L68 24"/>
+  <!-- top bar -->
+  <path d="M16 24 H104"/>
+  <!-- descending rods, graduated lengths -->
+  <path d="M24 30 V100"/>
+  <path d="M36 30 V91"/>
+  <path d="M48 30 V82"/>
+  <path d="M60 30 V73"/>
+  <path d="M72 30 V64"/>
+  <path d="M84 30 V55"/>
+  <path d="M96 30 V46"/>
+</svg>
