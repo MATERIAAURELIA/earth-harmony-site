@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Mix Your Own Sound Bath — Earth Harmony</title>
+<meta name="description" content="Play the actual professional instruments from Earth Harmony's Edmonton sound baths — gong, crystal bowl, Tibetan bowls, chimes, rainstick. Mix your own full-spectrum sound bath.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1522;--bg2:#132033;--panel:#152238;--ink:#f3ebdd;--ink-dim:#c6c2b2;--faint:#8e94a1;--accent:#d2a44e;--accent2:#b8863b;--line:rgba(210,164,78,.22)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(120% 90% at 50% 0%,#132033 0%,#0e1522 55%,#0a0f1a 100%);color:var(--ink);font-family:Marcellus,Georgia,serif;min-height:100svh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden}
+.eyebrow{font-family:Arial,Helvetica,sans-serif;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent);margin:clamp(28px,6vh,64px) 0 14px;text-align:center}
+h1{font-weight:400;font-size:clamp(27px,6vw,46px);line-height:1.1;text-align:center;padding:0 20px}
+.sub{color:var(--ink-dim);font-size:clamp(13.5px,2.8vw,16px);margin:12px 20px 0;text-align:center;font-family:Georgia,serif;font-style:italic}
+/* master button */
+#master{margin:clamp(22px,4vh,40px) 0 clamp(10px,2vh,20px);display:inline-flex;align-items:center;gap:12px;padding:15px 34px;border-radius:999px;background:var(--accent);color:#0e1522;border:none;font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:transform .3s,box-shadow .3s;box-shadow:0 12px 34px -12px rgba(210,164,78,.55)}
+#master:active{transform:scale(.97)}
+#master.playing{background:var(--bg2);color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+#status{font-family:Arial,Helvetica,sans-serif;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);height:16px;margin-bottom:clamp(8px,2vh,18px)}
+/* mixer */
+#mixer{display:flex;flex-wrap:wrap;gap:clamp(10px,2.4vw,26px);align-items:flex-end;justify-content:center;padding:10px 14px clamp(26px,5vh,50px);max-width:900px}
+.ch{display:flex;flex-direction:column;align-items:center;gap:12px;user-select:none;-webkit-user-select:none}
+.glyph{width:clamp(30px,8vw,42px);height:clamp(30px,8vw,42px);display:block;opacity:.9}
+.track{position:relative;width:clamp(44px,11vw,58px);height:clamp(200px,38svh,300px);border-radius:999px;background:linear-gradient(180deg,rgba(243,235,221,.05),rgba(0,0,0,.35));box-shadow:inset 0 2px 10px rgba(0,0,0,.6),0 1px 0 rgba(243,235,221,.06);cursor:pointer;touch-action:none}
+.fill{position:absolute;left:4px;right:auto;top:auto;bottom:4px;width:calc(100% - 8px);border-radius:999px;background:linear-gradient(180deg,var(--accent) 0%,var(--accent2) 100%);opacity:.9;transition:height .06s linear;min-height:8px;box-shadow:0 0 18px -2px rgba(210,164,78,.5)}
+.playing .fill{animation:glowpulse 5s ease-in-out infinite}
+@keyframes glowpulse{0%,100%{opacity:.85}50%{opacity:1}}
+.thumb{position:absolute;left:50%;transform:translate(-50%,50%);width:clamp(30px,8vw,38px);height:clamp(30px,8vw,38px);border-radius:50%;background:radial-gradient(circle at 35% 30%,#f2d492,#d2a44e 60%,#8a6a28);box-shadow:0 4px 14px rgba(0,0,0,.6),inset 0 1px 2px rgba(255,255,255,.5);pointer-events:none}
+.lbl{font-family:Arial,Helvetica,sans-serif;font-size:clamp(9px,2.2vw,11px);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim);text-align:center}
+.pct{font-family:Arial,Helvetica,sans-serif;font-size:9.5px;color:var(--faint);height:12px}
+/* footer */
+footer{margin-top:auto;padding:22px 20px calc(26px + env(safe-area-inset-bottom));text-align:center;border-top:1px solid rgba(243,235,221,.07);width:100%;background:rgba(10,15,26,.5)}
+footer .love{font-family:Georgia,serif;font-style:italic;color:var(--ink-dim);font-size:13.5px;margin-bottom:14px}
+footer a.pill{display:inline-block;padding:12px 24px;border-radius:999px;border:1.5px solid var(--accent);color:var(--accent);text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+footer .home{display:block;margin-top:14px;color:var(--faint);font-size:11.5px;text-decoration:none;font-family:Arial,Helvetica,sans-serif;letter-spacing:.08em}
+@media (max-width:700px){
+  #mixer{flex-direction:column-reverse;flex-wrap:nowrap;align-items:stretch;gap:16px;width:100%;max-width:360px;padding-bottom:16px}
+  .ch{flex-direction:row;align-items:center;gap:14px;transform:none !important;width:100%}
+  .glyph{width:34px;height:34px;flex:0 0 auto}
+  .track{width:100%;height:46px;flex:1 1 auto}
+  .thumb{top:50%;transform:translate(-50%,-50%);bottom:auto !important}
+  .fill{top:4px;bottom:4px;height:auto}
+  .lbl{display:none}
+  .pct{width:26px;text-align:right}
+  #specH{display:none}
+  .specV{display:block !important}
+}
+#loading{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(14,21,34,.7);backdrop-filter:blur(3px);z-index:50;font-family:Arial,sans-serif;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="eyebrow">◦ &nbsp;Earth Harmony &middot; Sound Playground</div>
+<h1>Mix Your Own Sound Bath</h1>
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin:18px 20px 8px;text-align:center">Why Our Sound Baths Stand Out</div>
+<p class="sub" style="margin-top:0"><b style="color:var(--ink);font-style:normal">Weaving sounds together is our art and passion.</b></p>
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim);margin:12px 20px 0;text-align:center;line-height:2">
+Deep Listening &nbsp;<span style="color:var(--accent)">&middot;</span>&nbsp; Professional Instruments &nbsp;<span style="color:var(--accent)">&middot;</span>&nbsp; Multiple Octaves</div>
+<div style="font-family:Georgia,serif;font-style:italic;color:var(--faint);font-size:13.5px;margin-top:14px;text-align:center">Explore mixing some of our sounds&hellip;</div>
+
+<button id="master">▶ &nbsp;Begin</button>
+<div id="status"></div>
+
+<div id="mixer">
+  <!-- channels injected -->
+</div>
+<div class="specV" style="display:none;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin:2px 0 6px;text-align:center;order:-1">△ &nbsp;bright</div>
+<div id="specH" style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin:-8px 0 10px">deep &nbsp;◁&mdash;&mdash;&mdash; the spectrum &mdash;&mdash;&mdash;▷&nbsp; bright</div>
+<div class="specV" style="display:none;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin:-4px 0 12px;text-align:center">deep &nbsp;▽</div>
+
+<div id="loading">tuning the room…</div>
+
+<footer>
+  <div class="love">If this settles something in you, imagine the real room — gongs you can feel in your chest.</div>
+  <a class="pill" href="https://events.earthharmonysoundwellness.com">Experience it live</a>
+  <a class="home" href="https://www.earthharmonysoundwellness.com">← earthharmonysoundwellness.com</a>
+</footer>
+
+<script>
+const LAYERS = [   // ordered LOW → HIGH: the spectrum IS the layout
+  {id:'gong',     file:'audio/mixer/gong.mp3',      name:'Gong',         icon:'icons/gong.svg',         vol:.45, arc:-12},
+  {id:'didge',    file:'audio/mixer/didge.mp3',     name:'Didgeridoo',   icon:'icons/didgeridoo.svg',   vol:.5,  arc:-12},
+  {id:'drone',    file:'audio/mixer/drone.mp3',     name:'Crystal Bowl', icon:'icons/crystal-bowl.svg', vol:.7,  arc:-2},
+  {id:'flute',    file:'audio/mixer/flute.mp3',     name:'Flute',        icon:'icons/flute.svg',        vol:.45, arc:-2},
+  {id:'rainstick',file:'audio/mixer/rainstick.mp3', name:'Rainstick',    icon:'icons/rainstick.svg',    vol:.35, arc:-7},
+  {id:'chimes',   file:'audio/mixer/chimes.mp3',    name:'Chimes',       icon:'icons/chimes.svg',       vol:.45, arc:-18},
+];
+const mixer = document.getElementById('mixer');
+const masterBtn = document.getElementById('master');
+const statusEl = document.getElementById('status');
+const loadingEl = document.getElementById('loading');
+let ac=null, playing=false, loaded=false;
+
+LAYERS.forEach(L=>{
+  const ch=document.createElement('div'); ch.className='ch'; ch.id='ch-'+L.id;
+  ch.style.transform = `translateY(${L.arc}px)`;
+  ch.innerHTML = `<img class="glyph" src="${L.icon}" alt="${L.name}">
+    <div class="track"><div class="fill"></div><div class="thumb"></div></div>
+    <div class="lbl">${L.name}</div><div class="pct"></div>`;
+  mixer.appendChild(ch);
+  L.el=ch; L.fill=ch.querySelector('.fill'); L.thumb=ch.querySelector('.thumb');
+  L.pctEl=ch.querySelector('.pct'); L.trackEl=ch.querySelector('.track');
+  setVol(L, L.vol, true);
+  const move=e=>{
+    const r=L.trackEl.getBoundingClientRect();
+    if(isMob()){
+      const x=(e.touches?e.touches[0].clientX:e.clientX);
+      setVol(L, Math.min(1,Math.max(0,(x-r.left)/r.width)));
+    } else {
+      const y=(e.touches?e.touches[0].clientY:e.clientY);
+      setVol(L, Math.min(1,Math.max(0,1-(y-r.top)/r.height)));
+    }
+  };
+  L.trackEl.addEventListener('pointerdown',e=>{L.trackEl.setPointerCapture(e.pointerId);move(e);
+    const mv=ev=>move(ev), up=()=>{L.trackEl.removeEventListener('pointermove',mv);L.trackEl.removeEventListener('pointerup',up)};
+    L.trackEl.addEventListener('pointermove',mv); L.trackEl.addEventListener('pointerup',up);});
+});
+
+function isMob(){return window.matchMedia('(max-width:700px)').matches}
+function setVol(L,v,silent){
+  L.vol=v;
+  const h=Math.max(0.03,v)*100;
+  if(isMob()){
+    L.fill.style.height=''; L.fill.style.width=h+'%';
+    L.thumb.style.bottom=''; L.thumb.style.left=`calc(${h}% - 2px)`;
+  } else {
+    L.fill.style.width=''; L.fill.style.height=h+'%';
+    L.thumb.style.left='50%'; L.thumb.style.bottom=`calc(${h}% - 2px)`;
+  }
+  L.pctEl.textContent=Math.round(v*100);
+  if(L.gain) L.gain.gain.setTargetAtTime(v*v, ac.currentTime, .05); // perceptual curve
+}
+window.addEventListener('resize',()=>LAYERS.forEach(L=>L.fill&&setVol(L,L.vol,true)));
+
+async function loadAll(){
+  loadingEl.style.display='flex';
+  ac = new (window.AudioContext||window.webkitAudioContext)();
+  await Promise.all(LAYERS.map(async L=>{
+    const buf = await fetch(L.file).then(r=>r.arrayBuffer());
+    L.buffer = await new Promise((res,rej)=>ac.decodeAudioData(buf,res,rej));
+    L.gain = ac.createGain(); L.gain.gain.value=L.vol*L.vol; L.gain.connect(ac.destination);
+  }));
+  loadingEl.style.display='none'; loaded=true;
+}
+
+function startAll(){
+  LAYERS.forEach(L=>{
+    if(L.gain){ L.gain.gain.cancelScheduledValues(ac.currentTime); L.gain.gain.setValueAtTime(0.0001, ac.currentTime); }
+    L.src = ac.createBufferSource();
+    L.src.buffer=L.buffer; L.src.loop=true; L.src.connect(L.gain); L.src.start();
+    L.el.classList.add('playing');
+  });
+}
+function stopAll(){   // rest = a long exhale, not a switch
+  LAYERS.forEach(L=>{
+    if(L.gain){ L.gain.gain.cancelScheduledValues(ac.currentTime);
+      L.gain.gain.setValueAtTime(L.gain.gain.value, ac.currentTime);
+      L.gain.gain.linearRampToValueAtTime(0.0001, ac.currentTime+2.8); }
+    const src=L.src; L.src=null;
+    if(src) setTimeout(()=>{try{src.stop()}catch(e){}}, 3000);
+    L.el.classList.remove('playing');
+  });
+}
+
+masterBtn.addEventListener('click', async ()=>{
+  if(!loaded){ try{ await loadAll(); }catch(e){ loadingEl.style.display='none'; statusEl.textContent='audio failed to load — try again'; return; } }
+  if(ac.state==='suspended') await ac.resume();
+  playing=!playing;
+  if(playing){ LAYERS.forEach(L=>setVol(L,0)); startAll(); masterBtn.classList.add('playing'); masterBtn.innerHTML='❚❚ &nbsp;Rest'; statusEl.textContent='raise a sound — see what calls you'; }
+  else { stopAll(); masterBtn.classList.remove('playing'); masterBtn.innerHTML='▶ &nbsp;Begin'; statusEl.textContent=''; }
+});
+</script>
+</body>
+</html>
