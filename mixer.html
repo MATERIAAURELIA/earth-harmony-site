@@ -39,7 +39,7 @@ footer .home{display:block;margin-top:14px;color:var(--faint);font-size:11.5px;t
 @media (max-width:700px){
   #mixer{flex-direction:column-reverse;flex-wrap:nowrap;align-items:stretch;gap:16px;width:100%;max-width:360px;padding-bottom:16px}
   .ch{flex-direction:row;align-items:center;gap:14px;transform:none !important;width:100%}
-  .glyph{width:34px;height:34px;flex:0 0 auto}
+  .glyph{width:52px;height:52px;flex:0 0 auto}
   .track{width:100%;height:46px;flex:1 1 auto}
   .thumb{top:50%;transform:translate(-50%,-50%);bottom:auto !important}
   .fill{top:4px;bottom:4px;height:auto}
@@ -54,11 +54,10 @@ footer .home{display:block;margin-top:14px;color:var(--faint);font-size:11.5px;t
 <body>
 <div class="eyebrow">◦ &nbsp;Earth Harmony &middot; Sound Playground</div>
 <h1>Mix Your Own Sound Bath</h1>
-<div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin:18px 20px 8px;text-align:center">Why Our Sound Baths Stand Out</div>
-<p class="sub" style="margin-top:0"><b style="color:var(--ink);font-style:normal">Weaving sounds together is our art and passion.</b></p>
-<div style="font-family:Arial,Helvetica,sans-serif;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim);margin:12px 20px 0;text-align:center;line-height:2">
-Deep Listening &nbsp;<span style="color:var(--accent)">&middot;</span>&nbsp; Professional Instruments &nbsp;<span style="color:var(--accent)">&middot;</span>&nbsp; Multiple Octaves</div>
-<div style="font-family:Georgia,serif;font-style:italic;color:var(--faint);font-size:13.5px;margin-top:14px;text-align:center">Explore mixing some of our sounds&hellip;</div>
+<div style="font-family:Marcellus,Georgia,serif;font-size:clamp(24px,5.6vw,34px);line-height:1.15;color:var(--accent);margin:22px 20px 10px;text-align:center">Why Our Sound Baths Stand Out</div>
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:clamp(12px,3vw,13.5px);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-dim);margin:6px 20px 0;text-align:center;line-height:2.3">
+Respond to the Room<br>Professional Instruments<br>Multiple Octaves</div>
+<div style="font-family:Georgia,serif;font-style:italic;color:var(--ink-dim);font-size:clamp(14px,3.4vw,16px);margin-top:20px;text-align:center">Weaving sounds is our art and passion&hellip;</div>
 
 <button id="master">▶ &nbsp;Begin</button>
 <div id="status"></div>
@@ -66,9 +65,9 @@ Deep Listening &nbsp;<span style="color:var(--accent)">&middot;</span>&nbsp; Pro
 <div id="mixer">
   <!-- channels injected -->
 </div>
-<div class="specV" style="display:none;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin:2px 0 6px;text-align:center;order:-1">△ &nbsp;bright</div>
+<div class="specV" style="display:none;font-family:Arial,sans-serif;font-size:14px;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin:2px 0 6px;text-align:center;order:-1">△ &nbsp;bright</div>
 <div id="specH" style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin:-8px 0 10px">deep &nbsp;◁&mdash;&mdash;&mdash; the spectrum &mdash;&mdash;&mdash;▷&nbsp; bright</div>
-<div class="specV" style="display:none;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin:-4px 0 12px;text-align:center">deep &nbsp;▽</div>
+<div class="specV" style="display:none;font-family:Arial,sans-serif;font-size:14px;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin:-4px 0 12px;text-align:center">deep &nbsp;▽</div>
 
 <div id="loading">tuning the room…</div>
 
@@ -130,7 +129,7 @@ function setVol(L,v,silent){
     L.thumb.style.left='50%'; L.thumb.style.bottom=`calc(${h}% - 2px)`;
   }
   L.pctEl.textContent=Math.round(v*100);
-  if(L.gain) L.gain.gain.setTargetAtTime(v*v, ac.currentTime, .05); // perceptual curve
+  if(L.gain) L.gain.gain.setTargetAtTime(v*v*.55, ac.currentTime, .05); // perceptual curve, tamed master
 }
 window.addEventListener('resize',()=>LAYERS.forEach(L=>L.fill&&setVol(L,L.vol,true)));
 
@@ -140,7 +139,7 @@ async function loadAll(){
   await Promise.all(LAYERS.map(async L=>{
     const buf = await fetch(L.file).then(r=>r.arrayBuffer());
     L.buffer = await new Promise((res,rej)=>ac.decodeAudioData(buf,res,rej));
-    L.gain = ac.createGain(); L.gain.gain.value=L.vol*L.vol; L.gain.connect(ac.destination);
+    L.gain = ac.createGain(); L.gain.gain.value=L.vol*L.vol*.55; L.gain.connect(ac.destination);
   }));
   loadingEl.style.display='none'; loaded=true;
 }
