@@ -926,23 +926,25 @@ img[data-photo^="svc-slot"]{filter:sepia(.20) hue-rotate(-8deg) saturate(1.16) b
         <a data-dc-tpl="221" href="https://list.robly.com/subscribe?a=bb2759f574f35963fb38112b07dcd45d" class="scp1" style="display: inline-flex; align-items: center; gap: 10px; margin-top: 30px; padding: 14px 24px; border-radius: 999px; background: var(--ink); color: var(--bg); font-weight: 700; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;" data-text="t-115">Sign Up for Monthly Events &amp; Specials →</a>
       </div>
       <div data-dc-tpl="222" data-reveal="" style="border-radius: 20px; border: 1px solid var(--line); background: var(--panel); padding: clamp(24px, 3vw, 40px); box-shadow: rgba(0, 0, 0, 0.5) 0px 24px 60px -34px; opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(0.2, 0.7, 0.2, 1), transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);">
-        <form data-dc-tpl="223" style="display: flex; flex-direction: column; gap: 18px;">
+        <form id="ehContact" data-dc-tpl="223" style="display: flex; flex-direction: column; gap: 18px;">
           <div data-dc-tpl="224" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;">
             <label data-dc-tpl="225" style="display: flex; flex-direction: column; gap: 8px; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint);">First Name
-              <input data-dc-tpl="226" type="text" class="scp7" style="background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; color: var(--ink); font-family: inherit; font-size: 15px; outline: none;">
+              <input name="firstName" required data-dc-tpl="226" type="text" class="scp7" style="background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; color: var(--ink); font-family: inherit; font-size: 15px; outline: none;">
             </label>
             <label data-dc-tpl="227" style="display: flex; flex-direction: column; gap: 8px; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint);">Last Name
-              <input data-dc-tpl="228" type="text" class="scp7" style="background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; color: var(--ink); font-family: inherit; font-size: 15px; outline: none;">
+              <input name="lastName" data-dc-tpl="228" type="text" class="scp7" style="background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; color: var(--ink); font-family: inherit; font-size: 15px; outline: none;">
             </label>
           </div>
           <label data-dc-tpl="229" style="display: flex; flex-direction: column; gap: 8px; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint);">Email
-            <input data-dc-tpl="230" type="email" class="scp7" style="background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; color: var(--ink); font-family: inherit; font-size: 15px; outline: none;">
+            <input name="email" required data-dc-tpl="230" type="email" class="scp7" style="background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; color: var(--ink); font-family: inherit; font-size: 15px; outline: none;">
           </label>
           <label data-dc-tpl="231" style="display: flex; flex-direction: column; gap: 8px; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint);">Message
-            <textarea data-dc-tpl="232" rows="4" class="scp7" style="background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; color: var(--ink); font-family: inherit; font-size: 15px; outline: none; resize: vertical;"></textarea>
+            <textarea name="message" required data-dc-tpl="232" rows="4" class="scp7" style="background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; color: var(--ink); font-family: inherit; font-size: 15px; outline: none; resize: vertical;"></textarea>
           </label>
           <button data-dc-tpl="233" type="submit" class="scp1" style="cursor: pointer; padding: 15px; border-radius: 10px; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; background: var(--accent); color: rgb(247, 241, 229); font-weight: 700; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase;"><span class="sc-interp" data-text="t-116">Get in Touch</span></button>
         </form>
+        <p id="ehContactMsg" style="display:none;margin:14px 0 0;font-size:14px;line-height:1.6;color:var(--ink);"></p>
+        <p style="margin:14px 0 0;font-size:12.5px;line-height:1.7;color:var(--faint);">Prefer email? Write directly to <a href="mailto:earthharmonysoundhealing@gmail.com" style="color:var(--accent);text-decoration:underline;">earthharmonysoundhealing@gmail.com</a></p>
       </div>
     </div>
   </section>
@@ -1055,6 +1057,31 @@ m();window.addEventListener('resize',m);})();</script>
     if(!raf) draw();
     cur.addEventListener('ended', function(){ icon(btn).textContent='\u25b6'; hideWave(btn); });
   }
+})();
+</script>
+<script>
+(function(){
+  var f=document.getElementById('ehContact');
+  if(!f) return;
+  var note=document.getElementById('ehContactMsg');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var d=new FormData(f);
+    var fn=(d.get('firstName')||'').trim(), ln=(d.get('lastName')||'').trim();
+    var em=(d.get('email')||'').trim(), ms=(d.get('message')||'').trim();
+    if(!fn||!em||!ms){
+      if(note){note.style.display='block';note.textContent='Please add your name, email and a message.';}
+      return;
+    }
+    var name=(fn+' '+ln).trim();
+    var subject='Website enquiry from '+name;
+    var body='Name: '+name+'\nEmail: '+em+'\n\n'+ms+'\n\n— sent from earthharmonysoundwellness.com';
+    if(note){
+      note.style.display='block';
+      note.innerHTML='Opening your email app to send this to Marcus. If nothing opens, please email <a href="mailto:earthharmonysoundhealing@gmail.com" style="color:var(--accent);">earthharmonysoundhealing@gmail.com</a> directly.';
+    }
+    window.location.href='mailto:earthharmonysoundhealing@gmail.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  });
 })();
 </script>
 </body></html>
