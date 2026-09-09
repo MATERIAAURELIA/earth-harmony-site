@@ -93,6 +93,7 @@
 <style id="logo-magnify">/* hover a logo to read it properly */
 #logo-wall img{transition:transform .22s ease, box-shadow .22s ease;}
 #logo-wall img:hover{transform:scale(2.1);position:relative;z-index:9;background:#fff;border-radius:10px;padding:6px 9px;box-shadow:0 14px 34px -12px rgba(0,0,0,.4);}</style>
+<style id="desktop-h1-flow">@media(min-width:641px){header#top h1 span{white-space:normal !important}}</style>
 <style id="mobile-hero-strip">
 @media (max-width: 640px){
   header#top{align-items:flex-start !important; padding:104px 14px 52vh !important; min-height:112svh !important;}
@@ -326,7 +327,7 @@ img[data-photo^="svc-slot"]{filter:sepia(.20) hue-rotate(-8deg) saturate(1.16) b
   <section id="featured" style="position: relative; padding: clamp(56px, 7vw, 96px) clamp(20px, 5vw, 64px); background: var(--bg-2);">
     <div style="max-width: 1160px; margin: 0 auto;">
       <div style="text-align:center; font-size:13.5px; letter-spacing:0.34em; text-transform:uppercase; color:var(--accent); margin-bottom: clamp(24px,3vw,38px);">&#9702; &nbsp;This Week's Featured Sound Journey</div>
-      <div class="fj-grid" style="display:grid; grid-template-columns: minmax(200px, 300px) 1fr; gap: clamp(24px, 4vw, 52px); align-items:center;">
+      <div class="fj-grid" style="display:grid; grid-template-columns: minmax(300px, 470px) 1fr; gap: clamp(20px, 2.6vw, 36px); align-items:center;">
         <div class="fj-vid" style="position:relative; border-radius:18px; overflow:hidden; background:#000; box-shadow:0 20px 50px rgba(0,0,0,.45);">
           <video id="fjv" src="images/featured-clearing-balancing.mp4" poster="images/featured-clearing-balancing-poster.jpg" autoplay muted loop playsinline style="display:block; width:100%; height:auto; max-height:520px; object-fit:cover;"></video>
           <button onclick="var v=document.getElementById('fjv');v.muted=!v.muted;this.textContent=v.muted?'🔇':'🔊';" style="position:absolute; bottom:16px; right:14px; z-index:3; background:rgba(0,0,0,.5); color:#fff; border:none; border-radius:50%; width:38px; height:38px; font-size:15px; cursor:pointer;">🔇</button>
