@@ -29,6 +29,14 @@
   .player{background:var(--panel);border:1px solid var(--line);border-radius:18px;
     padding:clamp(22px,3vw,30px);margin:0 0 clamp(34px,4vw,48px);
     box-shadow:rgba(243,235,221,.07) 0 1px 0 inset,rgba(0,0,0,.55) 0 18px 40px -26px}
+  .vid{max-width:400px;margin:0 auto clamp(30px,4vw,44px);}
+  .vid video{width:100%;height:auto;display:block;border-radius:18px;border:1px solid var(--line);
+    box-shadow:0 26px 60px -30px rgba(0,0,0,.8);background:#000}
+  .yt{display:block;text-align:center;margin-top:14px;font-size:11.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--faint);text-decoration:none}
+  .yt:hover{color:var(--accent)}
+  .ref-head{font-family:'Marcellus',serif;font-weight:400;font-size:17px;color:var(--faint);
+    letter-spacing:.02em;margin:0 0 clamp(18px,2.4vw,26px);text-align:center}
   .player h2{font-family:'Marcellus',serif;font-weight:400;font-size:21px;margin:0 0 4px}
   .player p{color:var(--faint);font-size:12.5px;letter-spacing:.06em;margin:0 0 18px}
   audio{width:100%;display:block}
@@ -57,16 +65,18 @@
 <div class="wrap">
   <div class="eyebrow">◦&nbsp; From the Library</div>
   <h1>Prayer for the Love Denied</h1>
-  <p class="sub">Read aloud, with music · Earth Harmony Sound &amp; Wellness</p>
+  <p class="sub">Read aloud, with music · filmed at Heart Creek Bunker, Alberta</p>
 
-  <figure>
-    <img src="../photo-library/prayer-flag-love-denied.jpg" alt="A red cloth prayer flag, hand-lettered in black ink around a central linocut image — the Prayer for the Love Denied">
-    <figcaption>The prayer as it was given — screen-printed on cloth, hand-lettered.</figcaption>
-  </figure>
+  <div class="vid">
+    <video controls playsinline preload="metadata"
+      poster="../photo-library/prayer-video-poster.jpg"
+      src="https://events.earthharmonysoundwellness.com/audio/prayer-for-the-love-denied-video.mp4"></video>
+    <a class="yt" href="https://youtube.com/shorts/LoDRvHCgkgQ" target="_blank" rel="noopener">Also on YouTube →</a>
+  </div>
 
   <div class="player">
-    <h2>Listen</h2>
-    <p>1 minute 39 seconds · read by Marcus Fung</p>
+    <h2>Just the sound</h2>
+    <p>Audio only · 1 minute 39 seconds</p>
     <audio controls preload="metadata"
       src="https://events.earthharmonysoundwellness.com/audio/prayer-for-the-love-denied.mp3">
       Your browser doesn't support audio playback —
@@ -76,6 +86,7 @@
        download="Prayer for the Love Denied.mp3">↓&nbsp; Download</a>
   </div>
 
+  <p class="ref-head">The words</p>
   <div class="prayer">
     <p><span class="open">Dear and holy Love denied…</span></p>
 
@@ -102,6 +113,11 @@
 
     <p><span class="close">May we choose Life… for the good of all, according to free will.</span></p>
   </div>
+
+  <figure style="margin:clamp(34px,4.5vw,50px) 0 0">
+    <img src="../photo-library/prayer-flag-love-denied.jpg" alt="A red cloth prayer flag, hand-lettered in black ink around a central linocut — the Prayer for the Love Denied">
+    <figcaption>The prayer as it was given — screen-printed on cloth, hand-lettered.</figcaption>
+  </figure>
 
   <hr class="rule">
 
