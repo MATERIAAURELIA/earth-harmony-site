@@ -577,7 +577,7 @@ img[data-photo^="svc-slot"]{filter:sepia(.20) hue-rotate(-8deg) saturate(1.16) b
       <p style="text-align:center; color: var(--ink-dim); font-size: 15.5px; margin: 0 0 46px;">&nbsp;</p>
       <div class="wk-flex" style="display:flex; align-items:center; justify-content:center; gap: clamp(30px,5vw,64px);">
         <div style="flex:0 0 auto;">
-          <div class="wk-flip" onclick="this.classList.toggle('flipped');this.nextElementSibling.style.opacity=this.classList.contains('flipped')?'0':'.85'" role="button" aria-label="Reveal this month's card" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
+          <div class="wk-flip" onclick="this.classList.toggle('flipped');this.nextElementSibling.style.opacity=this.classList.contains('flipped')?'0':'.85';if(this.classList.contains('flipped')&&window.goatcounter&&goatcounter.count)goatcounter.count({path:'click:wisdom-card-reveal',title:'Wisdom card reveal',event:true})" role="button" aria-label="Reveal this month's card" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
             <div class="wk-inner">
               <img class="wk-face wk-back" src="images/uploads/card-wisdom-back-v2.jpg" alt="Wisdom Keeper card — face down">
               <img class="wk-face wk-front" src="images/uploads/card-2026-09-roots-v2.jpg" alt="Wisdom Keeper Card VIII — Roots">
