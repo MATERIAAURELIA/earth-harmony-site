@@ -9,7 +9,20 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <!-- Firebase -->
-<script src="sync.js?v=2"></script>
+<script>
+  // Hosted portal: SyncStore = localStorage only, inlined (no external file to fail on older iPads)
+  var SyncStore = {
+    get: function (key) {
+      return new Promise(function (resolve) {
+        try { var raw = localStorage.getItem(key); resolve(raw ? JSON.parse(raw) : null); } catch (e) { resolve(null); }
+      });
+    },
+    set: function (key, data) {
+      try { data._ts = Date.now(); localStorage.setItem(key, JSON.stringify(data)); } catch (e) {}
+      return Promise.resolve();
+    }
+  };
+</script>
 <script>
   // TEMP debug (Oct 10): show the first startup error on screen so we can see it on the iPad
   window.__ehErr = null;
