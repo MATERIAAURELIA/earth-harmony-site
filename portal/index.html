@@ -1303,115 +1303,14 @@
   <button class="btn-skip" onclick="showScreen('s-door')" style="opacity:0.4;font-size:12px;">← Back</button>
 </div>
 
-<div id="s-welcome" class="screen">
-  <!-- Theme toggle hidden for now
-  <div style="display:flex; gap:8px; justify-content:center; margin-top:12px;">
-    <button class="theme-btn active" onclick="setTheme('forest')" id="themeForest" style="padding:5px 14px; border-radius:20px; border:1.5px solid var(--gold); background:linear-gradient(135deg,#1a3322,#0d1f12); color:var(--gold); font-size:11px; font-family:'Cinzel',serif; cursor:pointer; letter-spacing:1px;">Forest</button>
-    <button class="theme-btn" onclick="setTheme('midnight')" id="themeMidnight" style="padding:5px 14px; border-radius:20px; border:1.5px solid rgba(212,175,55,0.3); background:linear-gradient(135deg,#0a0a0f,#111118); color:var(--text-dim); font-size:11px; font-family:'Cinzel',serif; cursor:pointer; letter-spacing:1px;">Midnight</button>
-  </div>
-  -->
-  <div class="spacer"></div>
-  <div class="logo-mark" style="width:100px;height:100px;">
-    <svg viewBox="0 0 100 100" style="width:100%;height:100%;">
-      <style>
-        @keyframes logoGlow {
-          0%, 100% { opacity: 0.5; filter: drop-shadow(0 0 3px rgba(212,175,55,0.3)); }
-          50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(212,175,55,0.6)); }
-        }
-        @keyframes lineGlow {
-          0%, 100% { opacity: 0.25; }
-          50% { opacity: 0.55; }
-        }
-        .logo-seed { animation: logoGlow 4s ease-in-out infinite; }
-        .logo-lines { animation: lineGlow 4s ease-in-out infinite; }
-        .s1 { animation-delay: 0s; }
-        .s2 { animation-delay: -0.57s; }
-        .s3 { animation-delay: -1.14s; }
-        .s4 { animation-delay: -1.71s; }
-        .s5 { animation-delay: -2.28s; }
-        .s6 { animation-delay: -2.85s; }
-        .s7 { animation-delay: -3.42s; }
-      </style>
-      <!-- === METATRON'S CUBE — wraps around entire Seed === -->
-      <!-- Outer boundary circle -->
-      <circle cx="50" cy="50" r="48" fill="none" stroke="#d4af37" stroke-width="0.5" opacity="0.15"/>
-      
-      <!-- Layer 3: Metatron connecting lines (all 13 centers) — appreciate complexity -->
-      <g class="logo-lines">
-        <!-- Inner hexagon connections -->
-        <line x1="50" y1="30" x2="50" y2="70" stroke="#d4af37" stroke-width="0.5"/>
-        <line x1="32.7" y1="40" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.5"/>
-        <line x1="67.3" y1="40" x2="32.7" y2="60" stroke="#d4af37" stroke-width="0.5"/>
-        <line x1="50" y1="30" x2="32.7" y2="60" stroke="#d4af37" stroke-width="0.3"/>
-        <line x1="50" y1="30" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.3"/>
-        <line x1="50" y1="70" x2="32.7" y2="40" stroke="#d4af37" stroke-width="0.3"/>
-        <line x1="50" y1="70" x2="67.3" y2="40" stroke="#d4af37" stroke-width="0.3"/>
-        <line x1="32.7" y1="40" x2="67.3" y2="40" stroke="#d4af37" stroke-width="0.3"/>
-        <line x1="32.7" y1="60" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.3"/>
-        <!-- Outer-to-inner radial lines -->
-        <line x1="50" y1="10" x2="50" y2="30" stroke="#d4af37" stroke-width="0.4"/>
-        <line x1="84.6" y1="30" x2="67.3" y2="40" stroke="#d4af37" stroke-width="0.4"/>
-        <line x1="84.6" y1="70" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.4"/>
-        <line x1="50" y1="90" x2="50" y2="70" stroke="#d4af37" stroke-width="0.4"/>
-        <line x1="15.4" y1="70" x2="32.7" y2="60" stroke="#d4af37" stroke-width="0.4"/>
-        <line x1="15.4" y1="30" x2="32.7" y2="40" stroke="#d4af37" stroke-width="0.4"/>
-        <!-- Outer-to-outer cross connections -->
-        <line x1="50" y1="10" x2="84.6" y2="30" stroke="#d4af37" stroke-width="0.25"/>
-        <line x1="84.6" y1="30" x2="84.6" y2="70" stroke="#d4af37" stroke-width="0.25"/>
-        <line x1="84.6" y1="70" x2="50" y2="90" stroke="#d4af37" stroke-width="0.25"/>
-        <line x1="50" y1="90" x2="15.4" y2="70" stroke="#d4af37" stroke-width="0.25"/>
-        <line x1="15.4" y1="70" x2="15.4" y2="30" stroke="#d4af37" stroke-width="0.25"/>
-        <line x1="15.4" y1="30" x2="50" y2="10" stroke="#d4af37" stroke-width="0.25"/>
-        <!-- Outer diagonal crosses -->
-        <line x1="50" y1="10" x2="50" y2="90" stroke="#d4af37" stroke-width="0.25"/>
-        <line x1="15.4" y1="30" x2="84.6" y2="70" stroke="#d4af37" stroke-width="0.25"/>
-        <line x1="84.6" y1="30" x2="15.4" y2="70" stroke="#d4af37" stroke-width="0.25"/>
-        <!-- Outer-to-inner skip connections -->
-        <line x1="50" y1="10" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.2"/>
-        <line x1="50" y1="10" x2="32.7" y2="60" stroke="#d4af37" stroke-width="0.2"/>
-        <line x1="84.6" y1="30" x2="32.7" y2="60" stroke="#d4af37" stroke-width="0.2"/>
-        <line x1="84.6" y1="30" x2="50" y2="70" stroke="#d4af37" stroke-width="0.2"/>
-        <line x1="84.6" y1="70" x2="32.7" y2="40" stroke="#d4af37" stroke-width="0.2"/>
-        <line x1="84.6" y1="70" x2="50" y2="30" stroke="#d4af37" stroke-width="0.2"/>
-        <line x1="50" y1="90" x2="67.3" y2="40" stroke="#d4af37" stroke-width="0.2"/>
-        <line x1="50" y1="90" x2="32.7" y2="40" stroke="#d4af37" stroke-width="0.2"/>
-        <line x1="15.4" y1="70" x2="67.3" y2="40" stroke="#d4af37" stroke-width="0.2"/>
-        <line x1="15.4" y1="70" x2="50" y2="30" stroke="#d4af37" stroke-width="0.2"/>
-        <line x1="15.4" y1="30" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.2"/>
-        <line x1="15.4" y1="30" x2="50" y2="70" stroke="#d4af37" stroke-width="0.2"/>
-      </g>
-      
-      <!-- Layer 2: Hexagons — develop flexibility -->
-      <polygon points="50,30 67.3,40 67.3,60 50,70 32.7,60 32.7,40" fill="none" stroke="#d4af37" stroke-width="0.8" opacity="0.35"/>
-      <polygon points="50,10 84.6,30 84.6,70 50,90 15.4,70 15.4,30" fill="none" stroke="#d4af37" stroke-width="0.6" opacity="0.25"/>
-      
-      <!-- Layer 1: 7 Seed circles — practice simplicity (HEAVY) -->
-      <circle class="logo-seed s1" cx="50" cy="50" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
-      <circle class="logo-seed s2" cx="50" cy="30" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
-      <circle class="logo-seed s3" cx="67.3" cy="40" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
-      <circle class="logo-seed s4" cx="67.3" cy="60" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
-      <circle class="logo-seed s5" cx="50" cy="70" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
-      <circle class="logo-seed s6" cx="32.7" cy="60" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
-      <circle class="logo-seed s7" cx="32.7" cy="40" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
-      <!-- Center bindu -->
-      <circle cx="50" cy="50" r="1.5" fill="#d4af37" opacity="0.5"/>
-    </svg>
-  </div>
-  <div class="spacer"></div>
-  <div style="font-family: 'Cinzel', serif; color: #d4af37; font-size: 1.4em; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; text-align: center;">EARTH HARMONY</div>
-  <div style="font-family: 'Cinzel', serif; color: var(--text-dim); font-size: 14px; letter-spacing: 4px; margin-top: 6px; text-transform: uppercase; font-weight: 400;">Sound Bath Portal</div>
-  <div class="spacer"></div>
-  <div style="max-width: 300px; text-align: center; line-height: 2; color: var(--text-dim); font-family: 'Cormorant Garamond', serif; font-size: 18px;">
-    <div>Choose a name</div>
-    <div>Check in</div>
-    <div>Set an intention</div>
-    <div>See what shifts</div>
-  </div>
-  <div class="spacer"></div>
-  <input type="text" class="text-input" id="nameInput" placeholder="what should we call you?" maxlength="20" autocomplete="off" oninput="document.getElementById('enterBtn').disabled = this.value.trim().length === 0" onkeydown="if(event.key==='Enter' && this.value.trim()){playPortalChime();enterPortal();}">
-  <div style="color: var(--text-dim); font-size: 15px; margin-top: 10px; opacity: 0.5; font-style: italic;">eg. GoldenWeaver · RebelHugz7 · WildBear</div>
+<div id="s-welcome" class="screen" style="justify-content:center;text-align:center;">
+  <div style="font-family:'Cinzel',serif;color:var(--gold);font-size:26px;letter-spacing:4px;">Welcome</div>
+  <div style="height:28px"></div>
+  <input type="text" class="text-input" id="nameInput" placeholder="your name" maxlength="20" autocomplete="off" oninput="document.getElementById('enterBtn').disabled = this.value.trim().length === 0" onkeydown="if(event.key==='Enter' && this.value.trim()){playPortalChime();enterPortal();}">
+  
   <div class="spacer"></div>
   <button class="btn btn-solid" id="enterBtn" onclick="enterPortal()" disabled>Begin</button>
+  <button class="btn-skip" onclick="showScreen('s-door')" style="opacity:0.4; font-size: 12px; margin-top:10px;">← Back</button>
   <div class="nav-dots">
     <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
     <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
