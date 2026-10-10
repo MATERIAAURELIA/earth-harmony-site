@@ -2747,9 +2747,15 @@ function renderBodyShift() {
     { id: 'body',      y: 372 },
   ];
   const name = id => (CATEGORIES.find(c => c.id === id) || {}).name || id;
-  const glowR = v => (12 + v * 2.6) * 1.9;   // aura size (grows with score, gently)
+  const glowR = v => (12 + v * 2.6) * 1.9;   // point glow (grows with score, gently)
+  // whole-body aura: modest growth with the average score
+  const avg = o => { const v = CATEGORIES.map(c => o[c.id] ?? 5); return v.reduce((a, b) => a + b, 0) / v.length; };
+  const avgPre = avg(state.preScores), avgPost = avg(state.postScores);
+  const auraRX = v => (118 + v * 6).toFixed(1), auraRY = v => (215 + v * 7).toFixed(1), auraOp = v => (0.55 + v / 25).toFixed(2);
   let svg = `<svg viewBox="0 0 460 470" width="100%" style="display:block;overflow:visible">
-    <defs><radialGradient id="glow"><stop offset="0" stop-color="#f5d060" stop-opacity=".85"/><stop offset="1" stop-color="#f5d060" stop-opacity="0"/></radialGradient></defs>
+    <defs><radialGradient id="glow"><stop offset="0" stop-color="#f5d060" stop-opacity=".85"/><stop offset="1" stop-color="#f5d060" stop-opacity="0"/></radialGradient>
+      <radialGradient id="aura" cx="50%" cy="50%" r="50%"><stop offset="0.55" stop-color="#f5d060" stop-opacity=".22"/><stop offset="1" stop-color="#f5d060" stop-opacity="0"/></radialGradient></defs>
+    <ellipse id="bsAura" cx="${FX}" cy="240" rx="${auraRX(avgPre)}" ry="${auraRY(avgPre)}" fill="url(#aura)" opacity="${auraOp(avgPre)}"/>
     <g transform="translate(${FX - 200},0)" fill="rgba(245,208,96,0.10)" stroke="rgba(245,208,96,0.45)" stroke-width="2">
       <circle cx="200" cy="112" r="40"/>
       <path d="M200 154 C150 156 128 186 126 244 L122 334 C122 356 140 366 160 366 L240 366 C260 366 278 356 278 334 L274 244 C272 186 250 156 200 154 Z"/>
@@ -2792,6 +2798,17 @@ function renderBodyShift() {
     };
     requestAnimationFrame(step);
   };
+  // aura breathes outward across the whole sequence
+  const aura = box.querySelector('#bsAura');
+  setTimeout(() => {
+    const t0 = performance.now(), dur = 4600;
+    const step = (now) => {
+      const q = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - q, 2), v = avgPre + (avgPost - avgPre) * e;
+      aura.setAttribute('rx', auraRX(v)); aura.setAttribute('ry', auraRY(v)); aura.setAttribute('opacity', auraOp(v));
+      if (q < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, 500);
   [4, 3, 2, 1, 0].forEach((idx, k) => {          // body -> alignment -> harmony -> mind -> spirit
     setTimeout(() => {
       const n = nums[idx], g = glows[idx], dl = deltas[idx];
