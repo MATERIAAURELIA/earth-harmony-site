@@ -1,0 +1,3925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!-- Firebase -->
+<script src="sync.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+<script>
+  firebase.initializeApp({
+    apiKey: "AIzaSyA3CXtnY4Be5rNmSXmkJs6P5SwA_reM0rw",
+    authDomain: "earth-harmony-portal.firebaseapp.com",
+    databaseURL: "https://earth-harmony-portal-default-rtdb.firebaseio.com",
+    projectId: "earth-harmony-portal",
+    storageBucket: "earth-harmony-portal.firebasestorage.app",
+    messagingSenderId: "1058276837826",
+    appId: "1:1058276837826:web:d50dbc7e8b276f4686ee5b"
+  });
+  var db = firebase.database();
+</script>
+<title>Earth Harmony — Portal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --gold: #d4af37;
+    --gold-dim: #b8962e;
+    --gold-glow: rgba(212, 175, 55, 0.3);
+    --gold-bright: #f4d574;
+    --amber: #D4A24E;
+    --bg: #0a1a0d;
+    --bg2: #0d1f12;
+    --bg3: #1a3322;
+    --text: #e8e4dc;
+    --text-dim: #8a8678;
+    --accent: #2a2a3a;
+    --before: #c4a0b8;
+    --before-deep: #a07890;
+    --before-soft: rgba(196, 160, 184, 0.15);
+    --after: #f5d060;
+    --after-deep: #d4af37;
+    --after-soft: rgba(212, 175, 55, 0.2);
+    --materia: #D4A24E; /* my thumbprint ✨ */
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(160deg, #1a3322 0%, #143a25 20%, #0d1f12 45%, #0a1a0d 70%, #061008 100%);
+    background-attachment: fixed;
+    color: var(--text);
+    min-height: 100dvh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Sacred geometry background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 50%; left: 50%;
+    width: 600px; height: 600px;
+    transform: translate(-50%, -50%);
+    background: 
+      radial-gradient(circle, rgba(26,51,34,0.4) 0%, rgba(212,175,55,0.03) 30%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ==================== SACRED GEOMETRY SVG ==================== */
+  .sacred-bg {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px; height: 500px;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+    animation: slowRotate 120s linear infinite;
+  }
+
+  @keyframes slowRotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  /* ==================== GOLD RIM FRAME ==================== */
+  .gold-frame {
+    position: fixed;
+    inset: 6px;
+    border: 3px solid rgba(212, 175, 55, 0.45);
+    border-radius: 18px;
+    pointer-events: none;
+    z-index: 2;
+    box-shadow: 
+      inset 0 0 30px rgba(212, 175, 55, 0.05),
+      0 0 20px rgba(212, 175, 55, 0.08);
+  }
+  /* Inner border line — like the wisdom cards */
+  .gold-frame::after {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 13px;
+    border: 1.5px solid rgba(212, 175, 55, 0.2);
+    pointer-events: none;
+  }
+  /* Corner ornaments */
+  .gold-frame::before,
+  .gold-frame::after {
+    content: '✦';
+    position: absolute;
+    font-size: 10px;
+    color: rgba(212, 162, 78, 0.35);
+  }
+  .gold-frame::before { top: 10px; left: 14px; }
+  .gold-frame::after { top: 10px; right: 14px; }
+  .corner-bl, .corner-br {
+    position: absolute;
+    font-size: 10px;
+    color: rgba(212, 162, 78, 0.35);
+  }
+  .corner-bl { bottom: 10px; left: 14px; }
+  .corner-br { bottom: 10px; right: 14px; }
+
+  /* ==================== SCREENS ==================== */
+  .screen {
+    display: none;
+    min-height: 100dvh;
+    padding: 32px 20px;
+    position: relative;
+    z-index: 1;
+    animation: fadeIn 0.6s ease;
+  }
+  .screen.active { display: flex; flex-direction: column; align-items: center; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes introReveal {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 0.85; transform: translateY(0); }
+  }
+
+  .intro-step {
+    opacity: 0;
+    animation: introReveal 0.8s ease forwards;
+    margin-bottom: 20px;
+  }
+
+  /* ==================== TYPOGRAPHY ==================== */
+  .title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--gold);
+    text-align: center;
+    letter-spacing: 2px;
+  }
+
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 16px;
+    font-weight: 300;
+    text-align: center;
+    line-height: 1.6;
+    max-width: 300px;
+  }
+
+  /* ==================== BUTTONS ==================== */
+  .btn {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 14px 40px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s;
+    letter-spacing: 1px;
+    min-height: 48px;
+  }
+  .btn:active {
+    background: var(--gold);
+    color: var(--bg);
+    transform: scale(0.97);
+  }
+  .btn:disabled { opacity: 0.3; pointer-events: none; }
+
+  .btn-solid {
+    background: var(--gold);
+    color: var(--bg);
+    font-weight: 500;
+  }
+
+  .btn-skip {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 13px;
+    cursor: pointer;
+    padding: 8px 16px;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 1px;
+  }
+
+  /* ==================== INPUTS ==================== */
+  .text-input {
+    background: var(--bg2);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 18px;
+    color: var(--text);
+    text-align: center;
+    width: 100%;
+    max-width: 300px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .text-input:focus { border-color: var(--gold); }
+  .text-input::placeholder { color: var(--text-dim); }
+
+  /* ==================== LOGO ==================== */
+  .logo-mark {
+    width: 90px; height: 90px;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .logo-ring {
+    position: absolute;
+    width: 100%; height: 100%;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    animation: breathe 4s ease-in-out infinite;
+  }
+  .logo-ring:nth-child(2) {
+    width: 75%; height: 75%;
+    animation-delay: -1.3s;
+    opacity: 0.6;
+  }
+  .logo-ring:nth-child(3) {
+    width: 50%; height: 50%;
+    animation-delay: -2.6s;
+    opacity: 0.3;
+  }
+
+  @keyframes breathe {
+    0%, 100% { box-shadow: 0 0 15px var(--gold-glow); opacity: 0.8; }
+    50% { box-shadow: 0 0 30px var(--gold-glow); opacity: 1; }
+  }
+
+  .logo-icon {
+    font-size: 32px;
+    z-index: 1;
+  }
+
+  /* ==================== NAV DOTS ==================== */
+  .nav-dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    padding: 20px 0;
+    margin-top: auto;
+  }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    transition: all 0.3s;
+  }
+  .dot.active {
+    background: var(--gold);
+    width: 20px;
+    border-radius: 3px;
+  }
+
+  /* ==================== WORD CHIPS ==================== */
+  .word-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    max-width: 360px;
+    padding: 10px 0;
+  }
+
+  .word-chip {
+    padding: 10px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--accent);
+    background: var(--bg2);
+    color: var(--text-dim);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    user-select: none;
+  }
+  .word-chip.selected {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(212, 162, 78, 0.1);
+    box-shadow: 0 0 12px rgba(212, 162, 78, 0.1);
+  }
+
+  .custom-feeling {
+    background: var(--bg2);
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    padding: 10px 18px;
+    font-size: 14px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    width: 200px;
+    text-align: center;
+  }
+  .custom-feeling:focus { border-color: var(--gold); }
+  .custom-feeling::placeholder { color: var(--text-dim); }
+
+  /* ==================== SLIDERS — SACRED GEOMETRY ==================== */
+  .slider-group {
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .slider-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .slider-name {
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+
+  .slider-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--gold);
+    min-width: 30px;
+    text-align: right;
+  }
+
+  .slider-track {
+    position: relative;
+    width: 100%;
+    height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 100%);
+    outline: none;
+    position: relative;
+    z-index: 2;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, var(--gold-bright), var(--gold), var(--gold-dim));
+    cursor: pointer;
+    box-shadow: 0 0 16px var(--gold-glow), 0 2px 8px rgba(0,0,0,0.3);
+    border: 2px solid rgba(255,255,255,0.1);
+    transition: box-shadow 0.2s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:active {
+    box-shadow: 0 0 24px var(--gold-glow), 0 0 40px rgba(212,162,78,0.2), 0 2px 8px rgba(0,0,0,0.3);
+    transform: scale(1.1);
+  }
+
+  /* Firefox */
+  input[type="range"]::-moz-range-thumb {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, var(--gold-bright), var(--gold), var(--gold-dim));
+    cursor: pointer;
+    box-shadow: 0 0 16px var(--gold-glow);
+    border: 2px solid rgba(255,255,255,0.1);
+  }
+
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ==================== WORD CLOUD ==================== */
+  .cloud-container {
+    width: 100%;
+    max-width: 420px;
+    height: 60vh;
+    min-height: 300px;
+    position: relative;
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--bg2);
+    padding: 12px;
+  }
+
+  .cloud-word {
+    position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold);
+    transition: all 1.2s ease;
+    white-space: nowrap;
+  }
+
+  /* ==================== BEFORE/AFTER BARS ==================== */
+  .ba-container {
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ba-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .ba-label {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+
+  .ba-bars {
+    display: flex;
+    gap: 4px;
+    height: 28px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--bg3);
+  }
+
+  .ba-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.8s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 8px;
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 30px;
+  }
+
+  .ba-before {
+    background: linear-gradient(90deg, rgba(196,160,184,0.4), rgba(196,160,184,0.7));
+    color: #fff;
+    font-weight: 600;
+    border: 1px solid rgba(196,160,184,0.5);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+
+  .ba-after {
+    background: linear-gradient(90deg, rgba(240,200,80,0.5), rgba(240,200,80,0.85));
+    color: #1a1a24;
+    font-weight: 600;
+    border: 1px solid rgba(240,200,80,0.6);
+    text-shadow: 0 1px 2px rgba(255,255,255,0.1);
+  }
+
+  .ba-after.improved {
+    box-shadow: 0 0 10px rgba(240,200,80,0.4);
+  }
+
+  .ba-after.declined {
+    background: linear-gradient(90deg, rgba(196,160,184,0.3), rgba(196,160,184,0.5));
+    border-color: rgba(196,160,184,0.4);
+    color: #fff;
+  }
+
+  .ba-delta {
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 40px;
+    text-align: right;
+    padding-left: 6px;
+  }
+  .ba-delta.up { color: var(--after); }
+  .ba-delta.down { color: var(--before-deep); }
+  .ba-delta.same { color: var(--text-dim); }
+
+  /* Room results: vertical side-by-side columns */
+  .room-vertical {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 0;
+    height: 220px;
+  }
+  .room-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    max-width: 60px;
+  }
+  .room-col-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60px;
+  }
+  .room-col-bars {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+  }
+  .room-vbar {
+    flex: 1;
+    border-radius: 4px 4px 0 0;
+    min-height: 4px;
+    transition: height 0.8s ease;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 4px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .room-vbar.vb-before {
+    background: linear-gradient(0deg, rgba(196,160,184,0.3), rgba(196,160,184,0.6));
+    color: rgba(255,255,255,0.7);
+  }
+  .room-vbar.vb-after {
+    background: linear-gradient(0deg, rgba(212,175,55,0.4), rgba(245,208,96,0.8));
+    color: #1a1a24;
+  }
+  .room-col-delta {
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* Personal results: stacked head-to-head bars */
+  .ba-stacked .ba-bars {
+    flex-direction: column;
+    height: auto;
+    gap: 3px;
+  }
+  .ba-stacked .ba-bar {
+    height: 24px;
+    border-radius: 4px;
+  }
+
+  /* ==================== ART MODE TABS ==================== */
+  .art-tabs {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--accent);
+    border-radius: 24px;
+    overflow: hidden;
+    max-width: 300px;
+    width: 100%;
+  }
+  .art-tab {
+    flex: 1;
+    padding: 10px 16px;
+    text-align: center;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    background: var(--bg2);
+    color: var(--text-dim);
+    border: none;
+    transition: all 0.3s;
+    letter-spacing: 0.5px;
+  }
+  .art-tab.active {
+    background: var(--gold);
+    color: var(--bg);
+    font-weight: 500;
+  }
+
+  /* Symmetry selector */
+  .symmetry-bar {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+  }
+  .sym-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    background: var(--bg2);
+    color: var(--text-dim);
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .sym-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(212,162,78,0.1);
+    box-shadow: 0 0 8px var(--gold-glow);
+  }
+
+  /* Retro Paint styles */
+  .retro-canvas-wrap {
+    width: 320px; height: 280px;
+    border: 3px solid #c0c0c0;
+    background: #fff;
+    position: relative;
+    touch-action: none;
+    image-rendering: pixelated;
+  }
+  .retro-canvas-wrap canvas {
+    width: 100%; height: 100%;
+    image-rendering: pixelated;
+  }
+  .retro-palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    max-width: 320px;
+    padding: 4px;
+    background: #c0c0c0;
+    border: 2px solid #808080;
+    border-radius: 2px;
+  }
+  .retro-color {
+    width: 20px; height: 20px;
+    border: 1px solid #808080;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .retro-color.active {
+    border: 2px solid #000;
+    transform: scale(1.2);
+    z-index: 1;
+  }
+  .retro-size-bar {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    padding: 4px 8px;
+    background: #c0c0c0;
+    border: 2px solid #808080;
+    border-radius: 2px;
+  }
+  .retro-size {
+    cursor: pointer;
+    background: #000;
+    border: 1px solid #808080;
+  }
+  .retro-size.active {
+    border-color: #0000ff;
+    box-shadow: 0 0 0 1px #0000ff;
+  }
+  .retro-title-bar {
+    background: linear-gradient(90deg, #000080, #1084d0);
+    color: #fff;
+    font-size: 12px;
+    font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
+    padding: 3px 6px;
+    font-weight: bold;
+    letter-spacing: 0;
+    max-width: 326px;
+    width: 100%;
+  }
+
+  /* ==================== INSIGHT RETRIEVAL ==================== */
+  .insight-area {
+    width: 100%;
+    max-width: 340px;
+    min-height: 120px;
+    background: var(--bg2);
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+    padding: 20px;
+    font-size: 16px;
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    line-height: 1.7;
+    outline: none;
+    resize: none;
+  }
+  .insight-area:focus { border-color: var(--gold); }
+  .insight-area::placeholder {
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* ==================== AVATAR PICKER ==================== */
+  .avatar-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .avatar-option {
+    width: 100%;
+    padding: 10px 18px;
+    border-radius: 14px;
+    border: 1.5px solid var(--accent);
+    background: var(--bg2);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 22px;
+    position: relative;
+  }
+
+  .avatar-emoji-circle {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(212, 175, 55, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 22px;
+  }
+
+  .avatar-option.selected .avatar-emoji-circle {
+    border-color: var(--gold);
+    box-shadow: 0 0 10px var(--gold-glow);
+  }
+
+  .avatar-option .avatar-label {
+    font-size: 15px;
+    color: var(--text);
+    letter-spacing: 2px;
+    font-family: 'Cinzel', serif;
+    text-transform: uppercase;
+  }
+
+  .avatar-option.selected {
+    border-color: var(--gold);
+    box-shadow: 0 0 16px var(--gold-glow);
+    background: rgba(212, 175, 55, 0.08);
+  }
+
+  /* ==================== MANDALA CANVAS ==================== */
+  .mandala-canvas-wrap {
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    overflow: hidden;
+    position: relative;
+    background: var(--bg2);
+    touch-action: none;
+  }
+
+  .mandala-canvas-wrap canvas {
+    width: 100%; height: 100%;
+  }
+
+  .brush-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 320px;
+  }
+
+  .brush-color {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .brush-color.active { border-color: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.3); }
+
+  .brush-size {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .size-dot {
+    border-radius: 50%;
+    background: var(--gold);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+  .size-dot.active { border-color: #fff; }
+
+  /* ==================== RESULTS / COMMUNITY ==================== */
+  .results-card {
+    width: 100%;
+    max-width: 360px;
+    background: var(--bg2);
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .results-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--gold);
+  }
+
+  /* ==================== PORTAL LINKS ==================== */
+  .portal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .portal-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 12px;
+    background: var(--bg2);
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .portal-link:active {
+    border-color: var(--gold);
+    background: rgba(212, 162, 78, 0.05);
+  }
+
+  .portal-icon { font-size: 28px; }
+
+  .portal-label {
+    font-size: 13px;
+    font-weight: 400;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+
+  /* ==================== MATERIA MARK ==================== */
+  .materia-mark {
+    position: fixed;
+    bottom: 8px;
+    right: 12px;
+    font-size: 9px;
+    color: rgba(212, 162, 78, 0.2);
+    letter-spacing: 1px;
+    z-index: 10;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* ==================== FACILITATOR ==================== */
+  .fac-toggle {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    font-size: 11px;
+    color: var(--text-dim);
+    cursor: pointer;
+    z-index: 100;
+    padding: 6px 12px;
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+    background: var(--bg);
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    color: var(--gold);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ==================== ROOM VIEW ==================== */
+  .room-summary {
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .room-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+  }
+
+  .room-stat-label { font-size: 14px; }
+  .room-stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    color: var(--gold);
+  }
+
+  /* ==================== RESPONSIVE ==================== */
+  @media (max-width: 380px) {
+    .title { font-size: 24px; }
+    .slider-group { max-width: 300px; }
+    .ba-container { max-width: 300px; }
+    .portal-grid { max-width: 300px; }
+    .mandala-canvas-wrap { width: 280px; height: 280px; }
+  }
+
+  /* Spacer */
+  .spacer { height: 16px; }
+  .spacer-lg { height: 32px; }
+
+  /* Flow animation for transitions */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .stagger > * {
+    animation: slideUp 0.5s ease backwards;
+  }
+  .stagger > *:nth-child(1) { animation-delay: 0s; }
+  .stagger > *:nth-child(2) { animation-delay: 0.1s; }
+  .stagger > *:nth-child(3) { animation-delay: 0.2s; }
+  .stagger > *:nth-child(4) { animation-delay: 0.3s; }
+  .stagger > *:nth-child(5) { animation-delay: 0.4s; }
+  .stagger > *:nth-child(6) { animation-delay: 0.5s; }
+  .stagger > *:nth-child(7) { animation-delay: 0.6s; }
+
+  /* ==================== UNDO BUTTON ==================== */
+  .undo-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    background: var(--bg2);
+    color: var(--gold);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    opacity: 0.5;
+  }
+  .undo-btn.has-history { opacity: 1; }
+  .undo-btn:active { background: var(--gold); color: var(--bg); transform: scale(0.93); }
+
+  /* ==================== STAMP BAR ==================== */
+  .stamp-bar {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 340px;
+  }
+  .stamp-btn {
+    padding: 6px 10px;
+    border-radius: 16px;
+    border: 1px solid var(--accent);
+    background: var(--bg2);
+    color: var(--text-dim);
+    font-size: 11px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+  .stamp-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(212,162,78,0.1);
+    box-shadow: 0 0 8px var(--gold-glow);
+  }
+  .stamp-size-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 240px;
+    width: 100%;
+  }
+  .stamp-size-wrap label {
+    font-size: 11px;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .stamp-size-wrap input[type="range"] {
+    flex: 1;
+    height: 2px;
+  }
+
+  /* ==================== 3D SACRED MODE ==================== */
+  .sacred3d-canvas-wrap {
+    width: 320px; height: 320px;
+    border-radius: 16px;
+    border: 1px solid var(--accent);
+    overflow: hidden;
+    position: relative;
+    background: var(--bg2);
+    touch-action: none;
+  }
+  .sacred3d-canvas-wrap canvas {
+    width: 100%; height: 100%;
+  }
+  .solid-bar {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 340px;
+  }
+  .solid-btn {
+    padding: 8px 12px;
+    border-radius: 16px;
+    border: 1px solid var(--accent);
+    background: var(--bg2);
+    color: var(--text-dim);
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .solid-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(212,162,78,0.1);
+    box-shadow: 0 0 8px var(--gold-glow);
+  }
+</style>
+</head>
+<body>
+
+<!-- Gold rim frame -->
+<div class="gold-frame">
+  <span class="corner-bl">✦</span>
+  <span class="corner-br">✦</span>
+</div>
+
+<!-- Sacred geometry background -->
+<svg class="sacred-bg" viewBox="0 0 500 500">
+  <!-- Metatron's Cube -->
+  <!-- Outer boundary -->
+  <circle cx="250" cy="250" r="220" fill="none" stroke="rgba(212,175,55,0.2)" stroke-width="0.6"/>
+  <!-- Seed of Life: 7 circles -->
+  <circle cx="250" cy="250" r="100" fill="none" stroke="rgba(212,175,55,0.25)" stroke-width="0.5"/>
+  <circle cx="250" cy="150" r="100" fill="none" stroke="rgba(212,175,55,0.15)" stroke-width="0.5"/>
+  <circle cx="336" cy="200" r="100" fill="none" stroke="rgba(212,175,55,0.15)" stroke-width="0.5"/>
+  <circle cx="336" cy="300" r="100" fill="none" stroke="rgba(212,175,55,0.15)" stroke-width="0.5"/>
+  <circle cx="250" cy="350" r="100" fill="none" stroke="rgba(212,175,55,0.15)" stroke-width="0.5"/>
+  <circle cx="164" cy="300" r="100" fill="none" stroke="rgba(212,175,55,0.15)" stroke-width="0.5"/>
+  <circle cx="164" cy="200" r="100" fill="none" stroke="rgba(212,175,55,0.15)" stroke-width="0.5"/>
+  <!-- Metatron lines: connecting all 13 centers -->
+  <!-- Inner hexagon -->
+  <line x1="250" y1="150" x2="336" y2="200" stroke="rgba(212,175,55,0.12)" stroke-width="0.4"/>
+  <line x1="336" y1="200" x2="336" y2="300" stroke="rgba(212,175,55,0.12)" stroke-width="0.4"/>
+  <line x1="336" y1="300" x2="250" y2="350" stroke="rgba(212,175,55,0.12)" stroke-width="0.4"/>
+  <line x1="250" y1="350" x2="164" y2="300" stroke="rgba(212,175,55,0.12)" stroke-width="0.4"/>
+  <line x1="164" y1="300" x2="164" y2="200" stroke="rgba(212,175,55,0.12)" stroke-width="0.4"/>
+  <line x1="164" y1="200" x2="250" y2="150" stroke="rgba(212,175,55,0.12)" stroke-width="0.4"/>
+  <!-- Cross connections -->
+  <line x1="250" y1="150" x2="250" y2="350" stroke="rgba(212,175,55,0.1)" stroke-width="0.3"/>
+  <line x1="250" y1="150" x2="336" y2="300" stroke="rgba(212,175,55,0.1)" stroke-width="0.3"/>
+  <line x1="250" y1="150" x2="164" y2="300" stroke="rgba(212,175,55,0.1)" stroke-width="0.3"/>
+  <line x1="336" y1="200" x2="164" y2="300" stroke="rgba(212,175,55,0.1)" stroke-width="0.3"/>
+  <line x1="336" y1="200" x2="250" y2="350" stroke="rgba(212,175,55,0.1)" stroke-width="0.3"/>
+  <line x1="336" y1="300" x2="164" y2="200" stroke="rgba(212,175,55,0.1)" stroke-width="0.3"/>
+  <line x1="336" y1="300" x2="250" y2="150" stroke="rgba(212,175,55,0.1)" stroke-width="0.3"/>
+  <line x1="164" y1="200" x2="336" y2="300" stroke="rgba(212,175,55,0.1)" stroke-width="0.3"/>
+  <line x1="164" y1="200" x2="250" y2="350" stroke="rgba(212,175,55,0.1)" stroke-width="0.3"/>
+  <!-- Center point -->
+  <circle cx="250" cy="250" r="2" fill="rgba(212,175,55,0.2)"/>
+</svg>
+
+<div class="fac-toggle" onclick="toggleFacilitator()">⚙️</div>
+<div class="materia-mark">✨ materia</div>
+
+<!-- ==================== 0. INTRO ==================== -->
+<!-- ==================== 1. WELCOME ==================== -->
+<div id="s-welcome" class="screen active">
+  <!-- Theme toggle hidden for now
+  <div style="display:flex; gap:8px; justify-content:center; margin-top:12px;">
+    <button class="theme-btn active" onclick="setTheme('forest')" id="themeForest" style="padding:5px 14px; border-radius:20px; border:1.5px solid var(--gold); background:linear-gradient(135deg,#1a3322,#0d1f12); color:var(--gold); font-size:11px; font-family:'Cinzel',serif; cursor:pointer; letter-spacing:1px;">Forest</button>
+    <button class="theme-btn" onclick="setTheme('midnight')" id="themeMidnight" style="padding:5px 14px; border-radius:20px; border:1.5px solid rgba(212,175,55,0.3); background:linear-gradient(135deg,#0a0a0f,#111118); color:var(--text-dim); font-size:11px; font-family:'Cinzel',serif; cursor:pointer; letter-spacing:1px;">Midnight</button>
+  </div>
+  -->
+  <div class="spacer"></div>
+  <div class="logo-mark" style="width:100px;height:100px;">
+    <svg viewBox="0 0 100 100" style="width:100%;height:100%;">
+      <style>
+        @keyframes logoGlow {
+          0%, 100% { opacity: 0.5; filter: drop-shadow(0 0 3px rgba(212,175,55,0.3)); }
+          50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(212,175,55,0.6)); }
+        }
+        @keyframes lineGlow {
+          0%, 100% { opacity: 0.25; }
+          50% { opacity: 0.55; }
+        }
+        .logo-seed { animation: logoGlow 4s ease-in-out infinite; }
+        .logo-lines { animation: lineGlow 4s ease-in-out infinite; }
+        .s1 { animation-delay: 0s; }
+        .s2 { animation-delay: -0.57s; }
+        .s3 { animation-delay: -1.14s; }
+        .s4 { animation-delay: -1.71s; }
+        .s5 { animation-delay: -2.28s; }
+        .s6 { animation-delay: -2.85s; }
+        .s7 { animation-delay: -3.42s; }
+      </style>
+      <!-- === METATRON'S CUBE — wraps around entire Seed === -->
+      <!-- Outer boundary circle -->
+      <circle cx="50" cy="50" r="48" fill="none" stroke="#d4af37" stroke-width="0.5" opacity="0.15"/>
+      
+      <!-- Layer 3: Metatron connecting lines (all 13 centers) — appreciate complexity -->
+      <g class="logo-lines">
+        <!-- Inner hexagon connections -->
+        <line x1="50" y1="30" x2="50" y2="70" stroke="#d4af37" stroke-width="0.5"/>
+        <line x1="32.7" y1="40" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.5"/>
+        <line x1="67.3" y1="40" x2="32.7" y2="60" stroke="#d4af37" stroke-width="0.5"/>
+        <line x1="50" y1="30" x2="32.7" y2="60" stroke="#d4af37" stroke-width="0.3"/>
+        <line x1="50" y1="30" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.3"/>
+        <line x1="50" y1="70" x2="32.7" y2="40" stroke="#d4af37" stroke-width="0.3"/>
+        <line x1="50" y1="70" x2="67.3" y2="40" stroke="#d4af37" stroke-width="0.3"/>
+        <line x1="32.7" y1="40" x2="67.3" y2="40" stroke="#d4af37" stroke-width="0.3"/>
+        <line x1="32.7" y1="60" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.3"/>
+        <!-- Outer-to-inner radial lines -->
+        <line x1="50" y1="10" x2="50" y2="30" stroke="#d4af37" stroke-width="0.4"/>
+        <line x1="84.6" y1="30" x2="67.3" y2="40" stroke="#d4af37" stroke-width="0.4"/>
+        <line x1="84.6" y1="70" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.4"/>
+        <line x1="50" y1="90" x2="50" y2="70" stroke="#d4af37" stroke-width="0.4"/>
+        <line x1="15.4" y1="70" x2="32.7" y2="60" stroke="#d4af37" stroke-width="0.4"/>
+        <line x1="15.4" y1="30" x2="32.7" y2="40" stroke="#d4af37" stroke-width="0.4"/>
+        <!-- Outer-to-outer cross connections -->
+        <line x1="50" y1="10" x2="84.6" y2="30" stroke="#d4af37" stroke-width="0.25"/>
+        <line x1="84.6" y1="30" x2="84.6" y2="70" stroke="#d4af37" stroke-width="0.25"/>
+        <line x1="84.6" y1="70" x2="50" y2="90" stroke="#d4af37" stroke-width="0.25"/>
+        <line x1="50" y1="90" x2="15.4" y2="70" stroke="#d4af37" stroke-width="0.25"/>
+        <line x1="15.4" y1="70" x2="15.4" y2="30" stroke="#d4af37" stroke-width="0.25"/>
+        <line x1="15.4" y1="30" x2="50" y2="10" stroke="#d4af37" stroke-width="0.25"/>
+        <!-- Outer diagonal crosses -->
+        <line x1="50" y1="10" x2="50" y2="90" stroke="#d4af37" stroke-width="0.25"/>
+        <line x1="15.4" y1="30" x2="84.6" y2="70" stroke="#d4af37" stroke-width="0.25"/>
+        <line x1="84.6" y1="30" x2="15.4" y2="70" stroke="#d4af37" stroke-width="0.25"/>
+        <!-- Outer-to-inner skip connections -->
+        <line x1="50" y1="10" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="50" y1="10" x2="32.7" y2="60" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="84.6" y1="30" x2="32.7" y2="60" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="84.6" y1="30" x2="50" y2="70" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="84.6" y1="70" x2="32.7" y2="40" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="84.6" y1="70" x2="50" y2="30" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="50" y1="90" x2="67.3" y2="40" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="50" y1="90" x2="32.7" y2="40" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="15.4" y1="70" x2="67.3" y2="40" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="15.4" y1="70" x2="50" y2="30" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="15.4" y1="30" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="15.4" y1="30" x2="50" y2="70" stroke="#d4af37" stroke-width="0.2"/>
+      </g>
+      
+      <!-- Layer 2: Hexagons — develop flexibility -->
+      <polygon points="50,30 67.3,40 67.3,60 50,70 32.7,60 32.7,40" fill="none" stroke="#d4af37" stroke-width="0.8" opacity="0.35"/>
+      <polygon points="50,10 84.6,30 84.6,70 50,90 15.4,70 15.4,30" fill="none" stroke="#d4af37" stroke-width="0.6" opacity="0.25"/>
+      
+      <!-- Layer 1: 7 Seed circles — practice simplicity (HEAVY) -->
+      <circle class="logo-seed s1" cx="50" cy="50" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+      <circle class="logo-seed s2" cx="50" cy="30" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+      <circle class="logo-seed s3" cx="67.3" cy="40" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+      <circle class="logo-seed s4" cx="67.3" cy="60" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+      <circle class="logo-seed s5" cx="50" cy="70" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+      <circle class="logo-seed s6" cx="32.7" cy="60" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+      <circle class="logo-seed s7" cx="32.7" cy="40" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+      <!-- Center bindu -->
+      <circle cx="50" cy="50" r="1.5" fill="#d4af37" opacity="0.5"/>
+    </svg>
+  </div>
+  <div class="spacer"></div>
+  <div style="font-family: 'Cinzel', serif; color: #d4af37; font-size: 1.4em; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; text-align: center;">EARTH HARMONY</div>
+  <div style="font-family: 'Cinzel', serif; color: var(--text-dim); font-size: 14px; letter-spacing: 4px; margin-top: 6px; text-transform: uppercase; font-weight: 400;">Sound Bath Portal</div>
+  <div class="spacer"></div>
+  <div style="max-width: 300px; text-align: center; line-height: 2; color: var(--text-dim); font-family: 'Cormorant Garamond', serif; font-size: 18px;">
+    <div>Choose a name</div>
+    <div>Check in</div>
+    <div>Set an intention</div>
+    <div>See what shifts</div>
+  </div>
+  <div class="spacer"></div>
+  <input type="text" class="text-input" id="nameInput" placeholder="what should we call you?" maxlength="20" autocomplete="off" oninput="document.getElementById('enterBtn').disabled = this.value.trim().length === 0" onkeydown="if(event.key==='Enter' && this.value.trim()){playPortalChime();enterPortal();}">
+  <div style="color: var(--text-dim); font-size: 15px; margin-top: 10px; opacity: 0.5; font-style: italic;">eg. GoldenWeaver · RebelHugz7 · WildBear</div>
+  <div class="spacer"></div>
+  <button class="btn btn-solid" id="enterBtn" onclick="enterPortal()" disabled>Begin</button>
+  <div class="nav-dots">
+    <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
+</div>
+
+<!-- ==================== 1b. SET INTENTION ==================== -->
+<div id="s-intention" class="screen">
+  <div class="spacer"></div>
+  <div class="title" style="font-family: 'Cinzel', serif; font-size: 20px;">Power of Your Intention</div>
+  <div class="subtitle" style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; margin-top: 12px; line-height: 1.6; max-width: 300px;">
+    One intention is powerful.<br>A room full? Unstoppable.<br>Name what you're calling in.
+  </div>
+  <div class="spacer-lg"></div>
+  <input type="text" class="text-input" id="intentionInput" placeholder="My intention is..." maxlength="80" autocomplete="off" style="font-size: 16px; font-style: italic;">
+  <div style="color: var(--text-dim); font-size: 13px; margin-top: 8px; font-style: italic;">(or let it find you)</div>
+  <div class="spacer"></div>
+  <button class="btn btn-solid" onclick="submitIntention(true)">Share with the Room</button>
+  <button class="btn btn-solid" onclick="submitIntention(false)" style="background:transparent; border:1.5px solid var(--gold); color:var(--gold);">Keep Private 🔒</button>
+  <button class="btn-skip" onclick="skipIntention()">Skip</button>
+  <button class="btn-skip" onclick="showScreen('s-journey')" style="opacity:0.4; font-size: 12px;">← Back</button>
+  <div class="nav-dots">
+    <div class="dot"></div><div class="dot active"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
+</div>
+
+<!-- ==================== 2. AVATAR ==================== -->
+<div id="s-avatar" class="screen">
+  <div class="spacer"></div>
+  <div class="title">Choose Your Archetype</div>
+  <div class="subtitle">What energy are you bringing?</div>
+  <div class="spacer"></div>
+  <div class="avatar-grid" id="avatarGrid"></div>
+  <div class="spacer"></div>
+  <button class="btn" onclick="submitAvatar()">Continue</button>
+  <button class="btn-skip" onclick="submitAvatar()">Skip</button>
+  <button class="btn-skip" onclick="showScreen('s-welcome')" style="opacity:0.4; font-size: 12px;">← Back</button>
+  <div class="nav-dots">
+    <div class="dot"></div><div class="dot active"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
+</div>
+
+<!-- ==================== 3a. PRE CHECK-IN: Words ==================== -->
+<div id="s-precheckin" class="screen">
+  <div class="spacer"></div>
+  <div class="title">How Are You Arriving?</div>
+  <div class="subtitle">Select what resonates. Be honest — this is for you.</div>
+  <div class="spacer"></div>
+  <div class="word-grid" id="preWordGrid"></div>
+  <div style="display:flex; gap:8px; width:100%; max-width:340px; align-items:center;">
+    <input type="text" class="custom-feeling" id="customFeeling" onkeydown="if(event.key==='Enter'){addCustomFeeling();event.preventDefault();}" placeholder="+ add your own" maxlength="24" style="flex:1;">
+    <button class="btn" onclick="addCustomFeeling()" ontouchend="addCustomFeeling()" style="padding:10px 16px; font-size:15px; white-space:nowrap;">Add</button>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn btn-solid" onclick="addCustomFeeling(); buildSliders('preSliders','pre'); showScreen('s-presliders')">Continue</button>
+  <button class="btn-skip" onclick="buildSliders('preSliders','pre'); showScreen('s-presliders')">Skip</button>
+  <button class="btn-skip" onclick="showScreen('s-avatar')" style="opacity:0.4; font-size: 12px;">← Back</button>
+  <div class="nav-dots">
+    <div class="dot"></div><div class="dot"></div><div class="dot active"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
+</div>
+
+<!-- ==================== 3b. PRE CHECK-IN: Sliders ==================== -->
+<div id="s-presliders" class="screen">
+  <div class="spacer"></div>
+  <div class="title" style="font-size: 20px;">Right Now, I Feel...</div>
+  <div class="spacer"></div>
+  <div class="slider-group" id="preSliders"></div>
+  <div class="spacer"></div>
+  <button class="btn btn-solid" onclick="submitPreCheckin()">I'm Ready</button>
+  <button class="btn-skip" onclick="skipPreCheckin()">Skip</button>
+  <button class="btn-skip" onclick="showScreen('s-precheckin')" style="opacity:0.4; font-size: 12px;">← Back</button>
+</div>
+
+<!-- ==================== 4. COMMUNITY VIBE (word cloud) ==================== -->
+<div id="s-journey" class="screen" style="padding: 12px 8px;">
+  <div style="font-family: 'Cinzel', serif; color: var(--gold); font-size: 16px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 4px;">Current Community Vibe</div>
+  <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 8px;"><span id="participantCount">0</span> present</div>
+  <div class="cloud-container" id="cloudContainer"></div>
+  <div id="intentionEcho" style="display:none; font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--gold); font-size: 14px; margin-top: 8px; opacity: 0.7;"></div>
+  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 12px 0;">
+    <button class="btn btn-solid" onclick="showScreen('s-intention')">Ready to Set Your Intention →</button>
+    <button class="btn-skip" onclick="showScreen('s-precheckin')" style="opacity:0.4; font-size: 12px;">← Back</button>
+  </div>
+</div>
+
+<!-- ==================== 4b. JOURNEY COMPLETE ==================== -->
+<!-- COMMUNITY INTENTIONS -->
+<div id="s-communityintentions" class="screen">
+  <div class="spacer"></div>
+  <div class="title" style="font-family: 'Cinzel', serif; font-size: 20px;">Our Collective Intention</div>
+  <div class="subtitle" style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 16px; margin-top: 8px; line-height: 1.5; max-width: 300px;">We each carry a thread.<br>Together, we weave the container.</div>
+  <div class="spacer"></div>
+  <div id="intentionBoard" style="width:100%; max-width:340px; text-align:center;"></div>
+  <div class="spacer"></div>
+  <button class="btn btn-solid" onclick="showScreen('s-journeycomplete')">Continue</button>
+  <button class="btn-skip" onclick="showScreen('s-intention')" style="opacity:0.4; font-size: 12px;">← Back</button>
+</div>
+
+<div id="s-journeycomplete" class="screen">
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap: 32px;">
+    <div class="title" style="font-family: 'Cinzel', serif; font-size: 20px;">You're Ready</div>
+    <div class="subtitle" style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 20px; line-height: 1.6;">Silence your device.<br>Close your eyes.<br>Arrive fully.</div>
+    <div style="display: flex; gap: 24px; margin: 24px 0; align-items: center; justify-content: center;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+        <div style="width:56px; height:32px; background: #34c759; border-radius:16px; position:relative; display:flex; align-items:center; padding:2px;">
+          <div style="width:28px; height:28px; background:white; border-radius:50%; margin-left:auto;"></div>
+        </div>
+        <span style="font-size:13px; color:var(--text-dim);">🌙 Do Not Disturb</span>
+      </div>
+      <div style="color:var(--text-dim); font-size:14px;">or</div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+        <div style="width:56px; height:32px; background: #34c759; border-radius:16px; position:relative; display:flex; align-items:center; padding:2px;">
+          <div style="width:28px; height:28px; background:white; border-radius:50%; margin-left:auto;"></div>
+        </div>
+        <span style="font-size:13px; color:var(--text-dim);">✈️ Airplane Mode</span>
+      </div>
+    </div>
+    <div class="subtitle" style="font-size: 15px; opacity: 0.5;">Come back here when the journey is complete.</div>
+    <button class="btn btn-solid" onclick="showPostCheckin()">Journey Complete →</button>
+    <button class="btn-skip" onclick="showScreen('s-communityintentions')" style="opacity:0.4; font-size: 12px;">← Back</button>
+  </div>
+</div>
+
+<!-- ==================== 5. POST CHECK-IN ==================== -->
+<!-- POST: Sliders -->
+<div id="s-postcheckin" class="screen">
+  <div class="spacer"></div>
+  <div class="title">Welcome Back</div>
+  <div class="subtitle">How do you feel now?</div>
+  <div class="spacer"></div>
+  <div class="slider-group" id="postSliders"></div>
+  <div class="spacer"></div>
+  <button class="btn btn-solid" onclick="initShiftWords(); showScreen('s-postshift')">Continue</button>
+  <button class="btn-skip" onclick="initShiftWords(); showScreen('s-postshift')">Skip</button>
+  <button class="btn-skip" onclick="showScreen('s-journeycomplete')" style="opacity:0.4; font-size: 12px;">← Back</button>
+</div>
+
+<!-- POST: Harvest menu -->
+<div id="s-postharvest" class="screen">
+  <div class="spacer"></div>
+  <div class="title" style="font-size: 22px;">Harvest Your Experience</div>
+  <div class="subtitle" style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; margin-top: 8px; line-height: 1.6; max-width: 300px;">
+    Choose what feels right — use all, a few, or none.
+  </div>
+  <div style="font-size: 13px; color: var(--text-dim); margin-top: 12px; max-width: 280px; text-align: center; line-height: 1.5; opacity: 0.6;">
+    The insights you capture here grow with you over time.
+  </div>
+  <div class="spacer"></div>
+  <div style="display:flex; flex-direction:column; gap:10px; width:100%; max-width:340px;">
+    <div class="avatar-option" onclick="initPhenomena(); showScreen('s-postphenomena')" style="cursor:pointer;">
+      <span class="avatar-emoji-circle">✨</span>
+      <div style="display:flex;flex-direction:column;">
+        <span class="avatar-label">Phenomena</span>
+        <span style="font-size:11px;color:var(--text-dim);margin-top:2px;">What happened in there?</span>
+      </div>
+    </div>
+    <div class="avatar-option" onclick="showScreen('s-postinsight')" style="cursor:pointer;">
+      <span class="avatar-emoji-circle">🪶</span>
+      <div style="display:flex;flex-direction:column;">
+        <span class="avatar-label">Insight</span>
+        <span style="font-size:11px;color:var(--text-dim);margin-top:2px;">Name what you're bringing back</span>
+      </div>
+    </div>
+    <div class="avatar-option" onclick="initInstruments(); showScreen('s-postsounds')" style="cursor:pointer;">
+      <span class="avatar-emoji-circle">🎵</span>
+      <div style="display:flex;flex-direction:column;">
+        <span class="avatar-label">Sounds</span>
+        <span style="font-size:11px;color:var(--text-dim);margin-top:2px;">Which sounds touched you?</span>
+      </div>
+    </div>
+    <div class="avatar-option" onclick="showScreen('s-postfeedback')" style="cursor:pointer;">
+      <span class="avatar-emoji-circle">💬</span>
+      <div style="display:flex;flex-direction:column;">
+        <span class="avatar-label">Feedback</span>
+        <span style="font-size:11px;color:var(--text-dim);margin-top:2px;">Anything you'd like us to know</span>
+      </div>
+    </div>
+  </div>
+  <div class="spacer-lg"></div>
+  <button class="btn btn-solid" onclick="submitPostCheckin(); renderBeforeCloud(); showScreen('s-beforecloud')">I'm Complete</button>
+  <button class="btn-skip" onclick="submitPostCheckin(); renderBeforeCloud(); showScreen('s-beforecloud')">Skip all</button>
+  <button class="btn-skip" onclick="showScreen('s-postshift')" style="opacity:0.4; font-size: 12px;">← Back</button>
+</div>
+
+<!-- POST: Feedback -->
+<div id="s-postfeedback" class="screen">
+  <div class="spacer"></div>
+  <div class="title" style="font-size: 20px;">Feedback</div>
+  <div class="subtitle">Anything you'd like to share — requests, thoughts, what worked, what didn't</div>
+  <div class="spacer"></div>
+  <textarea class="insight-area" id="feedbackText" placeholder="Your voice matters here..." rows="4"></textarea>
+  <div class="spacer-lg"></div>
+  <button class="btn btn-solid" onclick="showScreen('s-postharvest')">Done</button>
+  <button class="btn-skip" onclick="showScreen('s-postharvest')" style="opacity:0.4; font-size: 12px;">← Back</button>
+</div>
+
+<!-- POST: Insight retrieval -->
+<div id="s-postinsight" class="screen">
+  <div class="spacer-lg"></div>
+  <div class="title" style="font-size: 22px;">🪶 Bring Something Back</div>
+  <div class="subtitle" style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 18px; margin-top: 12px; line-height: 1.6; max-width: 300px;">
+    Like returning from a dream — name one insight before it fades.
+  </div>
+  <div class="spacer-lg"></div>
+  <textarea class="insight-area" id="insightText" placeholder="What do you want to remember from this journey?" rows="3"></textarea>
+  <div class="spacer-lg"></div>
+  <button class="btn btn-solid" onclick="showScreen('s-postharvest')">Done</button>
+  <button class="btn-skip" onclick="showScreen('s-postharvest')" style="opacity:0.4; font-size: 12px;">← Back</button>
+</div>
+
+<!-- POST: What happened in there? -->
+<div id="s-postphenomena" class="screen">
+  <div class="spacer"></div>
+  <div class="title" style="font-size: 20px;">What Happened In There?</div>
+  <div style="font-size: 12px; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; margin-top: 4px;">Mind · Body · Spirit</div>
+  <div class="subtitle" style="margin-top: 6px;">Tap anything you experienced</div>
+  <div class="spacer"></div>
+  <div class="word-grid" id="phenomenaGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:8px; width:100%; max-width:340px;"></div>
+  <div style="display:flex; gap:8px; width:100%; max-width:340px; align-items:center; margin-top: 12px;">
+    <input type="text" class="custom-feeling" id="customPhenomenon" onkeydown="if(event.key==='Enter'){addCustomPhenomenon();event.preventDefault();}" placeholder="+ add your own" maxlength="30" style="flex:1;">
+    <button class="btn" onclick="addCustomPhenomenon()" ontouchend="addCustomPhenomenon()" style="padding:10px 16px; font-size:15px; white-space:nowrap;">Add</button>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn btn-solid" onclick="addCustomPhenomenon(); showScreen('s-postharvest')">Done</button>
+  <button class="btn-skip" onclick="showScreen('s-postharvest')" style="opacity:0.4; font-size: 12px;">← Back</button>
+</div>
+
+<!-- POST: The Shift — exit words -->
+<div id="s-postshift" class="screen">
+  <div class="spacer"></div>
+  <div class="title" style="font-size: 20px;">The Shift</div>
+  <div class="subtitle">What are you leaving with?</div>
+  <div class="spacer"></div>
+  <div class="word-grid" id="shiftWordGrid"></div>
+  <div style="display:flex; gap:8px; width:100%; max-width:340px; align-items:center; margin-top: 12px;">
+    <input type="text" class="custom-feeling" id="customShift" placeholder="+ add your own" maxlength="24" style="flex:1;" onkeydown="if(event.key==='Enter'){addCustomShift();event.preventDefault();}">
+    <button class="btn" onclick="addCustomShift()" ontouchend="addCustomShift()" style="padding:10px 16px; font-size:15px; white-space:nowrap;">Add</button>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn btn-solid" onclick="addCustomShift(); showScreen('s-postharvest')">Continue</button>
+  <button class="btn-skip" onclick="showScreen('s-postcheckin')" style="opacity:0.4; font-size: 12px;">← Back</button>
+</div>
+
+<!-- POST: Which sounds -->
+<div id="s-postsounds" class="screen">
+  <div class="spacer"></div>
+  <div class="title" style="font-size: 20px;">Which Sounds Touched You?</div>
+  <div class="subtitle">Select all that resonated</div>
+  <div class="spacer"></div>
+  <div class="word-grid" id="instrumentGrid"></div>
+  <div style="display:flex; gap:8px; width:100%; max-width:340px; align-items:center; margin-top: 12px;">
+    <input type="text" class="custom-feeling" id="customInstrument" onkeydown="if(event.key==='Enter'){addCustomInstrument();event.preventDefault();}" placeholder="+ add your own" maxlength="24" style="flex:1;">
+    <button class="btn" onclick="addCustomInstrument()" ontouchend="addCustomInstrument()" style="padding:10px 16px; font-size:15px; white-space:nowrap;">Add</button>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn btn-solid" onclick="addCustomInstrument(); showScreen('s-postharvest')">Done</button>
+  <button class="btn-skip" onclick="showScreen('s-postharvest')" style="opacity:0.4; font-size: 12px;">← Back</button>
+</div>
+
+<!-- ==================== BEFORE CLOUD ==================== -->
+<div id="s-beforecloud" class="screen">
+  <div class="spacer"></div>
+  <div class="title" style="font-family: 'Cinzel', serif; font-size: 22px;">We Arrived With</div>
+  <div style="font-size: 14px; color: var(--text-dim); margin-top: 4px;"><span id="beforeCloudCount">0</span> present</div>
+  <div class="spacer"></div>
+  <div class="cloud-container" id="beforeCloudContainer" style="min-height: 320px; height: 320px;"></div>
+  <div class="spacer"></div>
+  <button class="btn btn-solid" onclick="renderShiftCloud(); showScreen('s-shiftcloud')">See The Shift →</button>
+  <button class="btn-skip" onclick="showScreen('s-postharvest')" style="opacity:0.4; font-size: 12px;">← Back</button>
+</div>
+
+<!-- ==================== SHIFT CLOUD ==================== -->
+<div id="s-shiftcloud" class="screen">
+  <div class="spacer"></div>
+  <div class="title" style="font-family: 'Cinzel', serif; font-size: 22px;">We're Leaving With</div>
+  <div style="font-size: 14px; color: var(--gold); margin-top: 4px;"><span id="shiftCloudCount">0</span> present</div>
+  <div class="spacer"></div>
+  <div class="cloud-container" id="shiftCloudContainer" style="min-height: 320px; height: 320px;"></div>
+  <div class="spacer"></div>
+  <button class="btn btn-solid" onclick="renderResults(); showScreen('s-results')">See Your Results</button>
+  <button class="btn-skip" onclick="showScreen('s-beforecloud')" style="opacity:0.4; font-size: 12px;">← Back to Before</button>
+</div>
+
+<!-- ==================== 6. RESULTS & PORTAL ==================== -->
+<div id="s-results" class="screen">
+  <div class="spacer"></div>
+  <div class="title">Your Shift</div>
+  <div class="subtitle" style="display:flex;gap:16px;align-items:center;justify-content:center;">
+    <span style="color:var(--before);">● Before</span>
+    <span style="color:var(--text-dim);">vs</span>
+    <span style="color:var(--after);">● After</span>
+  </div>
+  <div class="spacer"></div>
+  
+  <!-- Before/After bars -->
+  <div class="ba-container" id="baContainer"></div>
+  <div class="spacer-lg"></div>
+
+  <!-- Group results (shown if in a group) -->
+  <div id="groupResults" style="display:none;">
+    <div class="results-card">
+      <div class="results-header">
+        <div class="results-title">👥 Your Group</div>
+        <span style="font-size: 12px; color: var(--text-dim);" id="groupMemberList"></span>
+      </div>
+      <div class="ba-container" id="groupBars"></div>
+    </div>
+    <div class="spacer-lg"></div>
+  </div>
+  
+  <!-- Room summary — vertical bars -->
+  <div class="results-card">
+    <div class="results-header">
+      <div class="results-title">The Room</div>
+      <span style="font-size: 12px; color: var(--text-dim);" id="roomCount">0 souls</span>
+    </div>
+    <div class="room-vertical" id="roomBarsVertical"></div>
+  </div>
+  <div class="spacer-lg"></div>
+
+  <!-- Insight echo -->
+  <div id="insightEcho" style="display:none;">
+    <div class="results-card">
+      <div class="results-title" style="margin-bottom:8px;">🪶 Your Retrieval</div>
+      <div id="insightDisplay" style="font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; line-height: 1.6; color: var(--text);"></div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- Portal links -->
+  <div class="title" style="font-size: 18px; margin-bottom: 4px;">Continue Your Journey</div>
+  <div class="spacer"></div>
+  <div class="portal-grid">
+    <!-- Art hidden for now
+    <a class="portal-link" onclick="showMandala()">
+      <span class="portal-icon">🎨</span>
+      <span class="portal-label">Integrate</span>
+    </a>
+    -->
+    <a class="portal-link" onclick="showCommunity()">
+      <span class="portal-icon">✨</span>
+      <span class="portal-label">Community</span>
+    </a>
+    <a class="portal-link" href="https://www.earthharmonysoundwellness.com" target="_blank" style="text-decoration:none;">
+      <span class="portal-icon">🌍</span>
+      <span class="portal-label">Earth Harmony Sound & Wellness</span>
+    </a>
+  </div>
+  <div class="spacer"></div>
+  
+  <div style="text-align: center; font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--text-dim); font-size: 15px;">
+    "The sound doesn't heal you — it reminds you how."
+  </div>
+
+  <button class="btn-skip" onclick="showScreen('s-shiftcloud')" style="opacity:0.4; font-size: 12px;">← Back</button>
+
+  <div class="nav-dots">
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot active"></div>
+  </div>
+</div>
+
+<!-- ==================== ART SCREEN ==================== -->
+<div id="s-mandala" class="screen">
+  <div class="spacer"></div>
+  <div class="title" style="font-family: 'Cinzel', serif;">Integrate</div>
+  <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--text-dim); font-size: 14px; text-align: center; max-width: 320px; line-height: 1.5; margin: 0 auto;">
+    Creative expression helps integrate transformative experiences into daily life.
+  </div>
+  <div class="spacer"></div>
+  <input type="text" class="text-input" id="artworkTitle" placeholder="name your artwork" maxlength="40" autocomplete="off" style="font-size: 14px; font-style: italic; max-width: 260px;">
+  <div class="spacer"></div>
+
+  <!-- Mode Tabs -->
+  <div class="art-tabs">
+    <button class="art-tab active" onclick="switchArtMode('mandala')">Sacred Mandala</button>
+    <button class="art-tab" onclick="switchArtMode('retro')">Retro Paint</button>
+    <button class="art-tab" onclick="switchArtMode('sacred3d')">3D Sacred</button>
+  </div>
+  <div class="spacer"></div>
+
+  <!-- Sacred Mandala Mode -->
+  <div id="mandalaMode">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="subtitle" style="margin:0;">Symmetry</div>
+      </div>
+      <div class="symmetry-bar" id="symmetryBar"></div>
+      <!-- Stamps disabled for now -->
+      <div class="stamp-bar" id="stampBar" style="display:none;"></div>
+      <div class="stamp-size-wrap" id="stampSizeWrap" style="display:none;"></div>
+      <div class="spacer"></div>
+      <div class="mandala-canvas-wrap" id="mandalaWrap">
+        <canvas id="mandalaCanvas"></canvas>
+      </div>
+      <div class="spacer"></div>
+      <div class="brush-bar" id="brushBar"></div>
+    </div>
+  </div>
+
+  <!-- Retro Paint Mode -->
+  <div id="retroMode" style="display:none;">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+      <div class="retro-title-bar">untitled - Paint</div>
+      <div class="retro-canvas-wrap" id="retroWrap">
+        <canvas id="retroCanvas"></canvas>
+      </div>
+      <div class="retro-palette" id="retroPalette"></div>
+      <div class="retro-size-bar" id="retroSizeBar"></div>
+    </div>
+  </div>
+
+  <!-- 3D Sacred Geometry Mode -->
+  <div id="sacred3dMode" style="display:none;">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <div class="subtitle" style="margin:0;">Platonic Solid</div>
+      <div class="solid-bar" id="solidBar"></div>
+      <div class="spacer"></div>
+      <div class="sacred3d-canvas-wrap" id="sacred3dWrap">
+        <canvas id="sacred3dCanvas"></canvas>
+      </div>
+      <div class="subtitle" style="margin:0;font-size:11px;color:var(--text-dim);">Drag to rotate · Auto-rotates when idle</div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+  <div style="display: flex; gap: 12px;">
+    <button class="btn" onclick="undoMandala()" id="undoBtn" style="font-size:18px;">↩ Undo</button>
+    <button class="btn" onclick="clearCurrentArt()">Clear</button>
+    <button class="btn btn-solid" onclick="saveMandala()">Save to Wall</button>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn-skip" onclick="showScreen('s-results')">← Back</button>
+</div>
+
+<!-- ==================== COMMUNITY SCREEN ==================== -->
+<div id="s-community" class="screen">
+  <div class="spacer"></div>
+  <div class="title">Community</div>
+  <div class="subtitle">Fellow travellers on this path</div>
+  <div class="spacer"></div>
+  <div class="room-summary" id="communityList"></div>
+  <div class="spacer-lg"></div>
+  <button class="btn-skip" onclick="showScreen('s-results')">← Back</button>
+</div>
+
+<!-- ==================== FACILITATOR ==================== -->
+<div id="s-facilitator" class="screen">
+  <div class="spacer-lg"></div>
+  <div class="title">Facilitator</div>
+  <div class="spacer"></div>
+  <div class="stat-grid" id="facStats"></div>
+  <div class="spacer"></div>
+  <div class="subtitle">Live Word Cloud</div>
+  <div class="cloud-container" id="facCloud" style="height: 220px;"></div>
+  <div class="spacer"></div>
+  <div class="subtitle">Top Instruments</div>
+  <div class="room-summary" id="facInstruments"></div>
+  <div class="spacer"></div>
+  <div class="subtitle">Insights Retrieved</div>
+  <div class="room-summary" id="facInsights" style="max-height: 300px; overflow-y: auto;"></div>
+  <div class="spacer"></div>
+  <!-- Session Code -->
+  <div style="background: var(--bg2); border: 1px solid var(--gold); border-radius: 12px; padding: 16px; margin: 8px 0; text-align: center;">
+    <div style="font-family: 'Cinzel', serif; color: var(--text-dim); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;">Session Code</div>
+    <div id="sessionCodeDisplay" style="font-family: 'Cinzel', serif; font-size: 28px; font-weight: 700; color: var(--gold); letter-spacing: 6px;"></div>
+    <div style="font-size: 12px; color: var(--text-dim); margin-top: 8px;">Share this code or link</div>
+    <button class="btn" onclick="copySessionLink()" style="margin-top: 8px; font-size: 12px;">Copy Join Link</button>
+    <button class="btn" onclick="newSessionCode()" style="margin-top: 4px; font-size: 12px;">New Code</button>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn" onclick="resetSession()">Reset Session</button>
+  <div class="spacer"></div>
+  <button class="btn" onclick="clearAllData()" style="border-color: #a04040; color: #a04040;">Clear ALL Data</button>
+  <div style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">Removes all sessions, check-ins, and community data</div>
+  <div class="spacer"></div>
+  <button class="btn-skip" onclick="toggleFacilitator()">← Back</button>
+</div>
+
+<script>
+// ==================== CONFIG ====================
+// Ordered bottom→top: HIGH vibe (top) → STABLE (mid) → HEAVY (bottom)
+const FEELINGS = [
+  'Overwhelmed', 'Anxious', 'Stressed', 'Heavy', 'Sad',
+  'Numb', 'Scattered', 'Restless', 'Foggy', 'Tired',
+  'Present', 'Curious', 'Open', 'Calm', 'Grounded',
+  'Peaceful', 'Grateful', 'Hopeful', 'Light', 'Energized',
+  'Uplifted', 'Excited'
+];
+
+const CATEGORIES = [
+  { id: 'harmony',    name: 'Harmony',          low: 'Out of Tune', high: 'In Tune' },
+  { id: 'alignment',  name: 'Alignment',        low: 'Off Course', high: 'On Purpose' },
+  { id: 'mind',       name: 'Mind',             low: 'Foggy',      high: 'Clear' },
+  { id: 'body',       name: 'Body',             low: 'Tense',      high: 'At Ease' },
+  { id: 'spirit',     name: 'Spirit',           low: 'Heavy',      high: 'Light' },
+];
+
+const INSTRUMENTS = [
+  'Singing Bowls', 'Gong', 'Handpan', 'Flute',
+  'Chimes', 'Drum', 'Voice', 'All of Them'
+];
+
+const AVATARS = [
+  { emoji: '⚔️', label: 'Warrior', desc: 'courage, strength, showing up' },
+  { emoji: '💗', label: 'Lover', desc: 'heart, connection, passion' },
+  { emoji: '🔥', label: 'Rebel', desc: 'freedom, truth, breaking patterns' },
+  { emoji: '🌟', label: 'Child', desc: 'wonder, play, openness' },
+  { emoji: '🌿', label: 'Healer', desc: 'nurture, restore, care' },
+  { emoji: '🦋', label: 'Magician', desc: 'transformation, depth, vision' },
+  { emoji: '🦉', label: 'Sage', desc: 'wisdom, reflection, knowing' },
+];
+
+const BRUSH_COLORS = [
+  '#D4A24E', '#f4d574', '#c0392b', '#e74c3c',
+  '#2ecc71', '#3498db', '#9b59b6', '#ecf0f1'
+];
+
+const QUOTES = [
+  "The body remembers what the mind forgets.",
+  "Sound doesn't heal you — it reminds you how.",
+  "You can't force a nervous system to release. You invite it.",
+  "Harmonics aren't decoration — they're the medicine.",
+  "The silence after the sound is where the work happens.",
+  "Trust where you arrive.",
+  "Every vibration is a conversation between you and the universe.",
+];
+
+// ==================== STATE ====================
+let state = {
+  user: '',
+  avatar: null,
+  intention: '',
+  preFeelings: [],
+  preScores: {},
+  postScores: {},
+  insight: '',
+  instrument: null,
+  instruments: [],
+  phenomena: [],
+  shiftWords: [],
+};
+
+// Check URL for session code
+// Theme
+function setTheme(theme) {
+  if (theme === 'forest') {
+    document.body.style.background = 'linear-gradient(160deg, #1a3322 0%, #143a25 20%, #0d1f12 45%, #0a1a0d 70%, #061008 100%)';
+    document.documentElement.style.setProperty('--bg', '#0a1a0d');
+    document.documentElement.style.setProperty('--bg2', '#0d1f12');
+    document.documentElement.style.setProperty('--bg3', '#1a3322');
+  } else {
+    document.body.style.background = 'linear-gradient(160deg, #111118 0%, #0d0d14 40%, #0a0a0f 70%, #050508 100%)';
+    document.documentElement.style.setProperty('--bg', '#0a0a0f');
+    document.documentElement.style.setProperty('--bg2', '#111118');
+    document.documentElement.style.setProperty('--bg3', '#1a1a24');
+  }
+  document.body.style.backgroundAttachment = 'fixed';
+  // Toggle button states (guard: buttons may be hidden/commented out)
+  const themeF = document.getElementById('themeForest');
+  const themeM = document.getElementById('themeMidnight');
+  if (themeF) { themeF.style.borderColor = theme === 'forest' ? 'var(--gold)' : 'rgba(212,175,55,0.3)'; themeF.style.color = theme === 'forest' ? 'var(--gold)' : 'var(--text-dim)'; }
+  if (themeM) { themeM.style.borderColor = theme === 'midnight' ? 'var(--gold)' : 'rgba(212,175,55,0.3)'; themeM.style.color = theme === 'midnight' ? 'var(--gold)' : 'var(--text-dim)'; }
+  SyncStore.set('ehp_theme', { theme });
+  localStorage.setItem('ehp_theme', theme);
+}
+// Restore saved theme
+const savedTheme = localStorage.getItem('ehp_theme') || 'forest';
+setTheme('midnight');
+
+const urlParams = new URLSearchParams(window.location.search);
+let sessionId = urlParams.get('session') || 'ELEMENT1';
+let allData = JSON.parse(localStorage.getItem('ehp_data') || '[]');
+let community = JSON.parse(localStorage.getItem('ehp_community') || '[]');
+// Hydrate from SyncStore on init
+(async () => {
+  const sd = await SyncStore.get('ehp_data');
+  if (sd && Array.isArray(sd) && sd.length > allData.length) { allData = sd; localStorage.setItem('ehp_data', JSON.stringify(allData)); }
+  const sc = await SyncStore.get('ehp_community');
+  if (sc && Array.isArray(sc) && sc.length > community.length) { community = sc; localStorage.setItem('ehp_community', JSON.stringify(community)); }
+  const ss = await SyncStore.get('ehp_session');
+  if (ss && ss.code && !urlParams.get('session')) { sessionId = ss.code; }
+})();
+let firebaseRef = null;
+let firebaseListener = null;
+
+function newSessionId() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 5; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  SyncStore.set('ehp_session', { code });
+  localStorage.setItem('ehp_session', code);
+  return code;
+}
+
+function save() {
+  SyncStore.set('ehp_data', allData);
+  SyncStore.set('ehp_community', community);
+  localStorage.setItem('ehp_data', JSON.stringify(allData));
+  localStorage.setItem('ehp_community', JSON.stringify(community));
+}
+
+// Firebase real-time sync
+function joinSession(code) {
+  sessionId = code;
+  localStorage.setItem('ehp_session', code);
+  // Update URL without reload
+  const url = new URL(window.location);
+  url.searchParams.set('session', code);
+  window.history.replaceState({}, '', url);
+  // Listen for changes
+  if (firebaseListener) firebaseRef.off('value', firebaseListener);
+  firebaseRef = db.ref('sessions/' + code + '/checkins');
+  firebaseListener = firebaseRef.on('value', (snap) => {
+    const data = snap.val();
+    if (data) {
+      allData = Object.values(data);
+      save();
+      // Re-render any visible clouds in real-time
+      const journeyScreen = document.getElementById('s-journey');
+      if (journeyScreen && journeyScreen.classList.contains('active')) renderWordCloud();
+      const beforeScreen = document.getElementById('s-beforecloud');
+      if (beforeScreen && beforeScreen.classList.contains('active')) renderBeforeCloud();
+      const shiftScreen = document.getElementById('s-shiftcloud');
+      if (shiftScreen && shiftScreen.classList.contains('active')) renderShiftCloud();
+    }
+  });
+}
+
+function pushCheckin(data) {
+  // Push to session in Firebase
+  const ref = db.ref('sessions/' + sessionId + '/checkins');
+  ref.push(data);
+  // Also save to user profile for cross-session history
+  if (state.user) {
+    const userKey = state.user.toLowerCase().replace(/[^a-z0-9]/g, '_');
+    db.ref('users/' + userKey + '/checkins').push(data);
+    db.ref('users/' + userKey + '/profile').update({
+      displayName: state.user,
+      lastSeen: Date.now(),
+      lastSession: sessionId
+    });
+  }
+}
+
+// Auto-join session from URL or localStorage
+joinSession(sessionId);
+
+// ==================== NAVIGATION ====================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ==================== HAPTIC ====================
+function haptic(style = 'light') {
+  if (!navigator.vibrate) return;
+  if (style === 'light') navigator.vibrate(10);
+  else if (style === 'medium') navigator.vibrate(25);
+  else if (style === 'heavy') navigator.vibrate([15, 30, 15]);
+}
+
+// ==================== 1. WELCOME ====================
+const nameInput = document.getElementById('nameInput');
+const enterBtn = document.getElementById('enterBtn');
+
+// Auto-fill saved name
+const savedName = localStorage.getItem('ehp_username');
+if (savedName) {
+  nameInput.value = savedName;
+  enterBtn.disabled = false;
+}
+
+nameInput.addEventListener('input', () => {
+  enterBtn.disabled = nameInput.value.trim().length === 0;
+});
+nameInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && nameInput.value.trim()) enterPortal();
+});
+
+function playPortalChime() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // Singing bowl chord — C5 + G5 + C6 (overtone series)
+    const freqs = [523.25, 783.99, 1046.5];
+    freqs.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.12 - i * 0.03, ctx.currentTime + 0.1);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 3);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(ctx.currentTime + i * 0.08);
+      osc.stop(ctx.currentTime + 3.5);
+    });
+  } catch(e) {}
+}
+
+function enterPortal() {
+  try {
+    state.user = nameInput.value.trim();
+    if (!state.user) return;
+    SyncStore.set('ehp_username', { name: state.user });
+    localStorage.setItem('ehp_username', state.user);
+    haptic('medium');
+    playPortalChime();
+    initAvatars();
+    showScreen('s-avatar');
+  } catch(e) {
+    alert('Error: ' + e.message);
+    console.error(e);
+  }
+}
+
+function submitIntention(share) {
+  state.intention = document.getElementById('intentionInput').value.trim();
+  if (share && state.intention) {
+    db.ref('sessions/' + sessionId + '/intentions').push({
+      user: state.user,
+      intention: state.intention,
+      timestamp: Date.now()
+    });
+  }
+  haptic('medium');
+  renderIntentionBoard();
+  showScreen('s-communityintentions');
+}
+
+function skipIntention() {
+  state.intention = '';
+  haptic('light');
+  renderIntentionBoard();
+  showScreen('s-communityintentions');
+}
+
+// ==================== INTENTION BOARD ====================
+let intentionBoardData = [];
+db.ref('sessions/' + sessionId + '/intentions').on('value', (snap) => {
+  const data = snap.val();
+  intentionBoardData = data ? Object.values(data) : [];
+  renderIntentionBoard();
+});
+
+function renderIntentionBoard() {
+  const container = document.getElementById('intentionBoard');
+  if (!container) return;
+  if (intentionBoardData.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+  container.style.display = 'block';
+  container.innerHTML = '<div style="font-family:Cinzel,serif;font-size:14px;letter-spacing:2px;color:var(--gold);margin-bottom:12px;text-transform:uppercase;">Community Intentions</div>';
+  intentionBoardData.forEach(item => {
+    const card = document.createElement('div');
+    card.style.cssText = 'background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.15);border-radius:10px;padding:10px 14px;margin-bottom:8px;text-align:left;';
+    card.innerHTML = `<span style="color:var(--gold);font-size:16px;font-weight:600;">${item.user}</span><br><span style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text);font-size:19px;">"${item.intention}"</span>`;
+    container.appendChild(card);
+  });
+}
+
+// ==================== 2. AVATARS ====================
+function initAvatars() {
+  const grid = document.getElementById('avatarGrid');
+  grid.innerHTML = '';
+  AVATARS.forEach(av => {
+    const el = document.createElement('div');
+    el.className = 'avatar-option';
+    el.innerHTML = `<span class="avatar-emoji-circle">${av.emoji}</span><div style="display:flex;flex-direction:column;"><span class="avatar-label">${av.label}</span><span style="font-size:11px;color:var(--text-dim);letter-spacing:0.5px;margin-top:2px;">${av.desc}</span></div>`;
+    el.onclick = () => {
+      grid.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      state.avatar = av;
+      haptic('light');
+    };
+    grid.appendChild(el);
+  });
+}
+
+function submitAvatar() {
+  haptic('medium');
+  initPreCheckin();
+  showScreen('s-precheckin');
+}
+
+// ==================== 3. PRE CHECK-IN ====================
+function initPreCheckin() {
+  // Word grid
+  const grid = document.getElementById('preWordGrid');
+  grid.innerHTML = '';
+  // No shuffle — ordered from heavy (top) to light (bottom)
+  FEELINGS.forEach(word => {
+    const chip = document.createElement('div');
+    chip.className = 'word-chip';
+    chip.textContent = word;
+    chip.onclick = () => {
+      chip.classList.toggle('selected');
+      haptic('light');
+      if (chip.classList.contains('selected')) {
+        state.preFeelings.push(word);
+      } else {
+        state.preFeelings = state.preFeelings.filter(w => w !== word);
+      }
+    };
+    grid.appendChild(chip);
+  });
+
+  // Custom feeling Enter key
+  document.getElementById('customFeeling').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addCustomFeeling();
+  });
+}
+
+function addCustomFeeling() {
+  const input = document.getElementById('customFeeling');
+  const word = input.value.trim();
+  if (!word) return;
+  state.preFeelings.push(word);
+  // Add as selected chip
+  const grid = document.getElementById('preWordGrid');
+  const chip = document.createElement('div');
+  chip.className = 'word-chip selected';
+  chip.textContent = word;
+  chip.onclick = () => {
+    chip.classList.toggle('selected');
+    haptic('light');
+    if (chip.classList.contains('selected')) {
+      state.preFeelings.push(word);
+    } else {
+      state.preFeelings = state.preFeelings.filter(w => w !== word);
+    }
+  };
+  grid.appendChild(chip);
+  input.value = '';
+  haptic('medium');
+}
+
+function buildSliders(containerId, prefix) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+
+  CATEGORIES.forEach(cat => {
+    const div = document.createElement('div');
+    div.className = 'slider-item';
+    div.innerHTML = `
+      <div class="slider-labels">
+        <span>${cat.low}</span>
+        <span class="slider-name" style="font-weight:600; color:var(--gold); letter-spacing:1px; text-transform:uppercase; font-size:13px;">${cat.name}</span>
+        <span>${cat.high}</span>
+      </div>
+      <div class="slider-track">
+        <input type="range" min="1" max="10" value="5" step="1"
+          id="${prefix}_${cat.id}"
+          oninput="onSlide('${prefix}', '${cat.id}', this.value)">
+        <span class="slider-val" id="${prefix}_val_${cat.id}" style="display:none;">5</span>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+let lastSliderVals = {};
+function onSlide(prefix, catId, val) {
+  const key = prefix + '_' + catId;
+  document.getElementById(`${prefix}_val_${catId}`).textContent = val;
+  if (lastSliderVals[key] !== val) {
+    haptic('light');
+    lastSliderVals[key] = val;
+  }
+}
+
+function skipPreCheckin() {
+  // Set defaults
+  state.preFeelings = ['Present'];
+  CATEGORIES.forEach(cat => { state.preScores[cat.id] = 5; });
+  haptic('light');
+  renderWordCloud();
+  showScreen('s-journey');
+}
+
+function submitPreCheckin() {
+  const custom = document.getElementById('customFeeling').value.trim();
+  if (custom) state.preFeelings.push(custom);
+  if (state.preFeelings.length === 0) state.preFeelings.push('Present');
+
+  // Capture pre-scores
+  CATEGORIES.forEach(cat => {
+    state.preScores[cat.id] = parseInt(document.getElementById(`pre_${cat.id}`).value);
+  });
+
+  // Save check-in locally + to Firebase
+  const checkinData = {
+    type: 'checkin',
+    name: state.user,
+    avatar: state.avatar,
+    feelings: [...state.preFeelings],
+    scores: { ...state.preScores },
+    time: Date.now(),
+    session: sessionId,
+  };
+  allData.push(checkinData);
+  save();
+  pushCheckin(checkinData);
+
+  haptic('heavy');
+  renderWordCloud();
+  showScreen('s-journey');
+}
+
+// ==================== 4. WORD CLOUD ====================
+function renderWordCloud() {
+  // Show intention if set
+  const intentEcho = document.getElementById('intentionEcho');
+  if (state.intention) {
+    intentEcho.textContent = `"${state.intention}"`;
+    intentEcho.style.display = 'block';
+  } else {
+    intentEcho.style.display = 'none';
+  }
+
+  const container = document.getElementById('cloudContainer');
+  container.innerHTML = '';
+
+  const counts = {};
+  const sessionCheckins = allData.filter(d => d.session === sessionId && d.type === 'checkin');
+  sessionCheckins.forEach(c => {
+    c.feelings.forEach(f => { counts[f] = (counts[f] || 0) + 1; });
+  });
+
+  document.getElementById('participantCount').textContent = sessionCheckins.length;
+
+  const words = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const maxCount = words.length > 0 ? words[0][1] : 1;
+  const w = container.clientWidth || 380;
+  const h = container.clientHeight || 280;
+  const cx = w / 2, cy = h / 2;
+
+  words.forEach(([word, count], i) => {
+    const el = document.createElement('div');
+    el.className = 'cloud-word';
+    el.textContent = word;
+
+    const scale = 0.5 + (count / maxCount) * 1.5;
+    const opacity = 0.35 + (count / maxCount) * 0.65;
+
+    // Top word = hero size
+    let fontSize;
+    if (i === 0) {
+      fontSize = Math.max(28, Math.min(42, scale * 28));
+      el.style.fontWeight = '700';
+      el.style.color = '#f0c850';
+      el.style.textShadow = '0 0 12px rgba(212,175,55,0.5), 0 0 24px rgba(212,175,55,0.25)';
+    } else {
+      fontSize = Math.max(13, Math.min(28, scale * 16));
+    }
+
+    el.style.fontSize = fontSize + 'px';
+    el.style.opacity = opacity;
+
+    // Repeated words glow brighter
+    if (count > 1 && i > 0) {
+      const glowStrength = Math.min(count * 4, 16);
+      el.style.color = '#f0c850';
+      el.style.textShadow = `0 0 ${glowStrength}px rgba(212,175,55,0.6), 0 0 ${glowStrength * 2}px rgba(212,175,55,0.3)`;
+      el.style.fontWeight = '600';
+    }
+
+    // Organic cloud shape — elliptical blob with jitter
+    const golden = 2.399963;
+    const angle = i * golden + (Math.random() - 0.5) * 0.5;
+    const baseR = 15 + Math.sqrt(i) * 30;
+    const jitter = (Math.random() - 0.5) * 20;
+    const rx = Math.min(baseR + jitter, w * 0.38);
+    const ry = Math.min(baseR + jitter * 0.6, h * 0.38);
+    const x = cx + Math.cos(angle) * rx - fontSize * word.length * 0.15;
+    const y = cy + Math.sin(angle) * ry - fontSize / 2;
+
+    el.style.left = Math.max(4, Math.min(w - 60, x)) + 'px';
+    el.style.top = Math.max(4, Math.min(h - 24, y)) + 'px';
+
+    container.appendChild(el);
+  });
+}
+
+// ==================== 5. POST CHECK-IN ====================
+function showPostCheckin() {
+  buildSliders('postSliders', 'post');
+  initInstruments();
+  haptic('medium');
+  showScreen('s-postcheckin');
+}
+
+function initInstruments() {
+  if (document.getElementById('instrumentGrid').children.length > 0) return;
+  const grid = document.getElementById('instrumentGrid');
+  grid.innerHTML = '';
+  state.instruments = [];
+  INSTRUMENTS.forEach(inst => {
+    const chip = document.createElement('div');
+    chip.className = 'word-chip';
+    chip.textContent = inst;
+    chip.onclick = () => {
+      chip.classList.toggle('selected');
+      haptic('light');
+      if (chip.classList.contains('selected')) {
+        state.instruments.push(inst);
+      } else {
+        state.instruments = state.instruments.filter(i => i !== inst);
+      }
+      state.instrument = state.instruments[0] || null;
+      haptic('light');
+    };
+    grid.appendChild(chip);
+  });
+  // Custom instrument Enter key
+  const custInput = document.getElementById('customInstrument');
+  if (custInput) {
+    custInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') addCustomInstrument();
+    });
+  }
+}
+
+// ==================== POST: PHENOMENA ====================
+const PHENOMENA_GROUPS = [
+  { label: 'Mind', items: ['Mind went quiet', 'Felt at peace', 'Had a vision', 'Lost track of time'] },
+  { label: 'Body', items: ['Released tension', 'Felt vibrations', 'Nervous system settled'] },
+  { label: 'Spirit', items: ['Connected to something bigger', 'Experienced insight', 'Journeyed somewhere', 'Feel renewed'] },
+];
+const PHENOMENA = PHENOMENA_GROUPS.flatMap(g => g.items);
+
+function initPhenomena() {
+  if (document.getElementById('phenomenaGrid').children.length > 0) return;
+  const grid = document.getElementById('phenomenaGrid');
+  grid.innerHTML = '';
+  state.phenomena = [];
+  PHENOMENA.forEach(p => {
+    const chip = document.createElement('div');
+    chip.className = 'word-chip';
+    chip.textContent = p;
+    chip.onclick = () => {
+      chip.classList.toggle('selected');
+      haptic('light');
+      if (chip.classList.contains('selected')) {
+        state.phenomena.push(p);
+      } else {
+        state.phenomena = state.phenomena.filter(x => x !== p);
+      }
+    };
+    grid.appendChild(chip);
+  });
+  document.getElementById('customPhenomenon').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addCustomPhenomenon();
+  });
+}
+
+function addCustomPhenomenon() {
+  const input = document.getElementById('customPhenomenon');
+  const text = input.value.trim();
+  if (!text) return;
+  state.phenomena.push(text);
+  const grid = document.getElementById('phenomenaGrid');
+  const chip = document.createElement('div');
+  chip.className = 'word-chip selected';
+  chip.textContent = text;
+  chip.onclick = () => {
+    chip.classList.toggle('selected');
+    haptic('light');
+    if (chip.classList.contains('selected')) {
+      state.phenomena.push(text);
+    } else {
+      state.phenomena = state.phenomena.filter(x => x !== text);
+    }
+  };
+  grid.appendChild(chip);
+  input.value = '';
+  haptic('medium');
+}
+
+// ==================== BEFORE/AFTER CLOUDS (room-wide) ====================
+function renderBeforeCloud() {
+  const container = document.getElementById('beforeCloudContainer');
+  container.innerHTML = '';
+
+  const counts = {};
+  const checkins = allData.filter(d => d.session === sessionId && d.type === 'checkin' && d.feelings);
+  checkins.forEach(c => {
+    (c.feelings || []).forEach(w => { counts[w] = (counts[w] || 0) + 1; });
+  });
+
+  document.getElementById('beforeCloudCount').textContent = checkins.length;
+
+  const words = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const maxCount = words.length > 0 ? words[0][1] : 1;
+  const w = container.clientWidth || 380;
+  const h = container.clientHeight || 320;
+  const cx = w / 2, cy = h / 2;
+  const pad = 20;
+
+  words.forEach(([word, count], i) => {
+    const el = document.createElement('div');
+    el.className = 'cloud-word';
+    el.textContent = word;
+    const scale = 0.5 + (count / maxCount) * 1.5;
+    const opacity = 0.35 + (count / maxCount) * 0.65;
+    let fontSize;
+    if (i === 0) {
+      fontSize = Math.max(26, Math.min(38, scale * 26));
+      el.style.fontWeight = '700';
+      el.style.color = 'var(--text)';
+      el.style.textShadow = '0 0 12px rgba(200,180,160,0.3)';
+    } else {
+      fontSize = Math.max(13, Math.min(26, scale * 16));
+    }
+    el.style.fontSize = fontSize + 'px';
+    el.style.opacity = opacity;
+    if (count > 1 && i > 0) {
+      el.style.color = 'var(--text)';
+      el.style.fontWeight = '600';
+    }
+    const golden = 2.399963;
+    const angle = i * golden + (Math.random() - 0.5) * 0.4;
+    const baseR = 12 + Math.sqrt(i) * 28;
+    const rx = Math.min(baseR, (w - pad * 2) * 0.36);
+    const ry = Math.min(baseR * 0.7, (h - pad * 2) * 0.36);
+    const estW = fontSize * word.length * 0.55;
+    const x = cx + Math.cos(angle) * rx - estW / 2;
+    const y = cy + Math.sin(angle) * ry - fontSize / 2;
+    el.style.left = Math.max(pad, Math.min(w - estW - pad, x)) + 'px';
+    el.style.top = Math.max(pad, Math.min(h - fontSize - pad, y)) + 'px';
+    container.appendChild(el);
+  });
+
+  if (words.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:var(--text-dim);padding:40px;font-style:italic;">No check-ins yet</div>';
+  }
+}
+
+function renderShiftCloud() {
+  const container = document.getElementById('shiftCloudContainer');
+  container.innerHTML = '';
+
+  const counts = {};
+  const completions = allData.filter(d => d.session === sessionId && d.type === 'complete' && d.shiftWords);
+  completions.forEach(c => {
+    (c.shiftWords || []).forEach(w => { counts[w] = (counts[w] || 0) + 1; });
+  });
+
+  document.getElementById('shiftCloudCount').textContent = completions.length;
+
+  const words = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const maxCount = words.length > 0 ? words[0][1] : 1;
+  const w = container.clientWidth || 380;
+  const h = container.clientHeight || 320;
+  const cx = w / 2, cy = h / 2;
+  const pad = 20;
+
+  words.forEach(([word, count], i) => {
+    const el = document.createElement('div');
+    el.className = 'cloud-word';
+    el.textContent = word;
+
+    const scale = 0.5 + (count / maxCount) * 1.5;
+    const opacity = 0.4 + (count / maxCount) * 0.6;
+
+    let fontSize;
+    if (i === 0) {
+      fontSize = Math.max(28, Math.min(40, scale * 28));
+      el.style.fontWeight = '700';
+      el.style.color = '#f0c850';
+      el.style.textShadow = '0 0 14px rgba(212,175,55,0.5), 0 0 28px rgba(212,175,55,0.25)';
+    } else {
+      fontSize = Math.max(13, Math.min(28, scale * 16));
+    }
+
+    el.style.fontSize = fontSize + 'px';
+    el.style.opacity = opacity;
+
+    if (count > 1 && i > 0) {
+      const glowStrength = Math.min(count * 5, 18);
+      el.style.color = '#f0c850';
+      el.style.textShadow = `0 0 ${glowStrength}px rgba(212,175,55,0.6)`;
+      el.style.fontWeight = '600';
+    }
+
+    const golden = 2.399963;
+    const angle = i * golden + (Math.random() - 0.5) * 0.4;
+    const baseR = 12 + Math.sqrt(i) * 28;
+    const rx = Math.min(baseR, (w - pad * 2) * 0.36);
+    const ry = Math.min(baseR * 0.7, (h - pad * 2) * 0.36);
+    const estW = fontSize * word.length * 0.55;
+    const x = cx + Math.cos(angle) * rx - estW / 2;
+    const y = cy + Math.sin(angle) * ry - fontSize / 2;
+
+    el.style.left = Math.max(pad, Math.min(w - estW - pad, x)) + 'px';
+    el.style.top = Math.max(pad, Math.min(h - fontSize - pad, y)) + 'px';
+
+    container.appendChild(el);
+  });
+
+  if (words.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:var(--text-dim);padding:40px;font-style:italic;">Words will appear as people complete their check-out</div>';
+  }
+}
+
+// ==================== POST: SHIFT WORDS ====================
+const SHIFT_WORDS = [
+  'Peace', 'Release', 'Clarity', 'Stillness',
+  'Connection', 'Gratitude', 'Lightness', 'Surrender',
+  'Joy', 'Awe', 'Grounded', 'Renewed',
+];
+
+function initShiftWords() {
+  if (document.getElementById('shiftWordGrid').children.length > 0) return;
+  const grid = document.getElementById('shiftWordGrid');
+  grid.innerHTML = '';
+  state.shiftWords = [];
+  SHIFT_WORDS.forEach(word => {
+    const chip = document.createElement('div');
+    chip.className = 'word-chip';
+    chip.textContent = word;
+    chip.onclick = () => {
+      chip.classList.toggle('selected');
+      haptic('light');
+      if (chip.classList.contains('selected')) {
+        state.shiftWords.push(word);
+      } else {
+        state.shiftWords = state.shiftWords.filter(w => w !== word);
+      }
+    };
+    grid.appendChild(chip);
+  });
+  document.getElementById('customShift').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addCustomShift();
+  });
+}
+
+function addCustomShift() {
+  const input = document.getElementById('customShift');
+  const word = input.value.trim();
+  if (!word) return;
+  state.shiftWords.push(word);
+  const grid = document.getElementById('shiftWordGrid');
+  const chip = document.createElement('div');
+  chip.className = 'word-chip selected';
+  chip.textContent = word;
+  chip.onclick = () => {
+    chip.classList.toggle('selected');
+    haptic('light');
+    if (chip.classList.contains('selected')) {
+      state.shiftWords.push(word);
+    } else {
+      state.shiftWords = state.shiftWords.filter(w => w !== word);
+    }
+  };
+  grid.appendChild(chip);
+  input.value = '';
+  haptic('medium');
+}
+
+function addCustomInstrument() {
+  const input = document.getElementById('customInstrument');
+  const inst = input.value.trim();
+  if (!inst) return;
+  state.instruments.push(inst);
+  state.instrument = state.instruments[0] || null;
+  const grid = document.getElementById('instrumentGrid');
+  const chip = document.createElement('div');
+  chip.className = 'word-chip selected';
+  chip.textContent = inst;
+  chip.onclick = () => {
+    chip.classList.toggle('selected');
+    haptic('light');
+    if (chip.classList.contains('selected')) {
+      state.instruments.push(inst);
+    } else {
+      state.instruments = state.instruments.filter(i => i !== inst);
+    }
+    state.instrument = state.instruments[0] || null;
+  };
+  grid.appendChild(chip);
+  input.value = '';
+  haptic('medium');
+}
+
+function submitPostCheckin() {
+  // Capture post-scores
+  CATEGORIES.forEach(cat => {
+    const el = document.getElementById(`post_${cat.id}`);
+    state.postScores[cat.id] = el ? parseInt(el.value) : 5;
+  });
+
+  state.insight = document.getElementById('insightText').value.trim();
+  state.feedback = (document.getElementById('feedbackText') || {}).value || '';
+  state.feedback = state.feedback.trim();
+
+  // Save completion locally + Firebase
+  const completeData = {
+    type: 'complete',
+    name: state.user,
+    avatar: state.avatar,
+    preScores: { ...state.preScores },
+    postScores: { ...state.postScores },
+    insight: state.insight,
+    feedback: state.feedback,
+    instrument: state.instrument,
+    instruments: [...state.instruments],
+    phenomena: [...state.phenomena],
+    shiftWords: [...state.shiftWords],
+    time: Date.now(),
+    session: sessionId,
+  };
+  allData.push(completeData);
+  pushCheckin(completeData);
+
+  // Update community profile
+  let profile = community.find(c => c.name.toLowerCase() === state.user.toLowerCase());
+  if (!profile) {
+    profile = { name: state.user, avatar: state.avatar, sessions: 0, streak: 0, lastSession: null, insights: [] };
+    community.push(profile);
+  }
+  profile.sessions++;
+  profile.avatar = state.avatar || profile.avatar;
+  if (state.insight) profile.insights.push({ text: state.insight, date: new Date().toISOString() });
+
+  const now = Date.now();
+  if (profile.lastSession && (now - profile.lastSession) < 14 * 86400000) {
+    profile.streak++;
+  } else {
+    profile.streak = 1;
+  }
+  profile.lastSession = now;
+
+  save();
+  haptic('heavy');
+  renderResults();
+  showScreen('s-results');
+}
+
+// ==================== 6. RESULTS ====================
+function renderResults() {
+  const ba = document.getElementById('baContainer');
+  ba.innerHTML = '';
+
+  // Find biggest shift
+  let biggestCat = null, biggestDelta = 0;
+  const deltas = {};
+  CATEGORIES.forEach(cat => {
+    const pre = state.preScores[cat.id] || 5;
+    const post = state.postScores[cat.id] || 5;
+    const delta = post - pre;
+    deltas[cat.id] = { delta, pre, post, name: cat.name };
+    if (Math.abs(delta) > Math.abs(biggestDelta)) {
+      biggestDelta = delta;
+      biggestCat = cat;
+    }
+  });
+
+  // Hero: biggest shift
+  if (biggestCat && biggestDelta !== 0) {
+    const hero = document.createElement('div');
+    hero.style.cssText = 'text-align:center;margin-bottom:20px;';
+    const arrow = biggestDelta > 0 ? '↑' : '↓';
+    const sign = biggestDelta > 0 ? '+' : '';
+    hero.innerHTML = `
+      <div style="font-size:13px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;">Your biggest shift</div>
+      <div style="font-family:Cinzel,serif;font-size:28px;color:var(--gold);margin-top:8px;">${biggestCat.name}</div>
+      <div style="font-size:36px;color:var(--gold);margin-top:4px;font-weight:700;">${sign}${biggestDelta} ${arrow}</div>
+    `;
+    ba.appendChild(hero);
+  } else {
+    const hero = document.createElement('div');
+    hero.style.cssText = 'text-align:center;margin-bottom:20px;';
+    hero.innerHTML = `<div style="font-family:Cinzel,serif;font-size:22px;color:var(--gold);">Steady State ⚖️</div>
+      <div style="font-size:13px;color:var(--text-dim);margin-top:6px;">You arrived balanced and stayed there</div>`;
+    ba.appendChild(hero);
+  }
+
+  // All deltas in a line
+  const line = document.createElement('div');
+  line.style.cssText = 'display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;';
+  CATEGORIES.forEach(cat => {
+    const d = deltas[cat.id];
+    const sign = d.delta > 0 ? '+' : '';
+    const color = d.delta > 0 ? 'var(--gold)' : d.delta < 0 ? 'var(--before)' : 'var(--text-dim)';
+    const val = d.delta === 0 ? '—' : `${sign}${d.delta}`;
+    const isBiggest = biggestCat && cat.id === biggestCat.id;
+    const span = document.createElement('span');
+    span.style.cssText = `font-size:${isBiggest ? '15px' : '14px'};color:${color};${isBiggest ? 'font-weight:700;' : ''}`;
+    span.textContent = `${cat.name} ${val}`;
+    line.appendChild(span);
+  });
+  ba.appendChild(line);
+
+  // Room summary — vertical bars
+  const roomV = document.getElementById('roomBarsVertical');
+  roomV.innerHTML = '';
+  const completions = allData.filter(d => d.session === sessionId && d.type === 'complete');
+  document.getElementById('roomCount').textContent = completions.length + ' present';
+
+  if (completions.length > 0) {
+    CATEGORIES.forEach(cat => {
+      const avgPre = (completions.reduce((s, c) => s + (c.preScores[cat.id] || 5), 0) / completions.length).toFixed(1);
+      const avgPost = (completions.reduce((s, c) => s + (c.postScores[cat.id] || 5), 0) / completions.length).toFixed(1);
+      const delta = (avgPost - avgPre).toFixed(1);
+      const deltaStr = delta > 0 ? `+${delta}` : delta == 0 ? '—' : `${delta}`;
+      const deltaColor = delta > 0 ? 'var(--after)' : delta < 0 ? 'var(--before-deep)' : 'var(--text-dim)';
+      const col = document.createElement('div');
+      col.className = 'room-col';
+      col.innerHTML = `
+        <div class="room-col-delta" style="color:${deltaColor}">${deltaStr}</div>
+        <div class="room-col-bars">
+          <div class="room-vbar vb-before" style="height:${avgPre * 10}%">${avgPre}</div>
+          <div class="room-vbar vb-after" style="height:${avgPost * 10}%">${avgPost}</div>
+        </div>
+        <div class="room-col-label">${cat.name}</div>
+      `;
+      roomV.appendChild(col);
+    });
+  }
+
+  // Group results (future feature)
+  const groupPanel = document.getElementById('groupResults');
+  if (false) { // groups disabled for now
+    const groups = JSON.parse(localStorage.getItem('ehp_groups') || '{}');
+    const grp = groups[groupCode];
+    if (grp && grp.members && grp.members.length > 1) {
+      groupPanel.style.display = 'block';
+      document.getElementById('groupMemberList').textContent = 
+        grp.members.map(m => `${m.avatar ? m.avatar.emoji : '🌀'} ${m.name}`).join(' · ');
+      
+      // Find group members' data in this session
+      const memberNames = grp.members.map(m => m.name);
+      const groupCompletions = allData.filter(d => 
+        d.session === sessionId && d.type === 'complete' && memberNames.includes(d.user)
+      );
+      
+      const groupBars = document.getElementById('groupBars');
+      groupBars.innerHTML = '';
+      
+      if (groupCompletions.length > 0) {
+        CATEGORIES.forEach(cat => {
+          const avgPre = (groupCompletions.reduce((s, c) => s + (c.preScores[cat.id] || 5), 0) / groupCompletions.length).toFixed(1);
+          const avgPost = (groupCompletions.reduce((s, c) => s + (c.postScores[cat.id] || 5), 0) / groupCompletions.length).toFixed(1);
+          const div = document.createElement('div');
+          div.className = 'ba-row';
+          const gDelta = (avgPost - avgPre).toFixed(1);
+          const gDeltaStr = gDelta > 0 ? `+${gDelta}` : gDelta == 0 ? '—' : `${gDelta}`;
+          const gDeltaClass = gDelta > 0 ? 'up' : gDelta < 0 ? 'down' : 'same';
+          const gAfterClass = gDelta > 0 ? 'improved' : gDelta < 0 ? 'declined' : '';
+          div.innerHTML = `
+            <div class="ba-label">${cat.name}</div>
+            <div class="ba-bars">
+              <div class="ba-bar ba-before" style="width: ${avgPre * 10}%">${avgPre}</div>
+              <div class="ba-bar ba-after ${gAfterClass}" style="width: ${avgPost * 10}%">${avgPost}</div>
+            </div>
+            <div class="ba-delta ${gDeltaClass}">${gDeltaStr}</div>
+          `;
+          groupBars.appendChild(div);
+        });
+      }
+    } else {
+      groupPanel.style.display = 'none';
+    }
+  } else {
+    groupPanel.style.display = 'none';
+  }
+
+  // Insight echo
+  if (state.insight) {
+    document.getElementById('insightEcho').style.display = 'block';
+    document.getElementById('insightDisplay').textContent = '"' + state.insight + '"';
+  }
+}
+
+// ==================== ART MODES ====================
+let mandalaCtx, mandalaDrawing = false;
+let brushColor = BRUSH_COLORS[0];
+let brushSize = 1.5;
+let mirrorSegments = 6;
+let currentArtMode = 'mandala';
+let mandalaLastPos = null;
+
+// Undo system
+let mandalaHistory = [];
+const MAX_UNDO = 20;
+
+function saveMandalaState() {
+  const canvas = document.getElementById('mandalaCanvas');
+  mandalaHistory.push(mandalaCtx.getImageData(0, 0, canvas.width, canvas.height));
+  if (mandalaHistory.length > MAX_UNDO) mandalaHistory.shift();
+  updateUndoBtn();
+}
+
+function undoMandala() {
+  if (mandalaHistory.length === 0) return;
+  const state_data = mandalaHistory.pop();
+  mandalaCtx.putImageData(state_data, 0, 0);
+  updateUndoBtn();
+  haptic('light');
+}
+
+function updateUndoBtn() {
+  const btn = document.getElementById('undoBtn');
+  if (btn) btn.classList.toggle('has-history', mandalaHistory.length > 0);
+}
+
+// Stamp system
+let activeStamp = null;
+const STAMP_TYPES = [
+  'Seed of Life', 'Flower of Life', "Metatron's Cube", 'Sri Yantra',
+  'Tetrahedron', 'Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron'
+];
+
+// Retro paint state
+let retroCtx, retroDrawing = false;
+let retroColor = '#000000';
+let retroBrushSize = 8;
+let retroLastPos = null;
+
+// 3D Sacred state
+let sacred3dCtx, sacred3dAnimId = null;
+let s3dRotX = 0.4, s3dRotY = 0.3, s3dRotZ = 0;
+let s3dDragging = false, s3dLastMouse = null;
+let s3dAutoRotate = true;
+let currentSolid = 'Tetrahedron';
+
+const RETRO_COLORS = [
+  '#000000','#808080','#800000','#808000','#008000','#008080','#000080','#800080',
+  '#ffffff','#c0c0c0','#ff0000','#ffff00','#00ff00','#00ffff','#0000ff','#ff00ff',
+  '#c08040','#ffc080','#00ff80','#80ffff','#8080ff','#ff0080','#ff8040','#804000',
+  '#400000','#004000','#000040','#404000','#400040','#004040'
+];
+
+const MANDALA_COLORS = [
+  '#E03636', '#F28B30', '#F5D53B', '#48C774',
+  '#3DB8E8', '#4A5FC1', '#9B59B6', '#E8E0F0'
+]; // Chakra spectrum: Root → Sacral → Solar → Heart → Throat → Third Eye → Crown → White
+
+function switchArtMode(mode) {
+  currentArtMode = mode;
+  document.querySelectorAll('.art-tab').forEach((t, i) => {
+    t.classList.toggle('active',
+      (i === 0 && mode === 'mandala') ||
+      (i === 1 && mode === 'retro') ||
+      (i === 2 && mode === 'sacred3d'));
+  });
+  document.getElementById('mandalaMode').style.display = mode === 'mandala' ? 'block' : 'none';
+  document.getElementById('retroMode').style.display = mode === 'retro' ? 'block' : 'none';
+  document.getElementById('sacred3dMode').style.display = mode === 'sacred3d' ? 'block' : 'none';
+
+  const subtitles = {
+    mandala: 'Touch the circle. Let it mirror your spirit.',
+    retro: "Paint like it's 1995. No rules.",
+    sacred3d: 'Rotate and contemplate the building blocks of creation.'
+  };
+  document.getElementById('artSubtitle').textContent = subtitles[mode];
+
+  if (mode === 'retro') initRetro();
+  if (mode === 'sacred3d') initSacred3d();
+  // Stop 3D animation when not in 3D mode
+  if (mode !== 'sacred3d' && sacred3dAnimId) {
+    cancelAnimationFrame(sacred3dAnimId);
+    sacred3dAnimId = null;
+  }
+}
+
+function showMandala() {
+  showScreen('s-mandala');
+  initMandalaMode();
+  // Reset to mandala tab
+  switchArtMode('mandala');
+}
+
+// ==================== SACRED MANDALA ====================
+function initMandalaMode() {
+  const wrap = document.getElementById('mandalaWrap');
+  const canvas = document.getElementById('mandalaCanvas');
+  const size = wrap.clientWidth;
+  canvas.width = size * 2;
+  canvas.height = size * 2;
+  canvas.style.width = size + 'px';
+  canvas.style.height = size + 'px';
+  mandalaCtx = canvas.getContext('2d');
+  mandalaCtx.scale(2, 2);
+  mandalaCtx.fillStyle = '#0a0a0f';
+  mandalaCtx.fillRect(0, 0, size, size);
+  mandalaHistory = [];
+  updateUndoBtn();
+
+  // Symmetry selector — single select, simple
+  window.activeSymmetries = new Set([mirrorSegments]);
+  const symBar = document.getElementById('symmetryBar');
+  symBar.innerHTML = '';
+  [2, 3, 4, 5, 6, 7].forEach(n => {
+    const btn = document.createElement('button');
+    btn.className = 'sym-btn' + (n === mirrorSegments ? ' active' : '');
+    btn.textContent = n;
+    btn.onclick = () => {
+      symBar.querySelectorAll('.sym-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeSymmetries = new Set([n]);
+      mirrorSegments = n;
+      rebuildPolyAngles();
+      haptic('light');
+    };
+    symBar.appendChild(btn);
+  });
+
+  // Build initial poly angles
+  rebuildPolyAngles();
+
+  // Stamp bar
+  initStampBar();
+
+  // Build brush bar with mandala colors
+  const bar = document.getElementById('brushBar');
+  bar.innerHTML = '';
+  brushColor = MANDALA_COLORS[0];
+  MANDALA_COLORS.forEach((c, i) => {
+    const el = document.createElement('div');
+    el.className = 'brush-color' + (i === 0 ? ' active' : '');
+    el.style.background = c;
+    el.onclick = () => {
+      bar.querySelectorAll('.brush-color').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      brushColor = c;
+    };
+    bar.appendChild(el);
+  });
+
+  // Size options — broader for expressive strokes
+  brushSize = 3;
+  [2, 4, 7].forEach((s, i) => {
+    const el = document.createElement('div');
+    el.className = 'size-dot' + (i === 0 ? ' active' : '');
+    el.style.width = (s * 4 + 10) + 'px';
+    el.style.height = (s * 4 + 10) + 'px';
+    el.onclick = () => {
+      bar.querySelectorAll('.size-dot').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      brushSize = s;
+    };
+    bar.appendChild(el);
+  });
+
+  // Touch events
+  canvas.onpointerdown = mandalaStart;
+  canvas.onpointermove = mandalaDraw;
+  canvas.onpointerup = canvas.onpointerleave = () => { mandalaDrawing = false; mandalaLastPos = null; };
+  canvas.style.touchAction = 'none';
+}
+
+// ==================== STAMP BAR ====================
+function initStampBar() {
+  const bar = document.getElementById('stampBar');
+  bar.innerHTML = '';
+  STAMP_TYPES.forEach(name => {
+    const btn = document.createElement('button');
+    btn.className = 'stamp-btn';
+    btn.textContent = name;
+    btn.onclick = () => {
+      if (activeStamp === name) {
+        activeStamp = null;
+        btn.classList.remove('active');
+        document.getElementById('stampSizeWrap').style.display = 'none';
+      } else {
+        bar.querySelectorAll('.stamp-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeStamp = name;
+        document.getElementById('stampSizeWrap').style.display = 'flex';
+      }
+      haptic('light');
+    };
+    bar.appendChild(btn);
+  });
+}
+
+function getCanvasPos(e, canvasId) {
+  const canvas = document.getElementById(canvasId || 'mandalaCanvas');
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: (e.clientX - rect.left) * (canvas.width / 2 / rect.width),
+    y: (e.clientY - rect.top) * (canvas.height / 2 / rect.height)
+  };
+}
+
+function mandalaStart(e) {
+  e.preventDefault();
+  saveMandalaState();
+  if (activeStamp) {
+    const pos = getCanvasPos(e);
+    const stampSize = parseInt(document.getElementById('stampSizeSlider').value);
+    placeStampMirrored(activeStamp, pos.x, pos.y, stampSize);
+    // Deselect stamp
+    activeStamp = null;
+    document.querySelectorAll('.stamp-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('stampSizeWrap').style.display = 'none';
+    haptic('medium');
+    return;
+  }
+  mandalaDrawing = true;
+  const pos = getCanvasPos(e);
+  mandalaLastPos = pos;
+  drawMirrored(pos.x, pos.y, null);
+}
+
+function mandalaDraw(e) {
+  e.preventDefault();
+  if (!mandalaDrawing) return;
+  const pos = getCanvasPos(e);
+  drawMirrored(pos.x, pos.y, mandalaLastPos);
+  mandalaLastPos = pos;
+}
+
+// Polymeter angles — combined from all active symmetries
+window.polyAngles = null;
+
+function rebuildPolyAngles() {
+  const angleSet = new Set();
+  activeSymmetries.forEach(n => {
+    for (let i = 0; i < n; i++) {
+      // Round to avoid float duplicates
+      const a = Math.round((i / n) * 360000) / 1000;
+      angleSet.add(a);
+    }
+  });
+  polyAngles = [...angleSet].sort((a, b) => a - b).map(a => a * Math.PI / 180);
+}
+
+function drawMirrored(x, y, lastPos) {
+  const canvas = document.getElementById('mandalaCanvas');
+  const cx = canvas.width / 4;
+  const cy = canvas.height / 4;
+  const dx = x - cx;
+  const dy = y - cy;
+
+  const angles = polyAngles || [];
+  // Fallback if not built yet
+  if (angles.length === 0) {
+    for (let i = 0; i < mirrorSegments; i++) angles.push((i / mirrorSegments) * Math.PI * 2);
+  }
+
+  for (const angle of angles) {
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+
+    // Normal rotation
+    let nx = cx + dx * cos - dy * sin;
+    let ny = cy + dx * sin + dy * cos;
+    let lx = null, ly = null;
+    if (lastPos) {
+      const ldx = lastPos.x - cx, ldy = lastPos.y - cy;
+      lx = cx + ldx * cos - ldy * sin;
+      ly = cy + ldx * sin + ldy * cos;
+    }
+    drawGlowStroke(nx, ny, lx, ly);
+
+    // Mirror reflection
+    nx = cx + dx * cos + dy * sin;
+    ny = cy + dx * sin - dy * cos;
+    if (lastPos) {
+      const ldx = lastPos.x - cx, ldy = lastPos.y - cy;
+      lx = cx + ldx * cos + ldy * sin;
+      ly = cy + ldx * sin - ldy * cos;
+    }
+    drawGlowStroke(nx, ny, lx, ly);
+  }
+}
+
+function drawGlowStroke(x, y, lx, ly) {
+  const ctx = mandalaCtx;
+
+  // Additive blending — overlaps create harmony nodes (brighter)
+  ctx.globalCompositeOperation = 'lighter';
+
+  // Outer glow layer
+  ctx.save();
+  ctx.globalAlpha = 0.12;
+  ctx.shadowColor = brushColor;
+  ctx.shadowBlur = 16;
+  ctx.strokeStyle = brushColor;
+  ctx.lineWidth = brushSize * 3.5;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  if (lx !== null) {
+    ctx.beginPath();
+    ctx.moveTo(lx, ly);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  } else {
+    ctx.beginPath();
+    ctx.arc(x, y, brushSize * 1.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // Mid glow
+  ctx.save();
+  ctx.globalAlpha = 0.4;
+  ctx.shadowColor = brushColor;
+  ctx.shadowBlur = 6;
+  ctx.strokeStyle = brushColor;
+  ctx.lineWidth = brushSize * 1.5;
+  ctx.lineCap = 'round';
+  if (lx !== null) {
+    ctx.beginPath();
+    ctx.moveTo(lx, ly);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // Core bright line
+  ctx.save();
+  ctx.globalAlpha = 0.9;
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = brushSize * 0.5;
+  ctx.lineCap = 'round';
+  ctx.shadowColor = brushColor;
+  ctx.shadowBlur = 4;
+  if (lx !== null) {
+    ctx.beginPath();
+    ctx.moveTo(lx, ly);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  } else {
+    ctx.beginPath();
+    ctx.arc(x, y, brushSize * 0.3, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // Reset composite operation
+  ctx.globalCompositeOperation = 'source-over';
+}
+
+// ==================== STAMP PLACEMENT ====================
+function placeStampMirrored(stampName, x, y, size) {
+  const canvas = document.getElementById('mandalaCanvas');
+  const cx = canvas.width / 4;
+  const cy = canvas.height / 4;
+  const dx = x - cx;
+  const dy = y - cy;
+
+  for (let i = 0; i < mirrorSegments; i++) {
+    const angle = (i / mirrorSegments) * Math.PI * 2;
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+
+    let nx = cx + dx * cos - dy * sin;
+    let ny = cy + dx * sin + dy * cos;
+    drawStamp(stampName, nx, ny, size);
+
+    // Mirror reflection
+    nx = cx + dx * cos + dy * sin;
+    ny = cy + dx * sin - dy * cos;
+    drawStamp(stampName, nx, ny, size);
+  }
+}
+
+function drawStamp(name, cx, cy, size) {
+  const ctx = mandalaCtx;
+  const r = size / 2;
+  ctx.save();
+  ctx.strokeStyle = brushColor;
+  ctx.lineWidth = 1;
+  ctx.shadowColor = brushColor;
+  ctx.shadowBlur = 8;
+  ctx.globalAlpha = 0.8;
+
+  switch (name) {
+    case 'Seed of Life': drawSeedOfLife(ctx, cx, cy, r); break;
+    case 'Flower of Life': drawFlowerOfLife(ctx, cx, cy, r); break;
+    case "Metatron's Cube": drawMetatronsCube(ctx, cx, cy, r); break;
+    case 'Sri Yantra': drawSriYantra(ctx, cx, cy, r); break;
+    case 'Tetrahedron': drawPlatonicStamp(ctx, cx, cy, r, 'tetra'); break;
+    case 'Cube': drawPlatonicStamp(ctx, cx, cy, r, 'cube'); break;
+    case 'Octahedron': drawPlatonicStamp(ctx, cx, cy, r, 'octa'); break;
+    case 'Dodecahedron': drawPlatonicStamp(ctx, cx, cy, r, 'dodeca'); break;
+    case 'Icosahedron': drawPlatonicStamp(ctx, cx, cy, r, 'icosa'); break;
+  }
+  ctx.restore();
+}
+
+function drawSeedOfLife(ctx, cx, cy, r) {
+  const cr = r * 0.4;
+  // Center circle
+  ctx.beginPath(); ctx.arc(cx, cy, cr, 0, Math.PI * 2); ctx.stroke();
+  // 6 surrounding circles
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
+    ctx.beginPath();
+    ctx.arc(cx + Math.cos(a) * cr, cy + Math.sin(a) * cr, cr, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+}
+
+function drawFlowerOfLife(ctx, cx, cy, r) {
+  const cr = r * 0.28;
+  // Inner ring (seed of life)
+  ctx.beginPath(); ctx.arc(cx, cy, cr, 0, Math.PI * 2); ctx.stroke();
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
+    ctx.beginPath();
+    ctx.arc(cx + Math.cos(a) * cr, cy + Math.sin(a) * cr, cr, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+  // Outer ring — 12 more circles at distance 2*cr and intermediate positions
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
+    // At 2*cr distance
+    ctx.beginPath();
+    ctx.arc(cx + Math.cos(a) * cr * 2, cy + Math.sin(a) * cr * 2, cr, 0, Math.PI * 2);
+    ctx.stroke();
+    // Between positions
+    const a2 = ((i + 0.5) / 6) * Math.PI * 2 - Math.PI / 2;
+    ctx.beginPath();
+    ctx.arc(cx + Math.cos(a2) * cr * Math.sqrt(3), cy + Math.sin(a2) * cr * Math.sqrt(3), cr, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+  // Outer boundary circle
+  ctx.beginPath(); ctx.arc(cx, cy, r * 0.95, 0, Math.PI * 2); ctx.stroke();
+}
+
+function drawMetatronsCube(ctx, cx, cy, r) {
+  const cr = r * 0.15;
+  // Fruit of life: 13 circles
+  const centers = [[0, 0]];
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
+    const d = r * 0.4;
+    centers.push([Math.cos(a) * d, Math.sin(a) * d]);
+  }
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
+    const d = r * 0.8;
+    centers.push([Math.cos(a) * d, Math.sin(a) * d]);
+  }
+  // Draw circles
+  centers.forEach(([dx, dy]) => {
+    ctx.beginPath();
+    ctx.arc(cx + dx, cy + dy, cr, 0, Math.PI * 2);
+    ctx.stroke();
+  });
+  // Connect all centers with lines
+  ctx.globalAlpha = 0.4;
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i < centers.length; i++) {
+    for (let j = i + 1; j < centers.length; j++) {
+      ctx.beginPath();
+      ctx.moveTo(cx + centers[i][0], cy + centers[i][1]);
+      ctx.lineTo(cx + centers[j][0], cy + centers[j][1]);
+      ctx.stroke();
+    }
+  }
+}
+
+function drawSriYantra(ctx, cx, cy, r) {
+  // Outer circles
+  ctx.beginPath(); ctx.arc(cx, cy, r * 0.95, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx, cy, r * 0.88, 0, Math.PI * 2); ctx.stroke();
+
+  // 9 interlocking triangles (simplified)
+  // 4 pointing up (Shiva), 5 pointing down (Shakti)
+  const upTriangles = [
+    { top: -0.80, base: 0.55, width: 0.90 },
+    { top: -0.55, base: 0.35, width: 0.72 },
+    { top: -0.35, base: 0.10, width: 0.50 },
+    { top: -0.15, base: -0.05, width: 0.28 },
+  ];
+  const downTriangles = [
+    { top: 0.85, base: -0.60, width: 0.92 },
+    { top: 0.65, base: -0.40, width: 0.78 },
+    { top: 0.45, base: -0.22, width: 0.58 },
+    { top: 0.28, base: -0.08, width: 0.38 },
+    { top: 0.12, base: 0.02, width: 0.18 },
+  ];
+
+  ctx.lineWidth = 0.8;
+  upTriangles.forEach(t => {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy + t.top * r);
+    ctx.lineTo(cx - t.width * r * 0.5, cy + t.base * r);
+    ctx.lineTo(cx + t.width * r * 0.5, cy + t.base * r);
+    ctx.closePath();
+    ctx.stroke();
+  });
+  downTriangles.forEach(t => {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy + t.top * r);
+    ctx.lineTo(cx - t.width * r * 0.5, cy + t.base * r);
+    ctx.lineTo(cx + t.width * r * 0.5, cy + t.base * r);
+    ctx.closePath();
+    ctx.stroke();
+  });
+
+  // Bindu (center dot)
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 0.02, 0, Math.PI * 2);
+  ctx.fillStyle = brushColor;
+  ctx.fill();
+}
+
+function drawPlatonicStamp(ctx, cx, cy, r, type) {
+  const solid = getPlatonicSolid(type);
+  const scale = r * 0.8;
+  // Apply slight rotation for depth
+  const rx = 0.4, ry = 0.3;
+  const projected = solid.vertices.map(v => {
+    let [x, y, z] = v;
+    // Rotate Y
+    let x1 = x * Math.cos(ry) + z * Math.sin(ry);
+    let z1 = -x * Math.sin(ry) + z * Math.cos(ry);
+    // Rotate X
+    let y1 = y * Math.cos(rx) - z1 * Math.sin(rx);
+    let z2 = y * Math.sin(rx) + z1 * Math.cos(rx);
+    // Simple perspective
+    const persp = 3 / (3 + z2);
+    return [cx + x1 * scale * persp, cy + y1 * scale * persp];
+  });
+
+  ctx.lineWidth = 0.8;
+  solid.edges.forEach(([a, b]) => {
+    ctx.beginPath();
+    ctx.moveTo(projected[a][0], projected[a][1]);
+    ctx.lineTo(projected[b][0], projected[b][1]);
+    ctx.stroke();
+  });
+  // Vertices as dots
+  projected.forEach(([px, py]) => {
+    ctx.beginPath();
+    ctx.arc(px, py, 1.5, 0, Math.PI * 2);
+    ctx.fillStyle = brushColor;
+    ctx.fill();
+  });
+}
+
+// ==================== PLATONIC SOLID DATA ====================
+function getPlatonicSolid(type) {
+  switch (type) {
+    case 'tetra': {
+      const a = 1 / Math.sqrt(3);
+      return {
+        vertices: [[1,1,1],[1,-1,-1],[-1,1,-1],[-1,-1,1]].map(v => v.map(c => c * a)),
+        edges: [[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]]
+      };
+    }
+    case 'cube': {
+      const v = [];
+      for (let x of [-0.5, 0.5]) for (let y of [-0.5, 0.5]) for (let z of [-0.5, 0.5]) v.push([x, y, z]);
+      return {
+        vertices: v,
+        edges: [[0,1],[0,2],[0,4],[1,3],[1,5],[2,3],[2,6],[3,7],[4,5],[4,6],[5,7],[6,7]]
+      };
+    }
+    case 'octa': {
+      const s = 0.7;
+      return {
+        vertices: [[s,0,0],[-s,0,0],[0,s,0],[0,-s,0],[0,0,s],[0,0,-s]],
+        edges: [[0,2],[0,3],[0,4],[0,5],[1,2],[1,3],[1,4],[1,5],[2,4],[2,5],[3,4],[3,5]]
+      };
+    }
+    case 'dodeca': {
+      const phi = (1 + Math.sqrt(5)) / 2;
+      const ip = 1 / phi;
+      const s = 0.45;
+      const v = [
+        [1,1,1],[1,1,-1],[1,-1,1],[1,-1,-1],
+        [-1,1,1],[-1,1,-1],[-1,-1,1],[-1,-1,-1],
+        [0,ip,phi],[0,ip,-phi],[0,-ip,phi],[0,-ip,-phi],
+        [ip,phi,0],[ip,-phi,0],[-ip,phi,0],[-ip,-phi,0],
+        [phi,0,ip],[phi,0,-ip],[-phi,0,ip],[-phi,0,-ip]
+      ].map(c => c.map(x => x * s));
+      return {
+        vertices: v,
+        edges: [
+          [0,8],[0,12],[0,16],[1,9],[1,12],[1,17],[2,10],[2,13],[2,16],
+          [3,11],[3,13],[3,17],[4,8],[4,14],[4,18],[5,9],[5,14],[5,19],
+          [6,10],[6,15],[6,18],[7,11],[7,15],[7,19],[8,10],[9,11],
+          [12,14],[13,15],[16,17],[18,19]
+        ]
+      };
+    }
+    case 'icosa': {
+      const phi = (1 + Math.sqrt(5)) / 2;
+      const s = 0.45;
+      const v = [
+        [0,1,phi],[0,1,-phi],[0,-1,phi],[0,-1,-phi],
+        [1,phi,0],[1,-phi,0],[-1,phi,0],[-1,-phi,0],
+        [phi,0,1],[phi,0,-1],[-phi,0,1],[-phi,0,-1]
+      ].map(c => c.map(x => x * s));
+      return {
+        vertices: v,
+        edges: [
+          [0,2],[0,4],[0,6],[0,8],[0,10],[1,3],[1,4],[1,6],[1,9],[1,11],
+          [2,5],[2,7],[2,8],[2,10],[3,5],[3,7],[3,9],[3,11],
+          [4,6],[4,8],[4,9],[5,7],[5,8],[5,9],
+          [6,10],[6,11],[7,10],[7,11],[8,9],[10,11]
+        ]
+      };
+    }
+  }
+}
+
+function clearMandala() {
+  saveMandalaState();
+  const canvas = document.getElementById('mandalaCanvas');
+  const size = canvas.width / 2;
+  mandalaCtx.fillStyle = '#0a0a0f';
+  mandalaCtx.fillRect(0, 0, size, size);
+  haptic('medium');
+}
+
+// ==================== 3D SACRED GEOMETRY VIEWER ====================
+function initSacred3d() {
+  const wrap = document.getElementById('sacred3dWrap');
+  const canvas = document.getElementById('sacred3dCanvas');
+  const size = wrap.clientWidth || 320;
+  canvas.width = size * 2;
+  canvas.height = size * 2;
+  canvas.style.width = size + 'px';
+  canvas.style.height = size + 'px';
+  sacred3dCtx = canvas.getContext('2d');
+  sacred3dCtx.scale(2, 2);
+
+  // Solid selector
+  const bar = document.getElementById('solidBar');
+  bar.innerHTML = '';
+  const solids = ['Tetrahedron', 'Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron'];
+  solids.forEach(name => {
+    const btn = document.createElement('button');
+    btn.className = 'solid-btn' + (name === currentSolid ? ' active' : '');
+    btn.textContent = name;
+    btn.onclick = () => {
+      bar.querySelectorAll('.solid-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentSolid = name;
+      haptic('light');
+    };
+    bar.appendChild(btn);
+  });
+
+  // Drag to rotate
+  canvas.onpointerdown = (e) => {
+    e.preventDefault();
+    s3dDragging = true;
+    s3dAutoRotate = false;
+    s3dLastMouse = { x: e.clientX, y: e.clientY };
+  };
+  canvas.onpointermove = (e) => {
+    e.preventDefault();
+    if (!s3dDragging || !s3dLastMouse) return;
+    const dx = e.clientX - s3dLastMouse.x;
+    const dy = e.clientY - s3dLastMouse.y;
+    s3dRotY += dx * 0.01;
+    s3dRotX += dy * 0.01;
+    s3dLastMouse = { x: e.clientX, y: e.clientY };
+  };
+  canvas.onpointerup = canvas.onpointerleave = () => {
+    s3dDragging = false;
+    s3dLastMouse = null;
+    // Resume auto-rotate after 2s
+    setTimeout(() => { if (!s3dDragging) s3dAutoRotate = true; }, 2000);
+  };
+  canvas.style.touchAction = 'none';
+
+  // Start animation loop
+  if (sacred3dAnimId) cancelAnimationFrame(sacred3dAnimId);
+  function animate() {
+    render3dSolid();
+    if (s3dAutoRotate) {
+      s3dRotY += 0.005;
+      s3dRotX += 0.002;
+    }
+    sacred3dAnimId = requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+function render3dSolid() {
+  const canvas = document.getElementById('sacred3dCanvas');
+  const ctx = sacred3dCtx;
+  const size = canvas.width / 2;
+  ctx.clearRect(0, 0, size, size);
+
+  // Background
+  ctx.fillStyle = '#0a0a0f';
+  ctx.fillRect(0, 0, size, size);
+
+  const solidMap = {
+    'Tetrahedron': 'tetra', 'Cube': 'cube', 'Octahedron': 'octa',
+    'Dodecahedron': 'dodeca', 'Icosahedron': 'icosa'
+  };
+  const solid = getPlatonicSolid(solidMap[currentSolid]);
+  const cx = size / 2, cy = size / 2;
+  const scale = size * 0.32;
+  const gold = '#D4A24E';
+
+  // Transform vertices
+  const projected = solid.vertices.map(v => {
+    let [x, y, z] = v;
+    // Rotate Y
+    let x1 = x * Math.cos(s3dRotY) + z * Math.sin(s3dRotY);
+    let z1 = -x * Math.sin(s3dRotY) + z * Math.cos(s3dRotY);
+    // Rotate X
+    let y1 = y * Math.cos(s3dRotX) - z1 * Math.sin(s3dRotX);
+    let z2 = y * Math.sin(s3dRotX) + z1 * Math.cos(s3dRotX);
+    // Rotate Z (slight)
+    let x2 = x1 * Math.cos(s3dRotZ) - y1 * Math.sin(s3dRotZ);
+    let y2 = x1 * Math.sin(s3dRotZ) + y1 * Math.cos(s3dRotZ);
+    // Perspective
+    const persp = 3 / (3 + z2);
+    return { x: cx + x2 * scale * persp, y: cy + y2 * scale * persp, z: z2 };
+  });
+
+  // Draw edges with glow
+  ctx.save();
+  ctx.shadowColor = gold;
+  ctx.shadowBlur = 12;
+  ctx.strokeStyle = gold;
+  ctx.lineWidth = 1.5;
+  ctx.globalAlpha = 0.7;
+  solid.edges.forEach(([a, b]) => {
+    ctx.beginPath();
+    ctx.moveTo(projected[a].x, projected[a].y);
+    ctx.lineTo(projected[b].x, projected[b].y);
+    ctx.stroke();
+  });
+  ctx.restore();
+
+  // Bright core edges
+  ctx.save();
+  ctx.strokeStyle = '#f4d574';
+  ctx.lineWidth = 0.8;
+  ctx.globalAlpha = 0.9;
+  ctx.shadowColor = gold;
+  ctx.shadowBlur = 4;
+  solid.edges.forEach(([a, b]) => {
+    ctx.beginPath();
+    ctx.moveTo(projected[a].x, projected[a].y);
+    ctx.lineTo(projected[b].x, projected[b].y);
+    ctx.stroke();
+  });
+  ctx.restore();
+
+  // Vertices as glowing dots
+  ctx.save();
+  ctx.shadowColor = gold;
+  ctx.shadowBlur = 10;
+  projected.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#f4d574';
+    ctx.globalAlpha = 0.9;
+    ctx.fill();
+    // Outer glow
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = gold;
+    ctx.globalAlpha = 0.3;
+    ctx.fill();
+  });
+  ctx.restore();
+
+  // Label
+  ctx.save();
+  ctx.fillStyle = gold;
+  ctx.globalAlpha = 0.4;
+  ctx.font = "12px 'Inter', sans-serif";
+  ctx.textAlign = 'center';
+  ctx.fillText(currentSolid, cx, size - 12);
+  ctx.restore();
+}
+
+// ==================== RETRO PAINT ====================
+function initRetro() {
+  const wrap = document.getElementById('retroWrap');
+  const canvas = document.getElementById('retroCanvas');
+  const w = wrap.clientWidth || 320;
+  const h = wrap.clientHeight || 280;
+  // Low res for chunky pixels
+  canvas.width = 320;
+  canvas.height = 280;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  retroCtx = canvas.getContext('2d');
+  retroCtx.imageSmoothingEnabled = false;
+  retroCtx.fillStyle = '#ffffff';
+  retroCtx.fillRect(0, 0, 320, 280);
+
+  // Palette
+  const pal = document.getElementById('retroPalette');
+  pal.innerHTML = '';
+  retroColor = RETRO_COLORS[0];
+  RETRO_COLORS.forEach((c, i) => {
+    const el = document.createElement('div');
+    el.className = 'retro-color' + (i === 0 ? ' active' : '');
+    el.style.background = c;
+    el.onclick = () => {
+      pal.querySelectorAll('.retro-color').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      retroColor = c;
+    };
+    pal.appendChild(el);
+  });
+
+  // Size bar
+  const sizeBar = document.getElementById('retroSizeBar');
+  sizeBar.innerHTML = '<span style="font-size:11px;font-family:sans-serif;color:#000;">Size:</span>';
+  [4, 8, 14, 22].forEach((s, i) => {
+    const el = document.createElement('div');
+    el.className = 'retro-size' + (i === 1 ? ' active' : '');
+    el.style.width = Math.min(s, 20) + 'px';
+    el.style.height = Math.min(s, 20) + 'px';
+    el.style.borderRadius = '0';
+    el.onclick = () => {
+      sizeBar.querySelectorAll('.retro-size').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      retroBrushSize = s;
+    };
+    sizeBar.appendChild(el);
+  });
+
+  // Events
+  canvas.onpointerdown = retroStart;
+  canvas.onpointermove = retroMove;
+  canvas.onpointerup = canvas.onpointerleave = () => { retroDrawing = false; retroLastPos = null; };
+  canvas.style.touchAction = 'none';
+}
+
+function getRetroPos(e) {
+  const canvas = document.getElementById('retroCanvas');
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: Math.floor((e.clientX - rect.left) * (canvas.width / rect.width)),
+    y: Math.floor((e.clientY - rect.top) * (canvas.height / rect.height))
+  };
+}
+
+function retroStart(e) {
+  e.preventDefault();
+  retroDrawing = true;
+  const pos = getRetroPos(e);
+  retroLastPos = pos;
+  drawRetroPixel(pos.x, pos.y);
+}
+
+function retroMove(e) {
+  e.preventDefault();
+  if (!retroDrawing) return;
+  const pos = getRetroPos(e);
+  // Bresenham-ish line for chunky continuous strokes
+  if (retroLastPos) {
+    const dx = pos.x - retroLastPos.x;
+    const dy = pos.y - retroLastPos.y;
+    const steps = Math.max(Math.abs(dx), Math.abs(dy), 1);
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      drawRetroPixel(
+        Math.floor(retroLastPos.x + dx * t),
+        Math.floor(retroLastPos.y + dy * t)
+      );
+    }
+  }
+  retroLastPos = pos;
+}
+
+function drawRetroPixel(x, y) {
+  retroCtx.fillStyle = retroColor;
+  const half = Math.floor(retroBrushSize / 2);
+  // Square brush for chunky MS Paint feel
+  retroCtx.fillRect(x - half, y - half, retroBrushSize, retroBrushSize);
+}
+
+function clearRetro() {
+  retroCtx.fillStyle = '#ffffff';
+  retroCtx.fillRect(0, 0, 320, 280);
+  haptic('medium');
+}
+
+// ==================== SHARED ART FUNCTIONS ====================
+function clearCurrentArt() {
+  if (currentArtMode === 'mandala') clearMandala();
+  else if (currentArtMode === 'retro') clearRetro();
+  else if (currentArtMode === 'sacred3d') {
+    s3dRotX = 0.4; s3dRotY = 0.3; s3dRotZ = 0;
+    haptic('medium');
+  }
+}
+
+function saveMandala() {
+  haptic('heavy');
+  alert('✨ Saved to the community wall!');
+  showScreen('s-results');
+}
+
+// ==================== COMMUNITY VIEW ====================
+function showCommunity() {
+  const list = document.getElementById('communityList');
+  list.innerHTML = '';
+
+  const sorted = [...community].sort((a, b) => b.sessions - a.sessions);
+
+  if (sorted.length === 0) {
+    list.innerHTML = '<div style="text-align:center;color:var(--text-dim);padding:20px;">Be the first! 🎵</div>';
+  }
+
+  sorted.slice(0, 20).forEach((p, i) => {
+    const isSelf = p.name.toLowerCase() === state.user.toLowerCase();
+    const div = document.createElement('div');
+    div.className = 'room-stat';
+    if (isSelf) div.style.borderColor = 'var(--gold-dim)';
+    div.innerHTML = `
+      <div>
+        <span style="font-size: 20px; margin-right: 8px;">${p.avatar ? p.avatar.emoji : '✨'}</span>
+        <span class="room-stat-label">${p.name}${isSelf ? ' (you)' : ''}</span>
+      </div>
+      <div style="text-align:right;">
+        <div class="room-stat-value">${p.sessions} session${p.sessions !== 1 ? 's' : ''}</div>
+        ${p.streak > 1 ? `<div style="font-size:11px;color:var(--text-dim);">${p.streak} streak 🔥</div>` : ''}
+      </div>
+    `;
+    list.appendChild(div);
+  });
+
+  showScreen('s-community');
+}
+
+// ==================== FACILITATOR ====================
+let facMode = false;
+
+function toggleFacilitator() {
+  facMode = !facMode;
+  if (facMode) {
+    renderFacilitator();
+    showScreen('s-facilitator');
+  } else {
+    showScreen('s-welcome');
+  }
+}
+
+function renderFacilitator() {
+  renderSessionCode();
+  const checkins = allData.filter(d => d.session === sessionId && d.type === 'checkin');
+  const completions = allData.filter(d => d.session === sessionId && d.type === 'complete');
+
+  // Stats
+  const stats = document.getElementById('facStats');
+  const avgShift = completions.length > 0 ?
+    (completions.reduce((s, c) => {
+      const preAvg = Object.values(c.preScores).reduce((a, b) => a + b, 0) / 5;
+      const postAvg = Object.values(c.postScores).reduce((a, b) => a + b, 0) / 5;
+      return s + (postAvg - preAvg);
+    }, 0) / completions.length).toFixed(1) : '—';
+
+  stats.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-number">${checkins.length}</div>
+      <div class="stat-label">Checked In</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">${completions.length}</div>
+      <div class="stat-label">Completed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">${avgShift > 0 ? '+' : ''}${avgShift}</div>
+      <div class="stat-label">Avg Shift</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">${completions.filter(c => c.insight).length}</div>
+      <div class="stat-label">Insights</div>
+    </div>
+  `;
+
+  // Word cloud (reuse logic)
+  const cloud = document.getElementById('facCloud');
+  cloud.innerHTML = '';
+  const counts = {};
+  checkins.forEach(c => c.feelings.forEach(f => { counts[f] = (counts[f] || 0) + 1; }));
+  const words = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const maxCount = words.length > 0 ? words[0][1] : 1;
+  const w = cloud.clientWidth || 380;
+  const h = 220;
+
+  words.forEach(([word, count], i) => {
+    const el = document.createElement('div');
+    el.className = 'cloud-word';
+    el.textContent = word;
+    const fontSize = Math.max(12, Math.min(28, (0.5 + count / maxCount) * 18));
+    el.style.fontSize = fontSize + 'px';
+    el.style.opacity = 0.3 + (count / maxCount) * 0.7;
+    const golden = 2.399963;
+    const angle = i * golden;
+    const radius = 15 + Math.sqrt(i) * 30;
+    el.style.left = Math.max(5, Math.min(w - 70, w / 2 + Math.cos(angle) * Math.min(radius, w * 0.35))) + 'px';
+    el.style.top = Math.max(5, Math.min(h - 25, h / 2 + Math.sin(angle) * Math.min(radius, h * 0.35))) + 'px';
+    cloud.appendChild(el);
+  });
+
+  // Instruments
+  const instDiv = document.getElementById('facInstruments');
+  instDiv.innerHTML = '';
+  const instCounts = {};
+  completions.forEach(c => { if (c.instrument) instCounts[c.instrument] = (instCounts[c.instrument] || 0) + 1; });
+  Object.entries(instCounts).sort((a, b) => b[1] - a[1]).forEach(([inst, count]) => {
+    const div = document.createElement('div');
+    div.className = 'room-stat';
+    div.innerHTML = `<span class="room-stat-label">${inst}</span><span class="room-stat-value">${count}</span>`;
+    instDiv.appendChild(div);
+  });
+
+  // Insights
+  const insDiv = document.getElementById('facInsights');
+  insDiv.innerHTML = '';
+  completions.filter(c => c.insight).forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'room-stat';
+    div.style.flexDirection = 'column';
+    div.style.alignItems = 'flex-start';
+    div.style.gap = '4px';
+    div.innerHTML = `
+      <span style="font-size: 12px; color: var(--text-dim);">${c.avatar ? c.avatar.emoji : '✨'} ${c.name}</span>
+      <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px;">"${c.insight}"</span>
+    `;
+    insDiv.appendChild(div);
+  });
+}
+
+function resetSession() {
+  if (confirm('Reset session? All check-ins for this session will be cleared.')) {
+    allData = allData.filter(d => d.session !== sessionId);
+    sessionId = newSessionId();
+    save();
+    renderFacilitator();
+    haptic('heavy');
+  }
+}
+
+function copySessionLink() {
+  const link = window.location.origin + window.location.pathname + '?session=' + sessionId;
+  navigator.clipboard.writeText(link).then(() => alert('Link copied! Share with participants.'));
+}
+
+function newSessionCode() {
+  if (confirm('Start a new session code? Old participants won\'t see new check-ins.')) {
+    const code = newSessionId();
+    joinSession(code);
+    renderFacilitator();
+    haptic('medium');
+  }
+}
+
+function renderSessionCode() {
+  const el = document.getElementById('sessionCodeDisplay');
+  if (el) el.textContent = sessionId;
+}
+
+function clearAllData() {
+  if (confirm('Clear EVERYTHING? All sessions, all check-ins, all community data — gone.')) {
+    if (confirm('Are you sure? This cannot be undone.')) {
+      localStorage.removeItem('ehp_data');
+      localStorage.removeItem('ehp_session');
+      localStorage.removeItem('ehp_community');
+      localStorage.removeItem('ehp_groups');
+      allData = [];
+      community = [];
+      sessionId = newSessionId();
+      save();
+      haptic('heavy');
+      showScreen('s-welcome');
+      alert('All data cleared. Fresh start.');
+    }
+  }
+}
+
+// ==================== DEMO DATA ====================
+function loadDemo() {
+  if (allData.some(d => d.session === sessionId)) return;
+
+  const names = ['Sarah', 'Jordan', 'Priya', 'Luna', 'Chen', 'Ava'];
+  const demoAvatars = AVATARS.slice(0, 6);
+
+  names.forEach((name, i) => {
+    const feelings = [];
+    const n = Math.floor(Math.random() * 3) + 1;
+    for (let j = 0; j < n; j++) feelings.push(FEELINGS[Math.floor(Math.random() * FEELINGS.length)]);
+
+    const preScores = {};
+    const postScores = {};
+    CATEGORIES.forEach(cat => {
+      preScores[cat.id] = Math.floor(Math.random() * 4) + 3;
+      postScores[cat.id] = Math.min(10, preScores[cat.id] + Math.floor(Math.random() * 4) + 1);
+    });
+
+    allData.push({
+      type: 'checkin',
+      name,
+      avatar: demoAvatars[i],
+      feelings,
+      scores: preScores,
+      time: Date.now() - Math.random() * 3600000,
+      session: sessionId,
+    });
+
+    allData.push({
+      type: 'complete',
+      name,
+      avatar: demoAvatars[i],
+      preScores,
+      postScores,
+      insight: ['I felt my jaw release for the first time in months',
+                'The gong brought me somewhere I didn\'t expect',
+                'I saw golden light behind my eyes',
+                '', 'Everything is connected', ''][i],
+      instrument: INSTRUMENTS[Math.floor(Math.random() * (INSTRUMENTS.length - 1))],
+      time: Date.now(),
+      session: sessionId,
+    });
+
+    // Community
+    if (!community.find(c => c.name === name)) {
+      community.push({
+        name,
+        avatar: demoAvatars[i],
+        sessions: Math.floor(Math.random() * 8) + 1,
+        streak: Math.floor(Math.random() * 5) + 1,
+        lastSession: Date.now(),
+        insights: [],
+      });
+    }
+  });
+
+  save();
+}
+
+// Auto-reset if ?reset=true in URL
+if (new URLSearchParams(window.location.search).get('reset') === 'true') {
+  localStorage.removeItem('ehp_data');
+  localStorage.removeItem('ehp_session');
+  localStorage.removeItem('ehp_community');
+  localStorage.removeItem('ehp_groups');
+  allData = [];
+  community = [];
+  sessionId = newSessionId();
+  save();
+  // Remove ?reset from URL so refreshing doesn't re-clear
+  window.history.replaceState({}, '', window.location.pathname);
+}
+
+// loadDemo(); // disabled — only use for testing
+</script>
+</body>
+</html>

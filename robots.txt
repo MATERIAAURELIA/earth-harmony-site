@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /draft/
+Disallow: /portal/
 
 Sitemap: https://www.earthharmonysoundwellness.com/sitemap.xml
