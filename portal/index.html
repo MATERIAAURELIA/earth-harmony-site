@@ -1204,7 +1204,7 @@
 <!-- ==================== 1. WELCOME ==================== -->
 <!-- ==================== 0. DOOR (communal iPad, Oct 10) ==================== -->
 <div id="s-door" class="screen active" style="justify-content:center;text-align:center;">
-  <div class="logo-mark" style="width:180px;height:180px;">
+  <div class="logo-mark" onclick="logoTap()" style="width:180px;height:180px;">
     <svg viewBox="0 0 100 100" style="width:100%;height:100%;">
       <style>
         @keyframes logoGlow {
@@ -1297,6 +1297,9 @@
   <button class="btn btn-solid" style="width:260px;padding:16px 20px;line-height:1.2;" onclick="doorArrive()"><span style="font-size:22px;letter-spacing:2px;">Arrive</span><br><span style="font-size:13px;opacity:.75;letter-spacing:1px;">check-in</span></button>
   <div style="height:18px"></div>
   <button class="btn" style="width:260px;padding:16px 20px;line-height:1.2;" onclick="doorReturn()"><span style="font-size:22px;letter-spacing:2px;">Return</span><br><span style="font-size:13px;opacity:.75;letter-spacing:1px;">post-session</span></button>
+  <div style="height:28px"></div>
+  <button class="btn-skip" onclick="hardReset()" style="opacity:0.45;font-size:13px;">↻ refresh this iPad</button>
+  <div id="verTag" style="font-size:11px;opacity:.35;margin-top:6px;"></div>
 </div>
 
 <!-- RETURN: pick your name -->
@@ -2327,6 +2330,17 @@ window.addEventListener('resize', fitScreens);
 window.addEventListener('orientationchange', function () { setTimeout(fitScreens, 300); });
 document.addEventListener('DOMContentLoaded', fitScreens);
 setTimeout(fitScreens, 0);
+
+
+// ==================== REFRESH / RESET (Oct 10) ====================
+var PORTAL_VERSION = '13';
+function hardReset() {
+  try { ['ehp_session','ehp_username','ehp_data','ehp_community'].forEach(function(k){ localStorage.removeItem(k); }); } catch(e) {}
+  location.replace(location.pathname + '?v=' + Date.now());
+}
+var _logoTaps = 0, _logoT = 0;
+function logoTap() { var n = Date.now(); _logoTaps = (n - _logoT < 800) ? _logoTaps + 1 : 1; _logoT = n; if (_logoTaps >= 3) hardReset(); }
+document.addEventListener('DOMContentLoaded', function(){ var v = document.getElementById('verTag'); if (v) v.textContent = 'v' + PORTAL_VERSION + ' · ' + sessionId; });
 
 // ==================== 0. DOOR / RETURN (communal iPad) ====================
 function freshState() {
