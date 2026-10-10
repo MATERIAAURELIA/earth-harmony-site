@@ -1897,7 +1897,7 @@ let community = JSON.parse(localStorage.getItem('ehp_community') || '[]');
   const sc = await SyncStore.get('ehp_community');
   if (sc && Array.isArray(sc) && sc.length > community.length) { community = sc; localStorage.setItem('ehp_community', JSON.stringify(community)); }
   const ss = await SyncStore.get('ehp_session');
-  if (ss && ss.code && !urlParams.get('session')) { sessionId = ss.code; }
+  // shared iPads: session is always today's date (never a stale saved code)
 })();
 let firebaseRef = null;
 let firebaseListener = null;
