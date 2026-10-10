@@ -9,20 +9,42 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <!-- Firebase -->
-<script src="sync.js"></script>
+<script src="sync.js?v=2"></script>
+<script>
+  // TEMP debug (Oct 10): show the first startup error on screen so we can see it on the iPad
+  window.__ehErr = null;
+  window.addEventListener('error', function(e){
+    if (window.__ehErr) return;
+    window.__ehErr = (e.message||'') + ' @ line ' + (e.lineno||'?') + ':' + (e.colno||'?');
+    var d = document.createElement('div');
+    d.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#400;color:#fff;font:14px monospace;padding:8px';
+    d.textContent = 'Startup error: ' + window.__ehErr;
+    (document.body || document.documentElement).appendChild(d);
+  });
+</script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 <script>
-  firebase.initializeApp({
-    apiKey: "AIzaSyA3CXtnY4Be5rNmSXmkJs6P5SwA_reM0rw",
-    authDomain: "earth-harmony-portal.firebaseapp.com",
-    databaseURL: "https://earth-harmony-portal-default-rtdb.firebaseio.com",
-    projectId: "earth-harmony-portal",
-    storageBucket: "earth-harmony-portal.firebasestorage.app",
-    messagingSenderId: "1058276837826",
-    appId: "1:1058276837826:web:d50dbc7e8b276f4686ee5b"
-  });
-  var db = firebase.database();
+  // Fail-safe (Oct 10): if Firebase doesn't load (slow/blocked on iPad), use a no-op db so the rest of the app still runs
+  var db;
+  try {
+    firebase.initializeApp({
+      apiKey: "AIzaSyA3CXtnY4Be5rNmSXmkJs6P5SwA_reM0rw",
+      authDomain: "earth-harmony-portal.firebaseapp.com",
+      databaseURL: "https://earth-harmony-portal-default-rtdb.firebaseio.com",
+      projectId: "earth-harmony-portal",
+      storageBucket: "earth-harmony-portal.firebasestorage.app",
+      messagingSenderId: "1058276837826",
+      appId: "1:1058276837826:web:d50dbc7e8b276f4686ee5b"
+    });
+    db = firebase.database();
+  } catch (e) {
+    console.warn('Firebase unavailable, running offline', e);
+    var _noopRef = { on: function(){ return function(){}; }, off: function(){}, once: function(){ return Promise.resolve({ val: function(){ return null; } }); },
+      push: function(){ return Promise.resolve(); }, set: function(){ return Promise.resolve(); }, update: function(){ return Promise.resolve(); }, remove: function(){ return Promise.resolve(); },
+      child: function(){ return _noopRef; }, orderByChild: function(){ return _noopRef; }, limitToLast: function(){ return _noopRef; } };
+    db = { ref: function(){ return _noopRef; } };
+  }
 </script>
 <title>Earth Harmony — Portal</title>
 <style>
@@ -1921,7 +1943,7 @@ function pushCheckin(data) {
 }
 
 // Auto-join session from URL or localStorage
-joinSession(sessionId);
+try { joinSession(sessionId); } catch (e) { console.warn("joinSession failed", e); }
 
 // ==================== NAVIGATION ====================
 function showScreen(id) {

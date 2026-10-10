@@ -5,10 +5,12 @@
  */
 const SyncStore = {
   _base: location.protocol + '//' + location.hostname + ':8101',
+  // only talk to the 8101 server on the home network / this Mac (hosted pages = localStorage only)
+  _local: /^(localhost|127\.|192\.168\.|10\.)/.test(location.hostname),
 
   async get(key) {
     // Try server first (source of truth), fall back to localStorage
-    try {
+    if (this._local) try {
       const resp = await fetch(`${this._base}/api/store/${key}`);
       if (resp.ok) {
         const serverData = await resp.json();
@@ -34,7 +36,7 @@ const SyncStore = {
     data._ts = Date.now();
     localStorage.setItem(key, JSON.stringify(data));
     // Fire and forget server save
-    try {
+    if (this._local) try {
       fetch(`${this._base}/api/store/${key}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
