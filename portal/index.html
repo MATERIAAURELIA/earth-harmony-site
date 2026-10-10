@@ -1197,13 +1197,100 @@
 <!-- ==================== 0. INTRO ==================== -->
 <!-- ==================== 1. WELCOME ==================== -->
 <!-- ==================== 0. DOOR (communal iPad, Oct 10) ==================== -->
-<div id="s-door" class="screen active">
-  <div class="spacer"></div><div class="spacer"></div>
-  <div class="title" style="font-family:'Cinzel',serif;letter-spacing:4px;">EARTH HARMONY</div>
-  <div class="spacer"></div><div class="spacer"></div>
-  <button class="btn btn-solid" style="min-width:240px;font-size:20px;padding:18px 28px;" onclick="doorArrive()">Arrive</button>
-  <div class="spacer"></div>
-  <button class="btn" style="min-width:240px;font-size:20px;padding:18px 28px;" onclick="doorReturn()">Return</button>
+<div id="s-door" class="screen active" style="justify-content:center;text-align:center;">
+  <div class="logo-mark" style="width:180px;height:180px;">
+    <svg viewBox="0 0 100 100" style="width:100%;height:100%;">
+      <style>
+        @keyframes logoGlow {
+          0%, 100% { opacity: 0.5; filter: drop-shadow(0 0 3px rgba(212,175,55,0.3)); }
+          50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(212,175,55,0.6)); }
+        }
+        @keyframes lineGlow {
+          0%, 100% { opacity: 0.25; }
+          50% { opacity: 0.55; }
+        }
+        .logo-seed { animation: logoGlow 4s ease-in-out infinite; }
+        .logo-lines { animation: lineGlow 4s ease-in-out infinite; }
+        .s1 { animation-delay: 0s; }
+        .s2 { animation-delay: -0.57s; }
+        .s3 { animation-delay: -1.14s; }
+        .s4 { animation-delay: -1.71s; }
+        .s5 { animation-delay: -2.28s; }
+        .s6 { animation-delay: -2.85s; }
+        .s7 { animation-delay: -3.42s; }
+      </style>
+      <!-- === METATRON'S CUBE — wraps around entire Seed === -->
+      <!-- Outer boundary circle -->
+      <circle cx="50" cy="50" r="48" fill="none" stroke="#d4af37" stroke-width="0.5" opacity="0.15"/>
+      
+      <!-- Layer 3: Metatron connecting lines (all 13 centers) — appreciate complexity -->
+      <g class="logo-lines">
+        <!-- Inner hexagon connections -->
+        <line x1="50" y1="30" x2="50" y2="70" stroke="#d4af37" stroke-width="0.5"/>
+        <line x1="32.7" y1="40" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.5"/>
+        <line x1="67.3" y1="40" x2="32.7" y2="60" stroke="#d4af37" stroke-width="0.5"/>
+        <line x1="50" y1="30" x2="32.7" y2="60" stroke="#d4af37" stroke-width="0.3"/>
+        <line x1="50" y1="30" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.3"/>
+        <line x1="50" y1="70" x2="32.7" y2="40" stroke="#d4af37" stroke-width="0.3"/>
+        <line x1="50" y1="70" x2="67.3" y2="40" stroke="#d4af37" stroke-width="0.3"/>
+        <line x1="32.7" y1="40" x2="67.3" y2="40" stroke="#d4af37" stroke-width="0.3"/>
+        <line x1="32.7" y1="60" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.3"/>
+        <!-- Outer-to-inner radial lines -->
+        <line x1="50" y1="10" x2="50" y2="30" stroke="#d4af37" stroke-width="0.4"/>
+        <line x1="84.6" y1="30" x2="67.3" y2="40" stroke="#d4af37" stroke-width="0.4"/>
+        <line x1="84.6" y1="70" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.4"/>
+        <line x1="50" y1="90" x2="50" y2="70" stroke="#d4af37" stroke-width="0.4"/>
+        <line x1="15.4" y1="70" x2="32.7" y2="60" stroke="#d4af37" stroke-width="0.4"/>
+        <line x1="15.4" y1="30" x2="32.7" y2="40" stroke="#d4af37" stroke-width="0.4"/>
+        <!-- Outer-to-outer cross connections -->
+        <line x1="50" y1="10" x2="84.6" y2="30" stroke="#d4af37" stroke-width="0.25"/>
+        <line x1="84.6" y1="30" x2="84.6" y2="70" stroke="#d4af37" stroke-width="0.25"/>
+        <line x1="84.6" y1="70" x2="50" y2="90" stroke="#d4af37" stroke-width="0.25"/>
+        <line x1="50" y1="90" x2="15.4" y2="70" stroke="#d4af37" stroke-width="0.25"/>
+        <line x1="15.4" y1="70" x2="15.4" y2="30" stroke="#d4af37" stroke-width="0.25"/>
+        <line x1="15.4" y1="30" x2="50" y2="10" stroke="#d4af37" stroke-width="0.25"/>
+        <!-- Outer diagonal crosses -->
+        <line x1="50" y1="10" x2="50" y2="90" stroke="#d4af37" stroke-width="0.25"/>
+        <line x1="15.4" y1="30" x2="84.6" y2="70" stroke="#d4af37" stroke-width="0.25"/>
+        <line x1="84.6" y1="30" x2="15.4" y2="70" stroke="#d4af37" stroke-width="0.25"/>
+        <!-- Outer-to-inner skip connections -->
+        <line x1="50" y1="10" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="50" y1="10" x2="32.7" y2="60" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="84.6" y1="30" x2="32.7" y2="60" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="84.6" y1="30" x2="50" y2="70" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="84.6" y1="70" x2="32.7" y2="40" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="84.6" y1="70" x2="50" y2="30" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="50" y1="90" x2="67.3" y2="40" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="50" y1="90" x2="32.7" y2="40" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="15.4" y1="70" x2="67.3" y2="40" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="15.4" y1="70" x2="50" y2="30" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="15.4" y1="30" x2="67.3" y2="60" stroke="#d4af37" stroke-width="0.2"/>
+        <line x1="15.4" y1="30" x2="50" y2="70" stroke="#d4af37" stroke-width="0.2"/>
+      </g>
+      
+      <!-- Layer 2: Hexagons — develop flexibility -->
+      <polygon points="50,30 67.3,40 67.3,60 50,70 32.7,60 32.7,40" fill="none" stroke="#d4af37" stroke-width="0.8" opacity="0.35"/>
+      <polygon points="50,10 84.6,30 84.6,70 50,90 15.4,70 15.4,30" fill="none" stroke="#d4af37" stroke-width="0.6" opacity="0.25"/>
+      
+      <!-- Layer 1: 7 Seed circles — practice simplicity (HEAVY) -->
+      <circle class="logo-seed s1" cx="50" cy="50" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+      <circle class="logo-seed s2" cx="50" cy="30" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+      <circle class="logo-seed s3" cx="67.3" cy="40" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+      <circle class="logo-seed s4" cx="67.3" cy="60" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+      <circle class="logo-seed s5" cx="50" cy="70" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+      <circle class="logo-seed s6" cx="32.7" cy="60" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+      <circle class="logo-seed s7" cx="32.7" cy="40" r="20" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+      <!-- Center bindu -->
+      <circle cx="50" cy="50" r="1.5" fill="#d4af37" opacity="0.5"/>
+    </svg>
+  </div>
+  <div style="height:22px"></div>
+  <div style="font-family:'Cinzel',serif;color:var(--gold);font-size:30px;letter-spacing:6px;">EARTH HARMONY</div>
+  <div style="font-family:'Cinzel',serif;color:var(--text-dim);font-size:15px;letter-spacing:5px;margin-top:6px;">SOUND BATH PORTAL</div>
+  <div style="height:44px"></div>
+  <button class="btn btn-solid" style="width:260px;padding:16px 20px;line-height:1.2;" onclick="doorArrive()"><span style="font-size:22px;letter-spacing:2px;">Arrive</span><br><span style="font-size:13px;opacity:.75;letter-spacing:1px;">check-in</span></button>
+  <div style="height:18px"></div>
+  <button class="btn" style="width:260px;padding:16px 20px;line-height:1.2;" onclick="doorReturn()"><span style="font-size:22px;letter-spacing:2px;">Return</span><br><span style="font-size:13px;opacity:.75;letter-spacing:1px;">post-session</span></button>
 </div>
 
 <!-- RETURN: pick your name -->
