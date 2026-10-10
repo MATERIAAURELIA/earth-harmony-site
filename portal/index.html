@@ -1196,7 +1196,27 @@
 
 <!-- ==================== 0. INTRO ==================== -->
 <!-- ==================== 1. WELCOME ==================== -->
-<div id="s-welcome" class="screen active">
+<!-- ==================== 0. DOOR (communal iPad, Oct 10) ==================== -->
+<div id="s-door" class="screen active">
+  <div class="spacer"></div><div class="spacer"></div>
+  <div class="title" style="font-family:'Cinzel',serif;letter-spacing:4px;">EARTH HARMONY</div>
+  <div class="spacer"></div><div class="spacer"></div>
+  <button class="btn btn-solid" style="min-width:240px;font-size:20px;padding:18px 28px;" onclick="doorArrive()">Arrive</button>
+  <div class="spacer"></div>
+  <button class="btn" style="min-width:240px;font-size:20px;padding:18px 28px;" onclick="doorReturn()">Return</button>
+</div>
+
+<!-- RETURN: pick your name -->
+<div id="s-return" class="screen">
+  <div class="spacer"></div>
+  <div class="title">Welcome back</div>
+  <div class="spacer"></div>
+  <div id="returnNames" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:360px;"></div>
+  <div class="spacer"></div>
+  <button class="btn-skip" onclick="showScreen('s-door')" style="opacity:0.4;font-size:12px;">← Back</button>
+</div>
+
+<div id="s-welcome" class="screen">
   <!-- Theme toggle hidden for now
   <div style="display:flex; gap:8px; justify-content:center; margin-top:12px;">
     <button class="theme-btn active" onclick="setTheme('forest')" id="themeForest" style="padding:5px 14px; border-radius:20px; border:1.5px solid var(--gold); background:linear-gradient(135deg,#1a3322,#0d1f12); color:var(--gold); font-size:11px; font-family:'Cinzel',serif; cursor:pointer; letter-spacing:1px;">Forest</button>
@@ -1426,8 +1446,8 @@
         <span style="font-size:13px; color:var(--text-dim);">✈️ Airplane Mode</span>
       </div>
     </div>
-    <div class="subtitle" style="font-size: 15px; opacity: 0.5;">Come back here when the journey is complete.</div>
-    <button class="btn btn-solid" onclick="showPostCheckin()">Journey Complete →</button>
+    <div class="subtitle" style="font-size: 15px; opacity: 0.6;">Pass the iPad on 🙏</div>
+    <button class="btn btn-solid" onclick="resetForNext()">Done</button>
     <button class="btn-skip" onclick="showScreen('s-communityintentions')" style="opacity:0.4; font-size: 12px;">← Back</button>
   </div>
 </div>
@@ -1436,8 +1456,7 @@
 <!-- POST: Sliders -->
 <div id="s-postcheckin" class="screen">
   <div class="spacer"></div>
-  <div class="title">Welcome Back</div>
-  <div class="subtitle">How do you feel now?</div>
+  <div class="title">How do you feel now?</div>
   <div class="spacer"></div>
   <div class="slider-group" id="postSliders"></div>
   <div class="spacer"></div>
@@ -1880,7 +1899,8 @@ const savedTheme = localStorage.getItem('ehp_theme') || 'forest';
 setTheme('midnight');
 
 const urlParams = new URLSearchParams(window.location.search);
-let sessionId = urlParams.get('session') || 'ELEMENT1';
+const _d = new Date();
+let sessionId = urlParams.get('session') || ('S' + _d.getFullYear() + String(_d.getMonth()+1).padStart(2,'0') + String(_d.getDate()).padStart(2,'0'));
 let allData = JSON.parse(localStorage.getItem('ehp_data') || '[]');
 let community = JSON.parse(localStorage.getItem('ehp_community') || '[]');
 // Hydrate from SyncStore on init
@@ -1978,10 +1998,7 @@ const enterBtn = document.getElementById('enterBtn');
 
 // Auto-fill saved name
 const savedName = localStorage.getItem('ehp_username');
-if (savedName) {
-  nameInput.value = savedName;
-  enterBtn.disabled = false;
-}
+// shared iPad: never prefill the last person's name
 
 nameInput.addEventListener('input', () => {
   enterBtn.disabled = nameInput.value.trim().length === 0;
@@ -2029,6 +2046,7 @@ function enterPortal() {
 
 function submitIntention(share) {
   state.intention = document.getElementById('intentionInput').value.trim();
+  for (var i = allData.length - 1; i >= 0; i--) { if (allData[i].type === 'checkin' && allData[i].name === state.user) { allData[i].intention = state.intention; save(); break; } }
   if (share && state.intention) {
     db.ref('sessions/' + sessionId + '/intentions').push({
       user: state.user,
@@ -2294,6 +2312,51 @@ function renderWordCloud() {
 
     container.appendChild(el);
   });
+}
+
+
+// ==================== 0. DOOR / RETURN (communal iPad) ====================
+function freshState() {
+  state.user=''; state.avatar=null; state.intention=''; state.preFeelings=[]; state.preScores={}; state.postScores={};
+  state.insight=''; state.instrument=null; state.instruments=[]; state.phenomena=[]; state.shiftWords=[];
+}
+function resetForNext() {
+  freshState();
+  try { nameInput.value=''; enterBtn.disabled=true; } catch(e) {}
+  document.querySelectorAll('.selected').forEach(function(el){ el.classList.remove('selected'); });
+  ['customFeeling','intentionInput','insightText','feedbackText'].forEach(function(id){ var el=document.getElementById(id); if (el) el.value=''; });
+  showScreen('s-door');
+}
+function doorArrive() { freshState(); haptic('light'); showScreen('s-welcome'); }
+function todaysCheckins() {
+  var done = {}; var byName = {};
+  allData.forEach(function(d){
+    if (!d || !d.name || (d.session && d.session !== sessionId)) return;
+    var k = d.name.toLowerCase();
+    if (d.type === 'complete') done[k] = true;
+    if (d.type === 'checkin') byName[k] = d;
+  });
+  return Object.keys(byName).filter(function(k){ return !done[k]; }).map(function(k){ return byName[k]; });
+}
+function doorReturn() {
+  var box = document.getElementById('returnNames'); box.innerHTML = '';
+  var list = todaysCheckins();
+  if (!list.length) { box.innerHTML = '<div class="subtitle" style="opacity:.6">No one checked in yet today</div>'; }
+  list.forEach(function(d){
+    var b = document.createElement('button'); b.className = 'btn';
+    b.style.cssText = 'min-width:140px;font-size:18px;padding:14px 18px;';
+    b.textContent = (d.avatar && d.avatar.emoji ? d.avatar.emoji + ' ' : '') + d.name;
+    b.onclick = function(){ resumeAs(d); };
+    box.appendChild(b);
+  });
+  haptic('light'); showScreen('s-return');
+}
+function resumeAs(d) {
+  freshState();
+  state.user = d.name; state.avatar = d.avatar || null;
+  state.preFeelings = (d.feelings || []).slice(); state.preScores = Object.assign({}, d.scores || {});
+  state.intention = d.intention || '';
+  showPostCheckin();
 }
 
 // ==================== 5. POST CHECK-IN ====================
