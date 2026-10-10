@@ -1398,12 +1398,13 @@
 <!-- ==================== 4. COMMUNITY VIBE (word cloud) ==================== -->
 <div id="s-journey" class="screen" style="padding: 12px 8px;">
   <div style="font-family: 'Cinzel', serif; color: var(--gold); font-size: 16px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px;">Arriving</div>
-  <div id="cloudToggle" style="display:flex;gap:8px;margin-bottom:8px;">
+
+  <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 8px;"><span id="participantCount">0</span> present</div>
+  <div class="cloud-container" id="cloudContainer"></div>
+  <div id="cloudToggle" style="display:flex;gap:8px;margin-top:12px;">
     <button class="btn" id="cloudMe" onclick="setCloudMode('me')" style="padding:8px 18px;font-size:15px;">Just me</button>
     <button class="btn btn-solid" id="cloudRoom" onclick="setCloudMode('room')" style="padding:8px 18px;font-size:15px;">The room</button>
   </div>
-  <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 8px;"><span id="participantCount">0</span> present</div>
-  <div class="cloud-container" id="cloudContainer"></div>
   <div id="intentionEcho" style="display:none; font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--gold); font-size: 14px; margin-top: 8px; opacity: 0.7;"></div>
   <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 12px 0;">
     <button class="btn btn-solid" onclick="showScreen('s-intention')">Ready to Set Your Intention →</button>
@@ -2739,17 +2740,34 @@ function renderBodyShift() {
     const col = d > 0 ? '#f5d060' : d < 0 ? '#c4a0b8' : '#cfc8b6';
     const sign = d > 0 ? '+' : '';
     const tx = p.side === 'R' ? 250 : 150, anchor = p.side === 'R' ? 'start' : 'end';
-    svg += `<circle cx="${p.x}" cy="${p.y}" r="${r * 1.8}" fill="url(#glow)" opacity="${0.25 + post / 14}"/>
+    svg += `<circle class="bs-glow" data-pre="${pre}" data-post="${post}" cx="${p.x}" cy="${p.y}" r="${(10 + pre * 2.2) * 1.8}" fill="url(#glow)" opacity="${0.25 + pre / 14}"/>
       <circle cx="${p.x}" cy="${p.y}" r="9" fill="${col}"/>
       <line x1="${p.x}" y1="${p.y}" x2="${tx + (p.side === 'R' ? -10 : 10)}" y2="${p.y}" stroke="${col}" stroke-opacity=".5"/>
       <text x="${tx}" y="${p.y - 12}" text-anchor="${anchor}" fill="#cfc8b6" font-family="Cinzel, serif" font-size="17" letter-spacing="2">${name(p.id).toUpperCase()}</text>
       <text x="${tx}" y="${p.y + 22}" text-anchor="${anchor}" font-family="Inter, sans-serif">
-        <tspan fill="#c4a0b8" font-size="22">${pre}</tspan><tspan fill="#cfc8b6" font-size="20"> → </tspan><tspan fill="#f5d060" font-size="34" font-weight="700">${post}</tspan>
-        <tspan fill="${col}" font-size="18" dx="8">${d === 0 ? '' : sign + d}</tspan>
+        <tspan fill="#c4a0b8" font-size="22">${pre}</tspan><tspan fill="#cfc8b6" font-size="20"> → </tspan><tspan class="bs-num" data-pre="${pre}" data-post="${post}" fill="#f5d060" font-size="34" font-weight="700">${pre}</tspan>
+        <tspan class="bs-delta" fill="${col}" font-size="18" dx="8" opacity="0">${d === 0 ? '' : sign + d}</tspan>
       </text>`;
   });
   svg += `</svg>`;
   box.innerHTML = svg;
+  // grow (or shrink) each point from before -> after, one after another, base to crown
+  const nums = Array.from(box.querySelectorAll('.bs-num')), glows = Array.from(box.querySelectorAll('.bs-glow')), deltas = Array.from(box.querySelectorAll('.bs-delta'));
+  const order = [4, 3, 2, 1, 0]; // body, alignment, harmony, mind, spirit
+  order.forEach((idx, k) => {
+    setTimeout(() => {
+      const n = nums[idx], g = glows[idx], dl = deltas[idx];
+      const a = +n.dataset.pre, b = +n.dataset.post, dur = 1400, t0 = performance.now();
+      const tick = (now) => {
+        const q = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - q, 3), v = a + (b - a) * e;
+        n.textContent = Math.round(v);
+        g.setAttribute('r', ((10 + v * 2.2) * 1.8).toFixed(1));
+        g.setAttribute('opacity', (0.25 + v / 14).toFixed(2));
+        if (q < 1) requestAnimationFrame(tick); else { dl.style.transition = 'opacity .6s'; dl.setAttribute('opacity', '1'); }
+      };
+      requestAnimationFrame(tick);
+    }, 500 + k * 700);
+  });
 }
 
 function renderResults() {
