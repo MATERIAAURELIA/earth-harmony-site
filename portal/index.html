@@ -2734,58 +2734,76 @@ function submitPostCheckin() {
 // ==================== BODY SHIFT FIGURE (Oct 10) ====================
 function renderBodyShift() {
   const box = document.getElementById('bodyShift'); if (!box) return;
-  // points on a seated figure (viewBox 400x520): label side, y position
-  const PTS = [
-    { id: 'spirit',    x: 200, y: 38,  side: 'R' },
-    { id: 'mind',      x: 200, y: 108, side: 'L' },
-    { id: 'harmony',   x: 200, y: 212, side: 'R' },
-    { id: 'alignment', x: 200, y: 282, side: 'L' },
-    { id: 'body',      x: 200, y: 372, side: 'R' },
+  // Figure on the left, ONE readable column of labels on the right; eye reads bottom -> top like a quest log.
+  const FX = 130;                      // figure centre x
+  const LX = 262;                      // label column x
+  const PTS = [                        // body points (base -> crown order is the animation order)
+    { id: 'spirit',    y: 40  },
+    { id: 'mind',      y: 112 },
+    { id: 'harmony',   y: 214 },
+    { id: 'alignment', y: 286 },
+    { id: 'body',      y: 372 },
   ];
   const name = id => (CATEGORIES.find(c => c.id === id) || {}).name || id;
-  let svg = `<svg viewBox="0 0 400 520" width="100%" style="display:block;overflow:visible">
-    <defs><radialGradient id="glow"><stop offset="0" stop-color="#f5d060" stop-opacity=".9"/><stop offset="1" stop-color="#f5d060" stop-opacity="0"/></radialGradient></defs>
-    <!-- seated figure -->
-    <g fill="rgba(245,208,96,0.10)" stroke="rgba(245,208,96,0.45)" stroke-width="2">
-      <circle cx="200" cy="108" r="40"/>
-      <path d="M200 150 C150 152 128 182 126 240 L122 330 C122 352 140 362 160 362 L240 362 C260 362 278 352 278 330 L274 240 C272 182 250 152 200 150 Z"/>
-      <path d="M126 250 C100 300 104 340 150 372 M274 250 C300 300 296 340 250 372"/>
-      <path d="M70 420 C110 372 170 380 200 396 C230 380 290 372 330 420 C300 448 240 452 200 436 C160 452 100 448 70 420 Z"/>
+  const glowR = v => (12 + v * 2.6) * 1.9;   // aura size (grows with score, gently)
+  let svg = `<svg viewBox="0 0 460 470" width="100%" style="display:block;overflow:visible">
+    <defs><radialGradient id="glow"><stop offset="0" stop-color="#f5d060" stop-opacity=".85"/><stop offset="1" stop-color="#f5d060" stop-opacity="0"/></radialGradient></defs>
+    <g transform="translate(${FX - 200},0)" fill="rgba(245,208,96,0.10)" stroke="rgba(245,208,96,0.45)" stroke-width="2">
+      <circle cx="200" cy="112" r="40"/>
+      <path d="M200 154 C150 156 128 186 126 244 L122 334 C122 356 140 366 160 366 L240 366 C260 366 278 356 278 334 L274 244 C272 186 250 156 200 154 Z"/>
+      <path d="M126 254 C100 304 104 344 150 376 M274 254 C300 304 296 344 250 376"/>
+      <path d="M70 424 C110 376 170 384 200 400 C230 384 290 376 330 424 C300 452 240 456 200 440 C160 456 100 452 70 424 Z"/>
     </g>
-    <line x1="200" y1="38" x2="200" y2="372" stroke="rgba(245,208,96,0.25)" stroke-width="2" stroke-dasharray="4 6"/>`;
+    <line x1="${FX}" y1="40" x2="${FX}" y2="372" stroke="rgba(245,208,96,0.22)" stroke-width="2" stroke-dasharray="4 6"/>
+    <g id="bsFloat"></g>`;
   PTS.forEach(p => {
     const pre = state.preScores[p.id] ?? 5, post = state.postScores[p.id] ?? 5, d = post - pre;
-    const r = 10 + post * 2.2;
     const col = d > 0 ? '#f5d060' : d < 0 ? '#c4a0b8' : '#cfc8b6';
     const sign = d > 0 ? '+' : '';
-    const tx = p.side === 'R' ? 250 : 150, anchor = p.side === 'R' ? 'start' : 'end';
-    svg += `<circle class="bs-glow" data-pre="${pre}" data-post="${post}" cx="${p.x}" cy="${p.y}" r="${(10 + pre * 2.2) * 1.8}" fill="url(#glow)" opacity="${0.25 + pre / 14}"/>
-      <circle cx="${p.x}" cy="${p.y}" r="9" fill="${col}"/>
-      <line x1="${p.x}" y1="${p.y}" x2="${tx + (p.side === 'R' ? -10 : 10)}" y2="${p.y}" stroke="${col}" stroke-opacity=".5"/>
-      <text x="${tx}" y="${p.y - 12}" text-anchor="${anchor}" fill="#cfc8b6" font-family="Cinzel, serif" font-size="17" letter-spacing="2">${name(p.id).toUpperCase()}</text>
-      <text x="${tx}" y="${p.y + 22}" text-anchor="${anchor}" font-family="Inter, sans-serif">
-        <tspan fill="#c4a0b8" font-size="22">${pre}</tspan><tspan fill="#cfc8b6" font-size="20"> → </tspan><tspan class="bs-num" data-pre="${pre}" data-post="${post}" fill="#f5d060" font-size="34" font-weight="700">${pre}</tspan>
-        <tspan class="bs-delta" fill="${col}" font-size="18" dx="8" opacity="0">${d === 0 ? '' : sign + d}</tspan>
+    svg += `<circle class="bs-glow" cx="${FX}" cy="${p.y}" r="${glowR(pre)}" fill="url(#glow)" opacity="${0.25 + pre / 16}"/>
+      <circle cx="${FX}" cy="${p.y}" r="8" fill="${col}"/>
+      <line x1="${FX + 12}" y1="${p.y}" x2="${LX - 12}" y2="${p.y}" stroke="${col}" stroke-opacity=".45" stroke-width="1.5"/>
+      <text x="${LX}" y="${p.y - 9}" fill="#cfc8b6" font-family="Cinzel, serif" font-size="16" letter-spacing="2">${name(p.id).toUpperCase()}</text>
+      <text x="${LX}" y="${p.y + 24}" font-family="Inter, sans-serif">
+        <tspan fill="#c4a0b8" font-size="20">${pre}</tspan><tspan fill="#cfc8b6" font-size="18"> → </tspan><tspan class="bs-num" data-pre="${pre}" data-post="${post}" data-y="${p.y}" data-d="${d}" fill="#f5d060" font-size="32" font-weight="700">${pre}</tspan>
+        <tspan class="bs-delta" fill="${col}" font-size="18" dx="10" opacity="0">${d === 0 ? '' : sign + d}</tspan>
       </text>`;
   });
   svg += `</svg>`;
   box.innerHTML = svg;
-  // grow (or shrink) each point from before -> after, one after another, base to crown
+
   const nums = Array.from(box.querySelectorAll('.bs-num')), glows = Array.from(box.querySelectorAll('.bs-glow')), deltas = Array.from(box.querySelectorAll('.bs-delta'));
-  const order = [4, 3, 2, 1, 0]; // body, alignment, harmony, mind, spirit
-  order.forEach((idx, k) => {
+  const layer = box.querySelector('#bsFloat');
+  // "+N" rises off the point and fades, like XP in a game
+  const floatUp = (y, d) => {
+    if (!d) return;
+    const tx = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    tx.setAttribute('x', FX + 22); tx.setAttribute('font-family', 'Inter, sans-serif'); tx.setAttribute('font-size', '26'); tx.setAttribute('font-weight', '800');
+    tx.setAttribute('fill', d > 0 ? '#f5d060' : '#c4a0b8'); tx.textContent = (d > 0 ? '+' : '') + d;
+    layer.appendChild(tx);
+    const t0 = performance.now(), dur = 1300;
+    const step = (now) => {
+      const q = Math.min(1, (now - t0) / dur);
+      tx.setAttribute('y', (y - 6 - q * 46).toFixed(1));
+      tx.setAttribute('opacity', (q < 0.2 ? q / 0.2 : 1 - (q - 0.2) / 0.8).toFixed(2));
+      if (q < 1) requestAnimationFrame(step); else tx.remove();
+    };
+    requestAnimationFrame(step);
+  };
+  [4, 3, 2, 1, 0].forEach((idx, k) => {          // body -> alignment -> harmony -> mind -> spirit
     setTimeout(() => {
       const n = nums[idx], g = glows[idx], dl = deltas[idx];
-      const a = +n.dataset.pre, b = +n.dataset.post, dur = 1400, t0 = performance.now();
+      const a = +n.dataset.pre, b = +n.dataset.post, dur = 1300, t0 = performance.now();
       const tick = (now) => {
         const q = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - q, 3), v = a + (b - a) * e;
         n.textContent = Math.round(v);
-        g.setAttribute('r', ((10 + v * 2.2) * 1.8).toFixed(1));
-        g.setAttribute('opacity', (0.25 + v / 14).toFixed(2));
-        if (q < 1) requestAnimationFrame(tick); else { dl.style.transition = 'opacity .6s'; dl.setAttribute('opacity', '1'); }
+        g.setAttribute('r', glowR(v).toFixed(1));
+        g.setAttribute('opacity', (0.25 + v / 16).toFixed(2));
+        if (q < 1) requestAnimationFrame(tick);
+        else { dl.style.transition = 'opacity .6s'; dl.setAttribute('opacity', '1'); floatUp(+n.dataset.y, +n.dataset.d); }
       };
       requestAnimationFrame(tick);
-    }, 500 + k * 700);
+    }, 500 + k * 800);
   });
 }
 
