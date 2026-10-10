@@ -1019,8 +1019,10 @@
   /* tablet: center every screen vertically; archetypes in 2 columns so they fit on one page */
   @media (min-width: 700px) {
     .screen.active { justify-content: center; }
-    .avatar-grid { display: grid !important; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 520px !important; width: 100%; }
-    .avatar-grid .avatar-option { margin: 0 !important; }
+    /* archetypes: 3 + 3 + 1 (last one centred) */
+    .avatar-grid { display: flex !important; flex-direction: row !important; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 560px !important; width: 100%; }
+    .avatar-grid .avatar-option { margin: 0 !important; width: calc((100% - 20px) / 3) !important; flex-direction: column !important; text-align: center; padding: 12px 8px !important; gap: 6px; }
+    .avatar-grid .avatar-option > div { align-items: center; }
     .cloud-container { height: 34vh; min-height: 220px; }
   }
   /* landscape iPad is short: smaller zoom so more fits without scrolling */
