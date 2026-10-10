@@ -976,6 +976,16 @@
   }
 
   /* ==================== RESPONSIVE ==================== */
+
+  /* iPad / tablet: scale up + brighter text (Marcus, Oct 10: "squinting, hard to read") */
+  :root { --text: #f7f3ea; --text-dim: #cfc8b6; }
+  @media (min-width: 700px) {
+    .screen:not(#s-mandala) { zoom: 1.65; }
+  }
+  @media (min-width: 1000px) {
+    .screen:not(#s-mandala) { zoom: 1.9; }
+  }
+
   @media (max-width: 380px) {
     .title { font-size: 24px; }
     .slider-group { max-width: 300px; }
