@@ -12,15 +12,8 @@
 <script>
   // Hosted portal: SyncStore = localStorage only, inlined (no external file to fail on older iPads)
   var SyncStore = {
-    get: function (key) {
-      return new Promise(function (resolve) {
-        try { var raw = localStorage.getItem(key); resolve(raw ? JSON.parse(raw) : null); } catch (e) { resolve(null); }
-      });
-    },
-    set: function (key, data) {
-      try { data._ts = Date.now(); localStorage.setItem(key, JSON.stringify(data)); } catch (e) {}
-      return Promise.resolve();
-    }
+    get: function (key) { return new Promise(function (resolve) { try { var raw = localStorage.getItem(key); resolve(raw ? JSON.parse(raw) : null); } catch (e) { resolve(null); } }); },
+    set: function (key, data) { try { data._ts = Date.now(); localStorage.setItem(key, JSON.stringify(data)); } catch (e) {} return Promise.resolve(); }
   };
 </script>
 <script>
@@ -1014,12 +1007,14 @@
 
   /* iPad / tablet: scale up + brighter text (Marcus, Oct 10: "squinting, hard to read") */
   :root { --text: #f7f3ea; --text-dim: #cfc8b6; }
+  /* zoom scales the box too, so shrink width/height by the same factor to fit the iPad frame */
   @media (min-width: 700px) {
-    .screen:not(#s-mandala) { zoom: 1.65; }
+    .screen:not(#s-mandala) { zoom: 1.45; width: calc(100vw / 1.45); min-height: calc(100dvh / 1.45); padding-left: 16px; padding-right: 16px; }
   }
   @media (min-width: 1000px) {
-    .screen:not(#s-mandala) { zoom: 1.9; }
+    .screen:not(#s-mandala) { zoom: 1.6; width: calc(100vw / 1.6); min-height: calc(100dvh / 1.6); }
   }
+  html, body { overflow-x: hidden; max-width: 100vw; }
 
   @media (max-width: 380px) {
     .title { font-size: 24px; }
@@ -1337,7 +1332,7 @@
 <div id="s-avatar" class="screen">
   <div class="spacer"></div>
   <div class="title">Choose Your Archetype</div>
-  <div class="subtitle">What energy are you bringing?</div>
+  <div class="subtitle">What energy are you resonating with today?</div>
   <div class="spacer"></div>
   <div class="avatar-grid" id="avatarGrid"></div>
   <div class="spacer"></div>
@@ -2002,7 +1997,7 @@ function playPortalChime() {
       osc.type = 'sine';
       osc.frequency.value = freq;
       gain.gain.setValueAtTime(0, ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.12 - i * 0.03, ctx.currentTime + 0.1);
+      gain.gain.linearRampToValueAtTime(0.025 - i * 0.006, ctx.currentTime + 0.4); // softer + gentler attack (Marcus Oct 10)
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 3);
       osc.connect(gain);
       gain.connect(ctx.destination);
