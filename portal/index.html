@@ -1404,7 +1404,11 @@
 
 <!-- ==================== 4. COMMUNITY VIBE (word cloud) ==================== -->
 <div id="s-journey" class="screen" style="padding: 12px 8px;">
-  <div style="font-family: 'Cinzel', serif; color: var(--gold); font-size: 16px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 4px;">Current Community Vibe</div>
+  <div style="font-family: 'Cinzel', serif; color: var(--gold); font-size: 16px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px;">Arriving</div>
+  <div id="cloudToggle" style="display:flex;gap:8px;margin-bottom:8px;">
+    <button class="btn" id="cloudMe" onclick="setCloudMode('me')" style="padding:8px 18px;font-size:15px;">Just me</button>
+    <button class="btn btn-solid" id="cloudRoom" onclick="setCloudMode('room')" style="padding:8px 18px;font-size:15px;">The room</button>
+  </div>
   <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 8px;"><span id="participantCount">0</span> present</div>
   <div class="cloud-container" id="cloudContainer"></div>
   <div id="intentionEcho" style="display:none; font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--gold); font-size: 14px; margin-top: 8px; opacity: 0.7;"></div>
@@ -1496,8 +1500,8 @@
     </div>
   </div>
   <div class="spacer-lg"></div>
-  <button class="btn btn-solid" onclick="submitPostCheckin(); renderBeforeCloud(); showScreen('s-beforecloud')">I'm Complete</button>
-  <button class="btn-skip" onclick="submitPostCheckin(); renderBeforeCloud(); showScreen('s-beforecloud')">Skip all</button>
+  <button class="btn btn-solid" onclick="submitPostCheckin(); renderResults(); showScreen('s-results')">I'm Complete</button>
+  <button class="btn-skip" onclick="submitPostCheckin(); renderResults(); showScreen('s-results')">Skip all</button>
   <button class="btn-skip" onclick="showScreen('s-postshift')" style="opacity:0.4; font-size: 12px;">← Back</button>
 </div>
 
@@ -1611,12 +1615,13 @@
   </div>
   <div class="spacer"></div>
   
-  <!-- Before/After bars -->
-  <div class="ba-container" id="baContainer"></div>
+  <!-- Body figure (Oct 10) -->
+  <div id="bodyShift" style="width:100%;max-width:420px;"></div>
+  <div class="ba-container" id="baContainer" style="display:none;"></div>
   <div class="spacer-lg"></div>
 
   <!-- Group results (shown if in a group) -->
-  <div id="groupResults" style="display:none;">
+  <div id="groupResults" style="display:none !important;">
     <div class="results-card">
       <div class="results-header">
         <div class="results-title">👥 Your Group</div>
@@ -1627,8 +1632,8 @@
     <div class="spacer-lg"></div>
   </div>
   
-  <!-- Room summary — vertical bars -->
-  <div class="results-card">
+  <!-- Room summary — kept for the follow-up email, hidden in the app -->
+  <div class="results-card" style="display:none;">
     <div class="results-header">
       <div class="results-title">The Room</div>
       <span style="font-size: 12px; color: var(--text-dim);" id="roomCount">0 souls</span>
@@ -1646,9 +1651,8 @@
     <div class="spacer"></div>
   </div>
 
-  <!-- Portal links -->
-  <div class="title" style="font-size: 18px; margin-bottom: 4px;">Continue Your Journey</div>
-  <div class="spacer"></div>
+  <!-- Portal links (hidden on the shared iPad) -->
+  <div style="display:none;">
   <div class="portal-grid">
     <!-- Art hidden for now
     <a class="portal-link" onclick="showMandala()">
@@ -1665,8 +1669,8 @@
       <span class="portal-label">Earth Harmony Sound & Wellness</span>
     </a>
   </div>
+  </div>
   <div class="spacer"></div>
-  
   <div style="text-align: center; font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--text-dim); font-size: 15px;">
     "The sound doesn't heal you — it reminds you how."
   </div>
@@ -2229,6 +2233,13 @@ function submitPreCheckin() {
 }
 
 // ==================== 4. WORD CLOUD ====================
+let cloudMode = 'room';
+function setCloudMode(m) {
+  cloudMode = m;
+  document.getElementById('cloudMe').className = 'btn' + (m === 'me' ? ' btn-solid' : '');
+  document.getElementById('cloudRoom').className = 'btn' + (m === 'room' ? ' btn-solid' : '');
+  renderWordCloud();
+}
 function renderWordCloud() {
   // Show intention if set
   const intentEcho = document.getElementById('intentionEcho');
@@ -2244,7 +2255,8 @@ function renderWordCloud() {
 
   const counts = {};
   const sessionCheckins = allData.filter(d => d.session === sessionId && d.type === 'checkin');
-  sessionCheckins.forEach(c => {
+  const shown = cloudMode === 'me' ? sessionCheckins.filter(c => c.name === state.user) : sessionCheckins;
+  shown.forEach(c => {
     c.feelings.forEach(f => { counts[f] = (counts[f] || 0) + 1; });
   });
 
@@ -2704,7 +2716,50 @@ function submitPostCheckin() {
 }
 
 // ==================== 6. RESULTS ====================
+
+// ==================== BODY SHIFT FIGURE (Oct 10) ====================
+function renderBodyShift() {
+  const box = document.getElementById('bodyShift'); if (!box) return;
+  // points on a seated figure (viewBox 400x520): label side, y position
+  const PTS = [
+    { id: 'spirit',    x: 200, y: 38,  side: 'R' },
+    { id: 'mind',      x: 200, y: 108, side: 'L' },
+    { id: 'harmony',   x: 200, y: 212, side: 'R' },
+    { id: 'alignment', x: 200, y: 282, side: 'L' },
+    { id: 'body',      x: 200, y: 372, side: 'R' },
+  ];
+  const name = id => (CATEGORIES.find(c => c.id === id) || {}).name || id;
+  let svg = `<svg viewBox="0 0 400 520" width="100%" style="display:block;overflow:visible">
+    <defs><radialGradient id="glow"><stop offset="0" stop-color="#f5d060" stop-opacity=".9"/><stop offset="1" stop-color="#f5d060" stop-opacity="0"/></radialGradient></defs>
+    <!-- seated figure -->
+    <g fill="rgba(245,208,96,0.10)" stroke="rgba(245,208,96,0.45)" stroke-width="2">
+      <circle cx="200" cy="108" r="40"/>
+      <path d="M200 150 C150 152 128 182 126 240 L122 330 C122 352 140 362 160 362 L240 362 C260 362 278 352 278 330 L274 240 C272 182 250 152 200 150 Z"/>
+      <path d="M126 250 C100 300 104 340 150 372 M274 250 C300 300 296 340 250 372"/>
+      <path d="M70 420 C110 372 170 380 200 396 C230 380 290 372 330 420 C300 448 240 452 200 436 C160 452 100 448 70 420 Z"/>
+    </g>
+    <line x1="200" y1="38" x2="200" y2="372" stroke="rgba(245,208,96,0.25)" stroke-width="2" stroke-dasharray="4 6"/>`;
+  PTS.forEach(p => {
+    const pre = state.preScores[p.id] ?? 5, post = state.postScores[p.id] ?? 5, d = post - pre;
+    const r = 10 + post * 2.2;
+    const col = d > 0 ? '#f5d060' : d < 0 ? '#c4a0b8' : '#cfc8b6';
+    const sign = d > 0 ? '+' : '';
+    const tx = p.side === 'R' ? 250 : 150, anchor = p.side === 'R' ? 'start' : 'end';
+    svg += `<circle cx="${p.x}" cy="${p.y}" r="${r * 1.8}" fill="url(#glow)" opacity="${0.25 + post / 14}"/>
+      <circle cx="${p.x}" cy="${p.y}" r="9" fill="${col}"/>
+      <line x1="${p.x}" y1="${p.y}" x2="${tx + (p.side === 'R' ? -10 : 10)}" y2="${p.y}" stroke="${col}" stroke-opacity=".5"/>
+      <text x="${tx}" y="${p.y - 12}" text-anchor="${anchor}" fill="#cfc8b6" font-family="Cinzel, serif" font-size="17" letter-spacing="2">${name(p.id).toUpperCase()}</text>
+      <text x="${tx}" y="${p.y + 22}" text-anchor="${anchor}" font-family="Inter, sans-serif">
+        <tspan fill="#c4a0b8" font-size="22">${pre}</tspan><tspan fill="#cfc8b6" font-size="20"> → </tspan><tspan fill="#f5d060" font-size="34" font-weight="700">${post}</tspan>
+        <tspan fill="${col}" font-size="18" dx="8">${d === 0 ? '' : sign + d}</tspan>
+      </text>`;
+  });
+  svg += `</svg>`;
+  box.innerHTML = svg;
+}
+
 function renderResults() {
+  try { renderBodyShift(); } catch (e) { console.warn(e); }
   const ba = document.getElementById('baContainer');
   ba.innerHTML = '';
 
