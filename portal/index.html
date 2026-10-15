@@ -1315,7 +1315,8 @@
 <div id="s-welcome" class="screen" style="justify-content:center;text-align:center;">
   <div style="font-family:'Cinzel',serif;color:var(--gold);font-size:26px;letter-spacing:4px;">Welcome</div>
   <div style="height:28px"></div>
-  <input type="text" class="text-input" id="nameInput" placeholder="your name" maxlength="20" autocomplete="off" oninput="document.getElementById('enterBtn').disabled = this.value.trim().length === 0" onkeydown="if(event.key==='Enter' && this.value.trim()){playPortalChime();enterPortal();}">
+  <input type="text" class="text-input" id="nameInput" placeholder="your name or a fun handle" maxlength="20" autocomplete="off" oninput="document.getElementById('enterBtn').disabled = this.value.trim().length === 0" onkeydown="if(event.key==='Enter' && this.value.trim()){playPortalChime();enterPortal();}">
+  <div style="margin-top:10px;font-size:13px;opacity:.6;letter-spacing:.5px">e.g. FlamingFlamingo67 · GoldenWeaver · WildBear</div>
   
   <div class="spacer"></div>
   <button class="btn btn-solid" id="enterBtn" onclick="enterPortal()" disabled>Begin</button>
@@ -1671,7 +1672,8 @@
     "The sound doesn't heal you — it reminds you how."
   </div>
 
-  <button class="btn btn-solid" onclick="resetForNext()" style="min-width:200px;">Done</button>
+  <button class="btn" onclick="renderRoom(); showScreen('s-room')" style="min-width:200px;">See the room →</button>
+  <button class="btn btn-solid" onclick="resetForNext()" style="min-width:200px;margin-top:10px;">Done</button>
   <button class="btn-skip" onclick="showScreen('s-postharvest')" style="opacity:0.4; font-size: 12px;">← Back</button>
 
   <div class="nav-dots">
@@ -1680,6 +1682,27 @@
   </div>
 </div>
 
+
+<!-- ROOM VIEW (Oct 10): intentions, words before/after, total shift, sounds -->
+<div id="s-room" class="screen" style="justify-content:center;text-align:center;">
+  <div class="title" style="font-size:28px;">The Room</div>
+  <div class="subtitle" id="roomHead" style="font-size:16px;opacity:.75;"></div>
+  <div style="height:14px"></div>
+  <div style="font-size:12px;letter-spacing:3px;color:var(--text-dim);">INTENTIONS</div>
+  <div id="roomIntentions" style="max-width:600px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;line-height:1.5;color:var(--gold-bright);margin:6px 0 16px;"></div>
+  <div style="display:flex;gap:24px;justify-content:center;max-width:560px;width:100%;">
+    <div style="flex:1"><div style="font-size:12px;letter-spacing:3px;color:var(--text-dim);">ARRIVED WITH</div><div id="roomBefore" style="color:var(--before);font-size:17px;line-height:1.6;margin-top:6px;"></div></div>
+    <div style="flex:1"><div style="font-size:12px;letter-spacing:3px;color:var(--text-dim);">LEFT WITH</div><div id="roomAfter" style="color:var(--after);font-size:19px;line-height:1.6;margin-top:6px;"></div></div>
+  </div>
+  <div style="height:18px"></div>
+  <div style="font-size:12px;letter-spacing:3px;color:var(--text-dim);">TOTAL SHIFT</div>
+  <div id="roomShift" style="width:100%;max-width:460px;margin-top:8px;"></div>
+  <div style="height:14px"></div>
+  <div id="roomSounds" style="font-size:15px;color:var(--text-dim);"></div>
+  <div style="height:20px"></div>
+  <button class="btn btn-solid" onclick="resetForNext()" style="min-width:200px;">Done</button>
+  <button class="btn-skip" onclick="showScreen('s-results')" style="opacity:0.45;font-size:13px;">← My shift</button>
+</div>
 <!-- ==================== ART SCREEN ==================== -->
 <div id="s-mandala" class="screen">
   <div class="spacer"></div>
@@ -2341,6 +2364,37 @@ function hardReset() {
 var _logoTaps = 0, _logoT = 0;
 function logoTap() { var n = Date.now(); _logoTaps = (n - _logoT < 800) ? _logoTaps + 1 : 1; _logoT = n; if (_logoTaps >= 3) hardReset(); }
 document.addEventListener('DOMContentLoaded', function(){ var v = document.getElementById('verTag'); if (v) v.textContent = 'v' + PORTAL_VERSION + ' · ' + sessionId; });
+
+
+// ==================== ROOM VIEW (Oct 10) ====================
+function renderRoom() {
+  const mine = allData.filter(d => d.session === sessionId);
+  const ins = mine.filter(d => d.type === 'checkin'), outs = mine.filter(d => d.type === 'complete');
+  const count = (arr, key) => { const c = {}; arr.forEach(x => (x[key] || []).forEach(w => c[w] = (c[w] || 0) + 1)); return Object.entries(c).sort((a, b) => b[1] - a[1]); };
+  document.getElementById('roomHead').textContent = ins.length + ' arrived · ' + outs.length + ' checked out';
+  const show = (id, list, n) => { document.getElementById(id).innerHTML = list.slice(0, n).map(([w]) => w).join(' · ') || '—'; };
+  show('roomBefore', count(ins, 'feelings'), 8); show('roomAfter', count(outs, 'shiftWords'), 8);
+  const intentions = (typeof intentionBoardData !== 'undefined' ? intentionBoardData : []).map(x => x.intention).filter(Boolean);
+  document.getElementById('roomIntentions').innerHTML = intentions.length ? intentions.map(s => '&ldquo;' + s.replace(/</g, '&lt;') + '&rdquo;').join(' &nbsp;·&nbsp; ') : '<span style="opacity:.5">—</span>';
+  const box = document.getElementById('roomShift'); box.innerHTML = '';
+  if (outs.length) {
+    CATEGORIES.slice().sort((a, b) => 0).forEach(cat => {
+      const a = outs.reduce((s, c) => s + ((c.preScores || {})[cat.id] ?? 5), 0) / outs.length;
+      const b = outs.reduce((s, c) => s + ((c.postScores || {})[cat.id] ?? 5), 0) / outs.length;
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:10px;margin:7px 0;';
+      row.innerHTML = `<div style="width:110px;text-align:left;font-family:Cinzel,serif;font-size:14px;letter-spacing:2px;color:#cfc8b6;">${cat.name.toUpperCase()}</div>
+        <div style="flex:1;position:relative;height:14px;background:rgba(255,255,255,.06);border-radius:7px;">
+          <div style="position:absolute;left:0;top:0;height:14px;border-radius:7px;width:${a * 10}%;background:var(--before);opacity:.7"></div>
+          <div class="rs-after" style="position:absolute;left:0;top:0;height:14px;border-radius:7px;width:${a * 10}%;background:var(--after);opacity:.85;transition:width 1.4s cubic-bezier(.2,.8,.2,1)" data-w="${b * 10}"></div></div>
+        <div style="width:110px;text-align:right;font-size:15px;color:#cfc8b6;">${a.toFixed(1)} → <b style="color:var(--after);font-size:19px;">${b.toFixed(1)}</b></div>`;
+      box.appendChild(row);
+    });
+    setTimeout(() => box.querySelectorAll('.rs-after').forEach((el, i) => setTimeout(() => el.style.width = el.dataset.w + '%', i * 250)), 200);
+  }
+  const snd = count(outs, 'instruments').slice(0, 4).map(([w]) => w);
+  document.getElementById('roomSounds').textContent = snd.length ? 'Sounds that touched the room: ' + snd.join(' · ') : '';
+}
 
 // ==================== 0. DOOR / RETURN (communal iPad) ====================
 function freshState() {
