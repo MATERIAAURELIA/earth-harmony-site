@@ -342,6 +342,449 @@ img[data-photo^="svc-slot"]{filter:sepia(.20) hue-rotate(-8deg) saturate(1.16) b
       </div>
     </div>
   </section>
+<!-- ===== Google review slider v2 (Oct 17 2026) ===== -->
+<section id="reviews" style="position: relative; padding: clamp(64px, 8vw, 110px) clamp(20px, 5vw, 64px); background: var(--bg);">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+<style id="gr-slider-css">
+#gr-slider{max-width:1120px;margin:0 auto;--g-ink:#202124;--g-grey:#5f6368;--g-line:#dadce0;--g-star:#FBBC04;--g-blue:#1a73e8;font-family:Roboto,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+#gr-slider *{box-sizing:border-box}
+#gr-slider .gr-head{text-align:center;margin-bottom:clamp(22px,3vw,32px);font-family:'Mulish',sans-serif}
+#gr-slider .gr-eyebrow{font-size:13.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+#gr-slider .gr-h2{font-family:Marcellus,serif;font-weight:400;font-size:clamp(28px,3.8vw,46px);line-height:1.06;margin:0;color:var(--ink)}
+#gr-slider .gr-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px 20px;background:#fff;border-radius:8px;padding:16px 20px;box-shadow:0 1px 2px rgba(60,64,67,.3),0 2px 6px 2px rgba(60,64,67,.15);margin-bottom:18px}
+#gr-slider .gr-bar-left{display:flex;align-items:center;gap:14px;min-width:0}
+#gr-slider .gr-g{flex-shrink:0;display:block}
+#gr-slider .gr-bar-title{font-size:16px;font-weight:500;color:var(--g-ink);line-height:1.2}
+#gr-slider .gr-bar-score{display:flex;align-items:center;gap:8px;margin-top:2px}
+#gr-slider .gr-bar-num{font-size:28px;font-weight:700;color:var(--g-ink);line-height:1}
+#gr-slider .gr-stars{color:var(--g-star);letter-spacing:1px;line-height:1}
+#gr-slider .gr-bar .gr-stars{font-size:20px}
+#gr-slider .gr-bar-sub{font-size:13px;color:var(--g-grey);margin-top:3px}
+#gr-slider .gr-bar-btns{display:flex;gap:8px;flex-wrap:wrap}
+#gr-slider .gr-btn-g{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:4px;font-size:14px;font-weight:500;line-height:1.2;white-space:nowrap}
+#gr-slider .gr-btn-g.primary{background:var(--g-blue);color:#fff}
+#gr-slider .gr-btn-g.primary:hover{background:#1765cc;color:#fff}
+#gr-slider .gr-btn-g.ghost{border:1px solid var(--g-line);color:var(--g-blue);background:#fff}
+#gr-slider .gr-btn-g.ghost:hover{background:#f6fafe;color:var(--g-blue)}
+#gr-slider .gr-viewport{position:relative}
+#gr-slider .gr-track{display:flex;align-items:flex-start;gap:16px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:4px 2px 10px;margin:0 -2px}
+#gr-slider .gr-track::-webkit-scrollbar{display:none}
+#gr-slider .gr-card{flex:0 0 calc((100% - 32px) / 3);min-width:0;scroll-snap-align:start;background:#fff;border-radius:8px;padding:18px 18px 16px;box-shadow:0 1px 2px rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15);position:relative;color:var(--g-ink)}
+#gr-slider .gr-top{display:flex;align-items:center;gap:12px;padding-right:26px}
+#gr-slider .gr-av{width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;font-weight:500}
+#gr-slider .gr-name{font-size:15px;font-weight:700;color:var(--g-ink);line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#gr-slider .gr-date{font-size:13px;color:var(--g-grey);margin-top:1px}
+#gr-slider .gr-card .gr-g{position:absolute;top:18px;right:18px}
+#gr-slider .gr-card .gr-stars{font-size:17px;margin:12px 0 8px}
+#gr-slider .gr-text{margin:0;font-size:14.5px;line-height:1.55;color:var(--g-ink);white-space:pre-line;overflow-wrap:anywhere}
+#gr-slider .gr-text.clamped{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;line-clamp:5;overflow:hidden}
+#gr-slider .gr-more{display:none;background:none;border:0;padding:6px 0 0;font:inherit;font-size:14px;font-weight:500;color:var(--g-grey);cursor:pointer}
+#gr-slider .gr-more.needed{display:inline-block}
+#gr-slider .gr-more:hover{color:var(--g-ink);text-decoration:underline}
+#gr-slider .gr-arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:0;background:#fff;color:var(--g-grey);box-shadow:0 1px 3px rgba(60,64,67,.3),0 4px 8px 3px rgba(60,64,67,.15);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;transition:opacity .2s}
+#gr-slider .gr-arrow:hover{color:var(--g-ink)}
+#gr-slider .gr-arrow[disabled]{opacity:0;pointer-events:none}
+#gr-slider .gr-prev{left:-20px}
+#gr-slider .gr-next{right:-20px}
+#gr-slider .gr-progress{height:3px;border-radius:3px;background:rgba(243,235,221,.14);margin:14px auto 0;max-width:240px;overflow:hidden}
+#gr-slider .gr-progress span{display:block;height:100%;background:var(--accent);border-radius:3px;transition:width .2s,margin-left .2s}
+#gr-slider .gr-count{text-align:center;margin-top:8px;font-size:12px;color:var(--faint);font-family:'Mulish',sans-serif;letter-spacing:.12em}
+#gr-slider button:focus-visible,#gr-slider a:focus-visible{outline:2px solid var(--g-blue);outline-offset:2px}
+@media (max-width:1180px){#gr-slider .gr-prev{left:-8px}#gr-slider .gr-next{right:-8px}}
+@media (max-width:900px){#gr-slider .gr-card{flex-basis:calc((100% - 16px) / 2)}}
+@media (max-width:640px){
+  #gr-slider .gr-card{flex-basis:calc(100% / 1.15)}
+  #gr-slider .gr-arrow{display:none}
+  #gr-slider .gr-bar{padding:14px 16px}
+  #gr-slider .gr-bar-btns{width:100%}
+  #gr-slider .gr-btn-g{flex:1;justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){#gr-slider .gr-track{scroll-behavior:auto}}
+</style>
+  <div id="gr-slider">
+    <div class="gr-head">
+      <div class="gr-eyebrow">◦ &nbsp;Reviews</div>
+      <h2 class="gr-h2">What people are saying</h2>
+    </div>
+    <div class="gr-bar">
+      <div class="gr-bar-left">
+        <svg class="gr-g" width="40" height="40" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        <div>
+          <div class="gr-bar-title">Google Reviews</div>
+          <div class="gr-bar-score"><span class="gr-bar-num" data-gr="avg">5.0</span><span class="gr-stars" aria-label="5 out of 5 stars">★★★★★</span></div>
+          <div class="gr-bar-sub">Based on <span data-gr="total">42</span> reviews</div>
+        </div>
+      </div>
+      <div class="gr-bar-btns">
+        <a class="gr-btn-g primary" href="https://www.google.com/maps?cid=7983407324691479522" target="_blank" rel="noopener">Read all on Google</a>
+        <a class="gr-btn-g ghost" href="https://g.page/r/CeK7fPWpwspuEAE/review" target="_blank" rel="noopener">Leave a review</a>
+      </div>
+    </div>
+    <div class="gr-viewport">
+      <button type="button" class="gr-arrow gr-prev" data-gr="prev" aria-label="Previous reviews"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+      <div class="gr-track" data-gr="track" role="region" aria-label="Google reviews, swipe or use arrows" tabindex="0"></div>
+      <button type="button" class="gr-arrow gr-next" data-gr="next" aria-label="Next reviews"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg></button>
+    </div>
+    <div class="gr-progress" aria-hidden="true"><span data-gr="bar"></span></div>
+    <div class="gr-count" data-gr="count" aria-live="polite"></div>
+  </div>
+<script>
+// Earth Harmony Sound & Wellness: Google reviews (all 5 stars).
+// 36 from the Jul 14 2026 scrape (projects/testimonials/google-reviews-scrape-2026-07-14.txt)
+// + 6 newer pulled from Google Search (sorted Newest) on Oct 17 2026. Total on Google: 42.
+// Dates are approximate (converted from Google's "N months ago").
+// Reviews with empty text are star-only ratings; they count toward the total but are not shown as cards.
+// To hide one from the slider, add  hide: true
+window.EH_GOOGLE_TOTAL = 42;
+window.EH_REVIEWS = [
+  {
+    "name": "Judy M.",
+    "rating": 5,
+    "date": "Oct 2026",
+    "text": "Marcus is a gifted facilitator and an exquisite alchemist for healing. Thank you Marcus",
+    "source": "google-2026-10-17"
+  },
+  {
+    "name": "Yuri B.",
+    "rating": 5,
+    "date": "Oct 2026",
+    "text": "Attending a sound bath session with Markus Fang was a truly unique and transformative experience.\nWhat set this session apart was how naturally we prepared for the journey—we began by relaxing and vocalizing different tones together, accompanied by the drone of the Shruti box. Connecting through sound beforehand created a wonderfully warm atmosphere and set a deep, grounded state for what was to come.\nThe combination of the singing bowls layered with the continuous, rich harmonies of the Shruti box created an extraordinary tapestry of sound. I felt completely immersed from start to finish. Beyond the music, the warmth of the connection and conversation made the whole evening special. I left feeling deeply relaxed, inspired, and renewed. Highly recommended!",
+    "source": "google-2026-10-17"
+  },
+  {
+    "name": "Treyna T.",
+    "rating": 5,
+    "date": "Oct 2026",
+    "text": "I’ve been to several different offerings and highly recommend any that call out to you. Whether it is to receive gentle sound or to really alchemize some energy Earth Harmony has it 🧚‍♀️💗🧘‍♀️🪘💃🙏🏻🎶",
+    "source": "google-2026-10-17"
+  },
+  {
+    "name": "Carmen B.",
+    "rating": 5,
+    "date": "Oct 2026",
+    "text": "Always welcoming and supportive to newcomers and those returning...and I ALWAYS recommend attending this circle! It is the BEST place to start your new community drumming \"addiction\"!",
+    "source": "google-2026-10-17"
+  },
+  {
+    "name": "Joody E.",
+    "rating": 5,
+    "date": "Oct 2026",
+    "text": "The experience was absolutely lovely! From the discussion prior to the sound bath through the sound bath and after. It was a very beautiful evening full of care and warmth and gratitude. ❤️",
+    "source": "google-2026-10-17"
+  },
+  {
+    "name": "Noelle R.",
+    "rating": 5,
+    "date": "Sep 2026",
+    "text": "Marcus is the best of the best. Working with him is aways a pleasure. Not only is he a remarkable human being, his experience, knowledge and presence together create a worthwhile experience. I highly recommend his soundbaths.",
+    "source": "google-2026-10-17"
+  },
+  {
+    "name": "Lourdes",
+    "rating": 5,
+    "date": "May 2026",
+    "text": "I had a wonderful experience at my very first soundbath with Earth Harmony Sound & Wellness.\nMarcus and his team take the time to explore and attend to all the details of the session extremely well and very thoroughly. Right from the prebrief email to the actual session itself, Marcus and his team are there to support you through your journey.\nMy husband also attended the session with me and he was a bit uncertain about it, but we both left feeling amazing and having really enjoyed the whole experience from start to finish.\nWe will definitely be back and we would both highly recommend the experience to others.\nThank you Marcus and team for a fantastic experience!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Susana F.",
+    "rating": 5,
+    "date": "May 2026",
+    "text": "It was my very first attending the event or workshop…… The Sound Bath.\nIt was just so cool, calm and relaxing !",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Tammy T.",
+    "rating": 5,
+    "date": "May 2026",
+    "text": "",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Charnelle M.",
+    "rating": 5,
+    "date": "Apr 2026",
+    "text": "Marcus and his team have a way of delivering sound experiences so elevated and immersive. His knowledge in music and passion for what he does shines through so brightly. It was a honor to attend his community sound bath last weekly. It was much needed and I cannot wait to join in on another one soon! Keep up the good work!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Jordan Z.",
+    "rating": 5,
+    "date": "Apr 2026",
+    "text": "",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Colin M.",
+    "rating": 5,
+    "date": "Apr 2026",
+    "text": "",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Ting P.",
+    "rating": 5,
+    "date": "Mar 2026",
+    "text": "Marcus and his team was outstanding! The experience was amazing and so relaxing and authentic! Thank you very much! I’ll be back again and again!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Olivia K.",
+    "rating": 5,
+    "date": "Mar 2026",
+    "text": "Marcus is a musical maestro of curating sound bath experiences that are welcoming, inclusive, and all-encompassing. From start to finish he held a luxuriously peaceful and safe space for everyone to settle their nervous systems and receive a reprieve from their busy lives. His sensitivity to the flow of the event and his musical offerings were next level. You will definitely leave feeling held and loved.",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "J. V.",
+    "rating": 5,
+    "date": "Mar 2026",
+    "text": "My first time. It was amazimg\nA great experience! Loved it!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Kristina L.",
+    "rating": 5,
+    "date": "Mar 2026",
+    "text": "Absolutely brilliant evening! The experience that Markus took us on was beautifully executed. Wonderful way to enjoy the family day long weekend in such a great positive vibe. LiveLaughLove…Kristina Lee",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Corrine T.",
+    "rating": 5,
+    "date": "Mar 2026",
+    "text": "Excellent experience as usual.",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Marcela S.",
+    "rating": 5,
+    "date": "Mar 2026",
+    "text": "Literally took my 3 day stress headache away. Can't wait to go back",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Laura S.",
+    "rating": 5,
+    "date": "Mar 2026",
+    "text": "Incredibly nurturing, supportive & intuitive experience",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Delightful by Design",
+    "rating": 5,
+    "date": "Feb 2026",
+    "text": "Absolutely love everything about Marcus’ offerings - truly there’s nothing like his unique brand of facilitation and community building",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Krystal S.",
+    "rating": 5,
+    "date": "Feb 2026",
+    "text": "Marcus is an incredible facilitator - his voice was incredibly soothing, like a gentle hug for the ears. Every sound seemed to resonate deep within me. I truly appreciate everything earth harmony sound and wellness hosts for our community; from the drum circles, sound baths and upcoming play shops (learning new instruments) it’s a beautiful gift that your sharing and it makes a real difference. Thank you for being so special and training others to do the same.",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Jessica T.",
+    "rating": 5,
+    "date": "Feb 2026",
+    "text": "I can’t express how much my husband and I love being here. We always leave feeling so much better than we did and always feel so welcome. The experience is absolutely phenomenal and we highly recommend it to everyone",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Joshua P.",
+    "rating": 5,
+    "date": "Feb 2026",
+    "text": "My fiancée and I attended a sound bath class with Marcus, and it was an amazing experience!! Highly recommend anyone to attend and try it out!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Kaela-lea R.",
+    "rating": 5,
+    "date": "Feb 2026",
+    "text": "I’ve had the opportunity to be immersed in two sound baths so far with earth harmony, thanks for creating such a healing atmosphere Marcus!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Kyla R.",
+    "rating": 5,
+    "date": "Feb 2026",
+    "text": "Marcus facilitated a welcoming and peaceful sound bath. I'm already registrated for the next one!!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Kerri B.",
+    "rating": 5,
+    "date": "Feb 2026",
+    "text": "Beautiful bowls that really rung fully but gently and pulled me so deeply, it just amazing!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Cheryl H.",
+    "rating": 5,
+    "date": "Feb 2026",
+    "text": "So relaxing… best sound bath around!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Sarah M.",
+    "rating": 5,
+    "date": "Feb 2026",
+    "text": "So beautiful",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Mavis R.",
+    "rating": 5,
+    "date": "Feb 2026",
+    "text": "",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Val A.",
+    "rating": 5,
+    "date": "Jan 2026",
+    "text": "Wonderful experience, better and better every time.",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Vikki G.",
+    "rating": 5,
+    "date": "Nov 2025",
+    "text": "Experienced the sound bathroom and it was absolutely incredible ❤️ highly recommend!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Sheina N.",
+    "rating": 5,
+    "date": "2025",
+    "text": "I recently had the pleasure of experiencing a sound healing session with Marcus, and I can honestly say it was an incredible experience. His warm welcoming and kind personality, made it easy for me to feel very comfortable from the moment I walked in. I really appreciated that he started by explaining what I could expect during the healing, what a typical session is like, and that it can be different for everyone.\n\nHe incorporates so many beautiful instruments and sounds – I think the variety really made the session so much more effective. And the singing is something I had never experienced before … I was surprised how much I felt from it – it was like energy was moving right from my gut, and releasing upwards! As the session went on, I could feel a deep sense of grounding and relaxation. I found it very helpful to notice how the sound sensations made my body and emotions feel … I actually felt emotions that I haven’t felt in years (in a very good healing way).\n\nWhat truly stood out to me was how I felt the next day. I experienced a heightened state of awareness, renewed – almost energized emotions, and even my body felt relaxed (and I have regular hip and back pain). The experience was just wonderful!\n\nI highly recommend this therapy to anyone looking for some relaxation/stress relief, or maybe even to reconnect with themselves and receive some emotional or physical healing. It is truly something everyone should try at least once, if not many times, in their life.",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Harper P.",
+    "rating": 5,
+    "date": "2025",
+    "text": "I participated in a drum circle with Marcus.\n\nIt was an incredible experience, where I felt very connected to strangers in a very new way.\n\nIt felt like an extension of self in a way that feels difficult to put to words.\n\nI left feeling more connected to myself, more grounded, and more solid.\n\nI definitely recommend it, and I will be looking for more opportunities like this in the future!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Nooreen S.",
+    "rating": 5,
+    "date": "2025",
+    "text": "Marcus is an extremely authentic, talented, grounded artist who led us through a couple’s sound bath. It was truly calming and spiritual and we felt completely at ease during and after the experience. There was a debrief post session to clarify feelings and thoughts and setting intentions post session. Highly recommend for anyone looking for a new experience guided by a gifted musician!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Rob F.",
+    "rating": 5,
+    "date": "2025",
+    "text": "Marcus was an absolute treat for the soul. If you haven't experienced his talent and healing journey than you're missing out, truly. As someone who runs a business, my schedule isn't always open but I would definitely make an exception to see Marcus again in the future. You won't regret it!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Lorne S.",
+    "rating": 5,
+    "date": "2025",
+    "text": "An amazing drum circle session last night! It was such an energizing and uplifting experience. Marcus, Your facilitation really brought everyone together, and the rhythm and flow you helped us create were incredible. I left feeling refreshed and full of positive energy.\nThanks again for sharing your passion and creating such a fun, inclusive space for us all. I’m already looking forward to the next time!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Cassie J.",
+    "rating": 5,
+    "date": "2025",
+    "text": "Marcus has facilitated a variety of sessions at our workplace for staff and residents, and it's been such a great experience. He's very warm and welcoming and creates a remarkable space for wellness and growth. Just recently attended his laughter yoga session, it was hysterical and wonderful 😄...we quickly booked another session for more staff to attend.",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Karelia G.",
+    "rating": 5,
+    "date": "2025",
+    "text": "Marcus is incredible at what he does. I attended a sound bath last night that was transformational. Nothing I share will even come close to describing my experience. It was so powerful and healing, having all the sounds wash over and vibrate through my body, my entire body feels renewed from the sounds and I feel like I came back home to my self. I also had the best sleep ever! Please do not hesitate to attend one of his sound bath sessions, hands down one of the best experiences I have ever had - will definitely do it again! Thank you Marcus 🙏🏻 for this life changing experience and for doing what you do!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Mandi H.",
+    "rating": 5,
+    "date": "2025",
+    "text": "Marcus pours his expertise, authenticity, and incredible energy into his facilitation. He creates a space that is comfortable and therapeutic for individuals of all abilities and levels of experience. Sound bath sessions facilitated by Earth Harmony Sound & Wellness are one of the most therapeutic experiences I have ever been a part of. The continuing care home I work at has hired Marcus to facilitate many drumming circles and staff wellness events. I am always so impressed. I leave every event feeling blessed to have crossed paths with such an incredible professional and human.\n(Also LOVE my Earth Harmony sweater!)\nThank you Earth Harmony!",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Krystal S.",
+    "rating": 5,
+    "date": "2025",
+    "text": "The recent drumming circle was a special experience, bringing a wave of connection and sound. The rhythms created a unique sense of peace. I was also moved by Marcus’s drumming circle last summer at WUB wellness and wanted to share this with friends who needed comfort. Introducing them to the session provided them solace and a deep connection to the sound and movement. I'm grateful to Earth Harmony for this experience. You've opened our hearts and ears to the power of sound and your dedication to healing through music and community is inspiring.",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Crystal",
+    "rating": 5,
+    "date": "2025",
+    "text": "As a drumming circle newbie I felt welcomed with warmth...the sound was incredible and the invitation to try different instruments was a blast, I loved the energy and the people...and there is no wrong way to play, simply enjoy! Thank you to you, Marcus & Holly and all of you in the drumming community! <3",
+    "source": "google-2026-07-14"
+  },
+  {
+    "name": "Bobby L.",
+    "rating": 5,
+    "date": "2025",
+    "text": "Earth Harmony delivers a rich and expressive soundscape healing experience that is none like any other. They provide a sound journey that is sure to treat your whole being to deep relaxation and wellness.",
+    "source": "google-2026-07-14"
+  }
+];
+
+</script>
+<script>
+(function(){
+  var root=document.getElementById('gr-slider'); if(!root) return;
+  var q=function(k){return root.querySelector('[data-gr="'+k+'"]');};
+  var all=window.EH_REVIEWS||[], total=window.EH_GOOGLE_TOTAL||all.length;
+  var list=all.filter(function(r){return r.text&&!r.hide;});
+  if(!list.length){document.getElementById('reviews').style.display='none';return;}
+  // Lead with substantial reviews (~3-6 lines), then the long ones, then the short ones.
+  function band(r){var n=r.text.length;return n>=170&&n<=650?0:(n>650?1:2);}
+  var reviews=list.map(function(r,i){return {r:r,i:i};}).sort(function(a,b){return band(a.r)-band(b.r)||a.i-b.i;}).map(function(x){return x.r;});
+  var COLORS=['#1a73e8','#d93025','#188038','#e37400','#8430ce','#007b83','#c5221f','#3949ab','#00897b','#6d4c41'];
+  var G='<svg class="gr-g" width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.480-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.650z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.980-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function color(n){var h=0;for(var i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))>>>0;return COLORS[h%COLORS.length];}
+  function initial(n){return (n.replace(/[^A-Za-zÀ-ÿ]/g,'')[0]||'?').toUpperCase();}
+  function card(r){return '<div class="gr-card">'+G+
+    '<div class="gr-top"><div class="gr-av" style="background:'+color(r.name)+'" aria-hidden="true">'+esc(initial(r.name))+'</div>'+
+    '<div style="min-width:0"><div class="gr-name">'+esc(r.name)+'</div><div class="gr-date">'+esc(r.date)+'</div></div></div>'+
+    '<div class="gr-stars" aria-label="'+r.rating+' out of 5 stars">'+'★'.repeat(r.rating)+'<span style="color:#dadce0">'+'★'.repeat(5-r.rating)+'</span></div>'+
+    '<p class="gr-text clamped">'+esc(r.text)+'</p>'+
+    '<button type="button" class="gr-more" aria-expanded="false">Read more</button></div>';}
+  var avg=all.reduce(function(s,r){return s+r.rating;},0)/all.length;
+  q('avg').textContent=avg.toFixed(1); q('total').textContent=total;
+  var track=q('track'); track.innerHTML=reviews.map(card).join('');
+  var cards=[].slice.call(track.children);
+  track.addEventListener('click',function(e){var b=e.target.closest('.gr-more');if(!b)return;var t=b.previousElementSibling,ex=t.classList.contains('clamped');t.classList.toggle('clamped',!ex);b.textContent=ex?'Read less':'Read more';b.setAttribute('aria-expanded',String(ex));});
+  function measure(){cards.forEach(function(c){var t=c.querySelector('.gr-text'),b=c.querySelector('.gr-more');if(t.classList.contains('clamped'))b.classList.toggle('needed',t.scrollHeight>t.clientHeight+2);});}
+  function step(){return cards.length>1?cards[1].offsetLeft-cards[0].offsetLeft:track.clientWidth;}
+  function update(){
+    var max=track.scrollWidth-track.clientWidth, x=track.scrollLeft;
+    q('prev').disabled=x<=2; q('next').disabled=x>=max-2;
+    var vis=Math.max(1,Math.round(track.clientWidth/step())), first=Math.min(cards.length-1,Math.round(x/step()));
+    var w=Math.min(100,vis/cards.length*100), left=max>0?(x/max)*(100-w):0;
+    var bar=q('bar'); bar.style.width=w+'%'; bar.style.marginLeft=left+'%';
+    var last=Math.min(cards.length,first+vis);
+    q('count').textContent=(vis>1?(first+1)+'–'+last:(first+1))+' of '+cards.length;
+  }
+  q('prev').addEventListener('click',function(){track.scrollBy({left:-step()*Math.max(1,Math.floor(track.clientWidth/step())),behavior:'smooth'});});
+  q('next').addEventListener('click',function(){track.scrollBy({left:step()*Math.max(1,Math.floor(track.clientWidth/step())),behavior:'smooth'});});
+  track.addEventListener('keydown',function(e){if(e.key==='ArrowRight'){e.preventDefault();q('next').click();}if(e.key==='ArrowLeft'){e.preventDefault();q('prev').click();}});
+  var raf; track.addEventListener('scroll',function(){cancelAnimationFrame(raf);raf=requestAnimationFrame(update);},{passive:true});
+  function navPad(){var n=document.querySelector('nav');if(n&&getComputedStyle(n).position==='fixed')document.getElementById('reviews').style.scrollMarginTop=(n.getBoundingClientRect().height+8)+'px';}
+  var rt; window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){measure();update();navPad();},150);});
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){measure();update();});
+  navPad(); measure(); update();
+  if(location.hash==='#reviews') setTimeout(function(){document.getElementById('reviews').scrollIntoView();},300);
+})();
+</script>
+</section>
+<!-- ===== /Google review slider v2 ===== -->
+
   <section data-dc-tpl="89" style="position: relative; padding: clamp(84px, 11vw, 150px) clamp(20px, 5vw, 64px); text-align: center; overflow: hidden;">
     
     <div data-dc-tpl="100" data-reveal="" style="position: relative; max-width: 880px; margin: 0px auto; opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(0.2, 0.7, 0.2, 1), transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);">
@@ -988,42 +1431,7 @@ img[data-photo^="svc-slot"]{filter:sepia(.20) hue-rotate(-8deg) saturate(1.16) b
 
 
   
-  <section data-dc-tpl="191" id="reviews" style="position: relative; padding: clamp(70px, 9vw, 120px) clamp(20px, 5vw, 64px); background: var(--bg-2);">
-    <div data-dc-tpl="192" style="max-width: 1060px; margin: 0px auto;">
-      <div data-dc-tpl="193" data-reveal="" style="text-align: center; margin-bottom: 44px; opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(0.2, 0.7, 0.2, 1), transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);">
-        <div data-dc-tpl="194" style="font-size: 13.5px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px;" data-text="t-99">◦ &nbsp;Reviews</div>
-        <h2 data-dc-tpl="195" style="font-family: Marcellus, serif; font-weight: 400; font-size: clamp(28px, 3.8vw, 46px); line-height: 1.06; margin: 0px 0px 14px;" data-text="t-20">What people are saying</h2>
-        <div data-dc-tpl="196" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-          <span data-dc-tpl="197" style="color: var(--accent-2); font-size: 18px; letter-spacing: 3px;" data-text="t-100">★★★★★</span>
-          <span data-dc-tpl="198" style="font-size: 14px; color: var(--ink-dim);" data-text="t-101">36 Google Reviews</span>
-        </div>
-      </div>
-      <div data-dc-tpl="199" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(16px, 2vw, 24px); margin-bottom: 36px;">
-        
-          <figure data-dc-tpl="201" data-reveal="" style="margin: 0px; display: flex; flex-direction: column; gap: 14px; padding: 26px; border-radius: 18px; border: 1px solid var(--line); background: var(--panel); box-shadow: rgba(243, 235, 221, 0.07) 0px 1px 0px inset, rgba(0, 0, 0, 0.55) 0px 18px 40px -26px; opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(0.2, 0.7, 0.2, 1), transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);">
-            <span data-dc-tpl="202" style="color: var(--accent-2); font-size: 15px; letter-spacing: 3px;" data-text="t-102">★★★★★</span>
-            <blockquote data-dc-tpl="203" style="margin: 0px; font-size: 15px; line-height: 1.7; color: var(--ink-dim); font-style: italic;"><span class="sc-interp" data-text="t-103">“I had a wonderful experience at my very first soundbath with Earth Harmony Sound &amp; Wellness. … My husband also attended the session with me and he was a bit uncertain about it, but we both left feeling amazing … We will definitely be back and we would both highly recommend the experience to others.”</span></blockquote>
-            <figcaption data-dc-tpl="204" style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint);"><span class="sc-interp" data-text="t-104">Lourdes · Google Review</span></figcaption>
-          </figure>
-        
-          <figure data-dc-tpl="201" data-reveal="" style="margin: 0px; display: flex; flex-direction: column; gap: 14px; padding: 26px; border-radius: 18px; border: 1px solid var(--line); background: var(--panel); box-shadow: rgba(243, 235, 221, 0.07) 0px 1px 0px inset, rgba(0, 0, 0, 0.55) 0px 18px 40px -26px; opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(0.2, 0.7, 0.2, 1), transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);">
-            <span data-dc-tpl="202" style="color: var(--accent-2); font-size: 15px; letter-spacing: 3px;" data-text="t-105">★★★★★</span>
-            <blockquote data-dc-tpl="203" style="margin: 0px; font-size: 15px; line-height: 1.7; color: var(--ink-dim); font-style: italic;"><span class="sc-interp" data-text="t-106">“I attended a sound bath last night that was transformational. … It was so powerful and healing, having all the sounds wash over and vibrate through my body … I also had the best sleep ever! Please do not hesitate to attend one of his sound bath sessions, hands down one of the best experiences I have ever had.”</span></blockquote>
-            <figcaption data-dc-tpl="204" style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint);"><span class="sc-interp" data-text="t-107">Karelia G. · Google Review</span></figcaption>
-          </figure>
-        
-          <figure data-dc-tpl="201" data-reveal="" style="margin: 0px; display: flex; flex-direction: column; gap: 14px; padding: 26px; border-radius: 18px; border: 1px solid var(--line); background: var(--panel); box-shadow: rgba(243, 235, 221, 0.07) 0px 1px 0px inset, rgba(0, 0, 0, 0.55) 0px 18px 40px -26px; opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(0.2, 0.7, 0.2, 1), transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);">
-            <span data-dc-tpl="202" style="color: var(--accent-2); font-size: 15px; letter-spacing: 3px;" data-text="t-108">★★★★★</span>
-            <blockquote data-dc-tpl="203" style="margin: 0px; font-size: 15px; line-height: 1.7; color: var(--ink-dim); font-style: italic;"><span class="sc-interp" data-text="t-109">“Sound bath sessions facilitated by Earth Harmony Sound &amp; Wellness are one of the most therapeutic experiences I have ever been a part of. The continuing care home I work at has hired Marcus to facilitate many drumming circles and staff wellness events. I am always so impressed.”</span></blockquote>
-            <figcaption data-dc-tpl="204" style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint);"><span class="sc-interp" data-text="t-110">Mandi H. · Google Review</span></figcaption>
-          </figure>
-        
-      </div>
-      <div data-dc-tpl="205" data-reveal="" style="text-align: center; opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(0.2, 0.7, 0.2, 1), transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);">
-        <a data-dc-tpl="206" href="https://www.google.com/search?q=Earth+Harmony+Sound+%26+Wellness+Edmonton+reviews" class="scp3" style="display: inline-flex; align-items: center; gap: 9px; padding: 13px 26px; border-radius: 999px; border: 1px solid var(--accent); color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;" data-text="t-111">Read All 36 Reviews on Google →</a>
-      </div>
-    </div>
-  </section>
+
 
   
   <section data-dc-tpl="207" id="contact" style="position: relative; padding: clamp(70px, 9vw, 120px) clamp(20px, 5vw, 64px); overflow: hidden;">
