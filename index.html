@@ -376,10 +376,10 @@ img[data-photo^="svc-slot"]{filter:sepia(.20) hue-rotate(-8deg) saturate(1.16) b
 #gr-slider .gr-date{font-size:13px;color:var(--g-grey);margin-top:1px}
 #gr-slider .gr-card .gr-g{position:absolute;top:18px;right:18px}
 #gr-slider .gr-card .gr-stars{font-size:17px;margin:12px 0 8px}
-#gr-slider .gr-text{margin:0;font-size:14.5px;line-height:1.55;color:var(--g-ink);white-space:pre-line;overflow-wrap:anywhere}
+#gr-slider .gr-text{margin:0;min-height:calc(14.5px * 1.55 * 5);font-size:14.5px;line-height:1.55;color:var(--g-ink);white-space:pre-line;overflow-wrap:anywhere}
 #gr-slider .gr-text.clamped{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;line-clamp:5;overflow:hidden}
-#gr-slider .gr-more{display:none;background:none;border:0;padding:6px 0 0;font:inherit;font-size:14px;font-weight:500;color:var(--g-grey);cursor:pointer}
-#gr-slider .gr-more.needed{display:inline-block}
+#gr-slider .gr-more{display:inline-block;visibility:hidden;background:none;border:0;padding:6px 0 0;font:inherit;font-size:14px;font-weight:500;color:var(--g-grey);cursor:pointer}
+#gr-slider .gr-more.needed{visibility:visible}
 #gr-slider .gr-more:hover{color:var(--g-ink);text-decoration:underline}
 #gr-slider .gr-arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:0;background:#fff;color:var(--g-grey);box-shadow:0 1px 3px rgba(60,64,67,.3),0 4px 8px 3px rgba(60,64,67,.15);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;transition:opacity .2s}
 #gr-slider .gr-arrow:hover{color:var(--g-ink)}
@@ -393,8 +393,12 @@ img[data-photo^="svc-slot"]{filter:sepia(.20) hue-rotate(-8deg) saturate(1.16) b
 @media (max-width:1180px){#gr-slider .gr-prev{left:-8px}#gr-slider .gr-next{right:-8px}}
 @media (max-width:900px){#gr-slider .gr-card{flex-basis:calc((100% - 16px) / 2)}}
 @media (max-width:640px){
-  #gr-slider .gr-card{flex-basis:calc(100% / 1.15)}
-  #gr-slider .gr-arrow{display:none}
+  #gr-slider .gr-viewport{padding:0 26px}
+  #gr-slider .gr-track{gap:28px}
+  #gr-slider .gr-card{flex-basis:100%}
+  #gr-slider .gr-arrow{width:26px;height:64px;border-radius:0;background:none;box-shadow:none;color:var(--accent)}
+  #gr-slider .gr-arrow svg{width:18px;height:40px}
+  #gr-slider .gr-prev{left:-4px}#gr-slider .gr-next{right:-4px}
   #gr-slider .gr-bar{padding:14px 16px}
   #gr-slider .gr-bar-btns{width:100%}
   #gr-slider .gr-btn-g{flex:1;justify-content:center}
@@ -421,9 +425,9 @@ img[data-photo^="svc-slot"]{filter:sepia(.20) hue-rotate(-8deg) saturate(1.16) b
       </div>
     </div>
     <div class="gr-viewport">
-      <button type="button" class="gr-arrow gr-prev" data-gr="prev" aria-label="Previous reviews"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+      <button type="button" class="gr-arrow gr-prev" data-gr="prev" aria-label="Previous reviews"><svg width="22" height="22" viewBox="0 0 16 32" aria-hidden="true"><path d="M13 2 3 16l10 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="gr-track" data-gr="track" role="region" aria-label="Google reviews, swipe or use arrows" tabindex="0"></div>
-      <button type="button" class="gr-arrow gr-next" data-gr="next" aria-label="Next reviews"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg></button>
+      <button type="button" class="gr-arrow gr-next" data-gr="next" aria-label="Next reviews"><svg width="22" height="22" viewBox="0 0 16 32" aria-hidden="true"><path d="M3 2l10 14L3 30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
     <div class="gr-progress" aria-hidden="true"><span data-gr="bar"></span></div>
     <div class="gr-count" data-gr="count" aria-live="polite"></div>
@@ -771,8 +775,8 @@ window.EH_REVIEWS = [
     var last=Math.min(cards.length,first+vis);
     q('count').textContent=(vis>1?(first+1)+'–'+last:(first+1))+' of '+cards.length;
   }
-  q('prev').addEventListener('click',function(){track.scrollBy({left:-step()*Math.max(1,Math.floor(track.clientWidth/step())),behavior:'smooth'});});
-  q('next').addEventListener('click',function(){track.scrollBy({left:step()*Math.max(1,Math.floor(track.clientWidth/step())),behavior:'smooth'});});
+  q('prev').addEventListener('click',function(){track.scrollBy({left:-step()*Math.max(1,Math.round(track.clientWidth/step())),behavior:'smooth'});});
+  q('next').addEventListener('click',function(){track.scrollBy({left:step()*Math.max(1,Math.round(track.clientWidth/step())),behavior:'smooth'});});
   track.addEventListener('keydown',function(e){if(e.key==='ArrowRight'){e.preventDefault();q('next').click();}if(e.key==='ArrowLeft'){e.preventDefault();q('prev').click();}});
   var raf; track.addEventListener('scroll',function(){cancelAnimationFrame(raf);raf=requestAnimationFrame(update);},{passive:true});
   function navPad(){var n=document.querySelector('nav');if(n&&getComputedStyle(n).position==='fixed')document.getElementById('reviews').style.scrollMarginTop=(n.getBoundingClientRect().height+8)+'px';}
