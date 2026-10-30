@@ -1318,6 +1318,11 @@
   <div style="height:20px"></div>
   <input type="text" class="text-input" id="nameInput" placeholder="your name or a fun handle" maxlength="20" autocomplete="off" oninput="document.getElementById('enterBtn').disabled = this.value.trim().length === 0" onkeydown="if(event.key==='Enter' && this.value.trim()){playPortalChime();enterPortal();}">
   <div style="margin-top:10px;font-size:13px;opacity:.6;letter-spacing:.5px">e.g. FlamingFlamingo67 · GoldenWeaver · WildBear</div>
+  <!-- RETURNING TRAVELLERS (Oct 30): find your name from past journeys -->
+  <div id="pastFinder" style="display:none;margin-top:18px;max-width:420px;margin-left:auto;margin-right:auto;">
+    <div style="font-size:13px;opacity:.7;letter-spacing:1px;margin-bottom:8px;">Been here before? Start typing, or <a href="#" onclick="pastShowAll();return false;" style="color:var(--gold);">see everyone</a></div>
+    <div id="pastMatches" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;"></div>
+  </div>
   
   <div class="spacer"></div>
   <button class="btn btn-solid" id="enterBtn" onclick="enterPortal()" disabled>Begin</button>
@@ -2047,6 +2052,7 @@ function enterPortal() {
   try {
     state.user = nameInput.value.trim();
     if (!state.user) return;
+    try { var _pu = pastFind(state.user); if (_pu) { state.returning = _pu; pastWelcome(_pu); } } catch (e) {}
     SyncStore.set('ehp_username', { name: state.user });
     localStorage.setItem('ehp_username', state.user);
     haptic('medium');
@@ -2400,7 +2406,7 @@ function renderRoom() {
 
 // ==================== 0. DOOR / RETURN (communal iPad) ====================
 function freshState() {
-  state.user=''; state.avatar=null; state.intention=''; state.preFeelings=[]; state.preScores={}; state.postScores={};
+  state.user=''; state.returning=null; state.avatar=null; state.intention=''; state.preFeelings=[]; state.preScores={}; state.postScores={};
   state.insight=''; state.instrument=null; state.instruments=[]; state.phenomena=[]; state.shiftWords=[];
 }
 function resetForNext() {
@@ -2410,7 +2416,55 @@ function resetForNext() {
   ['customFeeling','intentionInput','insightText','feedbackText'].forEach(function(id){ var el=document.getElementById(id); if (el) el.value=''; });
   showScreen('s-door');
 }
-function doorArrive() { freshState(); haptic('light'); showScreen('s-welcome'); }
+function doorArrive() { freshState(); haptic('light'); try { pastRender([]); pastLoad(); } catch (e) {} showScreen('s-welcome'); }
+// ==================== RETURNING TRAVELLERS (Oct 30) ====================
+var pastUsers = [];
+var PAST_HIDE = {ddddd:1, uuh:1, www:1};
+function pastKey(n) { return String(n||'').toLowerCase().replace(/[^a-z0-9]/g, '_'); }
+function pastLoad() {
+  try {
+    db.ref('users').once('value').then(function(snap){
+      var d = snap && snap.val ? snap.val() : null; if (!d) return;
+      pastUsers = Object.keys(d).filter(function(k){ return !PAST_HIDE[k] && d[k] && d[k].profile && d[k].profile.displayName; }).map(function(k){
+        var u = d[k], cs = u.checkins ? Object.values(u.checkins) : [], sess = {}, last = null, lastAv = null;
+        cs.forEach(function(c){ if (!c) return; if (c.session) sess[c.session] = 1; if (!last || (c.time||0) >= (last.time||0)) last = c; if (c.avatar && c.avatar.emoji) lastAv = c.avatar; });
+        return { key: k, name: u.profile.displayName, journeys: Object.keys(sess).length, last: last, avatar: lastAv };
+      }).sort(function(a,b){ return a.name.localeCompare(b.name); });
+      document.getElementById('pastFinder').style.display = pastUsers.length ? 'block' : 'none';
+    }).catch(function(){});
+  } catch (e) {}
+}
+function pastChip(u) {
+  var b = document.createElement('button'); b.type = 'button'; b.className = 'btn';
+  b.style.cssText = 'font-size:15px;padding:8px 14px;min-width:0;';
+  b.textContent = (u.avatar ? u.avatar.emoji + ' ' : '') + u.name;
+  b.onclick = function(){ nameInput.value = u.name; enterBtn.disabled = false; document.getElementById('pastMatches').innerHTML = ''; haptic('light'); };
+  return b;
+}
+function pastRender(list) { var box = document.getElementById('pastMatches'); if (!box) return; box.innerHTML = ''; list.forEach(function(u){ box.appendChild(pastChip(u)); }); }
+function pastShowAll() { pastRender(pastUsers); }
+function pastFilter() {
+  var q = nameInput.value.trim().toLowerCase().replace(/\s+/g, '');
+  if (!q) { pastRender([]); return; }
+  pastRender(pastUsers.filter(function(u){ return u.name.toLowerCase().replace(/\s+/g, '').indexOf(q) !== -1; }).slice(0, 6));
+}
+function pastFind(name) { var k = pastKey(name); for (var i = 0; i < pastUsers.length; i++) if (pastUsers[i].key === k) return pastUsers[i]; return null; }
+function pastWelcome(u) {
+  try {
+    var n = u.journeys + 1, bits = [];
+    if (u.avatar) bits.push('last time you walked as ' + u.avatar.emoji + ' ' + u.avatar.label);
+    if (u.last && u.last.instrument) bits.push('the ' + String(u.last.instrument).toLowerCase() + ' found you');
+    var t = document.createElement('div');
+    t.style.cssText = 'position:fixed;left:50%;top:22px;transform:translateX(-50%);z-index:9999;max-width:88%;background:rgba(14,21,34,.95);border:1px solid var(--gold);color:var(--gold);border-radius:16px;padding:14px 20px;text-align:center;font-family:Cinzel,serif;letter-spacing:1px;box-shadow:0 0 24px rgba(212,175,55,.25);transition:opacity .8s;';
+    t.innerHTML = '<div style="font-size:18px;">Welcome back, ' + u.name.replace(/</g,'&lt;') + '</div><div style="font-size:13px;opacity:.8;margin-top:6px;font-family:inherit;">Journey #' + n + (bits.length ? ' · ' + bits.join(' · ') : '') + '</div>';
+    document.body.appendChild(t);
+    setTimeout(function(){ t.style.opacity = '0'; }, 4200);
+    setTimeout(function(){ if (t.parentNode) t.parentNode.removeChild(t); }, 5200);
+  } catch (e) {}
+}
+try { nameInput.addEventListener('input', pastFilter); } catch (e) {}
+try { pastLoad(); } catch (e) {}
+
 function todaysCheckins() {
   var done = {}; var byName = {};
   allData.forEach(function(d){
