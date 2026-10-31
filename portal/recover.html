@@ -39,7 +39,7 @@ document.getElementById('send').onclick=function(){
   try{
     firebase.initializeApp({databaseURL:"https://earth-harmony-portal-4baeb-default-rtdb.firebaseio.com",projectId:"earth-harmony-portal-4baeb"});
     var d=new Date(), key='S'+d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
-    firebase.database().ref('recovered/'+key+'/'+dev).set({sent:Date.now(), ua:navigator.userAgent, items:items, allCount:raw.length, community:comm.slice(-40)})
+    firebase.database().ref('sessions/RESCUE-'+key+'/'+dev).set({sent:Date.now(), ua:navigator.userAgent, items:items, allCount:raw.length, community:comm.slice(-40)})
       .then(function(){ m.textContent='✓ Sent '+items.length+'. MAT has it.'; })
       .catch(function(e){ m.textContent='Did not send: '+e.message+'. Check Wi-Fi and tap again.'; b.disabled=false; });
     setTimeout(function(){ if(m.textContent==='Sending…'){ m.textContent='Still waiting. Is Wi-Fi on? Tap again.'; b.disabled=false; } },12000);
