@@ -1530,7 +1530,8 @@
   <div class="spacer-lg"></div>
   <textarea class="insight-area" id="insightText" placeholder="What do you want to remember from this journey?" rows="3"></textarea>
   <div class="spacer-lg"></div>
-  <button class="btn btn-solid" onclick="showScreen('s-postharvest')">Done</button>
+  <button class="btn btn-solid" onclick="setInsightShare(true)">Share with the Room</button>
+  <button class="btn btn-solid" onclick="setInsightShare(false)" style="background:transparent; border:1.5px solid var(--gold); color:var(--gold);">Keep Private 🔒</button>
   <button class="btn-skip" onclick="showScreen('s-postharvest')" style="opacity:0.4; font-size: 12px;">← Back</button>
 </div>
 
@@ -2407,7 +2408,7 @@ function renderRoom() {
 // ==================== 0. DOOR / RETURN (communal iPad) ====================
 function freshState() {
   state.user=''; state.returning=null; state.avatar=null; state.intention=''; state.preFeelings=[]; state.preScores={}; state.postScores={};
-  state.insight=''; state.instrument=null; state.instruments=[]; state.phenomena=[]; state.shiftWords=[];
+  state.insight=''; state.insightShare=false; state.instrument=null; state.instruments=[]; state.phenomena=[]; state.shiftWords=[];
 }
 function resetForNext() {
   freshState();
@@ -2797,6 +2798,9 @@ function addCustomInstrument() {
   haptic('medium');
 }
 
+// insight: only shared ones can appear in the room's follow-up email (Marcus, Nov 4: if it's not ticked, it stays private)
+function setInsightShare(share) { state.insightShare = !!share; showScreen('s-postharvest'); }
+
 function submitPostCheckin() {
   // Capture post-scores
   CATEGORIES.forEach(cat => {
@@ -2816,6 +2820,7 @@ function submitPostCheckin() {
     preScores: { ...state.preScores },
     postScores: { ...state.postScores },
     insight: state.insight,
+    insightShare: state.insightShare === true,
     feedback: state.feedback,
     instrument: state.instrument,
     instruments: [...state.instruments],
