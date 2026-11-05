@@ -4266,7 +4266,7 @@ if (new URLSearchParams(window.location.search).get('reset') === 'true') {
 // loadDemo(); // disabled — only use for testing
 </script>
 <!-- MAT sync test (Nov 4 2026): hidden. Open with ?test or triple-tap the top-left corner. Writes to sessions/<id>/pings only, never to real check-ins. -->
-<div id="mat-st-hot" style="position:fixed;top:0;left:0;width:56px;height:56px;z-index:99998"></div>
+<div id="mat-st-hot" style="position:fixed;top:0;left:0;width:56px;height:56px;z-index:99998;cursor:pointer;-webkit-tap-highlight-color:transparent" onclick="void(0)"></div>
 <div id="mat-st" style="display:none;position:fixed;right:12px;bottom:12px;z-index:99999;font:15px -apple-system,Arial,sans-serif;text-align:right">
   <div id="mat-st-msg" style="background:rgba(14,21,34,.92);color:#f3ead2;border-radius:10px;padding:6px 10px;margin-bottom:6px;display:none"></div>
   <button id="mat-st-btn" style="background:#d2a44e;color:#0e1522;border:0;border-radius:999px;padding:12px 18px;font-weight:700;font-size:15px">⚡ Sync test</button>
@@ -4276,7 +4276,7 @@ if (new URLSearchParams(window.location.search).get('reset') === 'true') {
   var box=document.getElementById('mat-st'), msg=document.getElementById('mat-st-msg');
   function show(){box.style.display='block';}
   if(new URLSearchParams(location.search).has('test')) show();
-  var taps=[];document.getElementById('mat-st-hot').addEventListener('click',function(){var t=Date.now();taps=taps.filter(function(x){return t-x<1200;});taps.push(t);if(taps.length>=3){box.style.display=box.style.display==='none'?'block':'none';taps=[];}});
+  var taps=[];var hot=document.getElementById('mat-st-hot');function hotTap(e){if(e&&e.type==='touchend')e.preventDefault();var t=Date.now();taps=taps.filter(function(x){return t-x<1200;});taps.push(t);if(taps.length>=3){box.style.display=box.style.display==='none'?'block':'none';taps=[];}}hot.addEventListener('touchend',hotTap,{passive:false});hot.addEventListener('click',hotTap);
   document.getElementById('mat-st-btn').addEventListener('click',function(){
     msg.style.display='block';msg.textContent='Sending…';
     try{
