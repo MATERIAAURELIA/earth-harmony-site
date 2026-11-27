@@ -1980,20 +1980,66 @@ function joinSession(code) {
 }
 
 function pushCheckin(data) {
-  // Push to session in Firebase
-  const ref = db.ref('sessions/' + sessionId + '/checkins');
-  ref.push(data);
-  // Also save to user profile for cross-session history
-  if (state.user) {
-    const userKey = state.user.toLowerCase().replace(/[^a-z0-9]/g, '_');
-    db.ref('users/' + userKey + '/checkins').push(data);
-    db.ref('users/' + userKey + '/profile').update({
-      displayName: state.user,
-      lastSeen: Date.now(),
-      lastSession: sessionId
-    });
+  // OUTBOX (Nov 26): every record is kept on the device until Firebase confirms it.
+  // Fixes lost check-outs when Wi-Fi blinks or the screen closes mid-save.
+  try {
+    if (!data._k) data._k = db.ref('sessions/' + sessionId + '/checkins').push().key;
+    var ob = JSON.parse(localStorage.getItem('ehp_outbox') || '[]');
+    if (!ob.some(function(x){ return x._k === data._k; })) ob.push(data);
+    localStorage.setItem('ehp_outbox', JSON.stringify(ob));
+  } catch (e) { console.warn('outbox save failed', e); }
+  flushOutbox();
+}
+var _flushing = false;
+var _saveSince = 0;
+function setSaveBadge(n) {
+  // FEEDBACK LOOP (Marcus, Nov 26): the guest SEES their journey land in the cloud.
+  var b = document.getElementById('saveBadge');
+  if (!b) { b = document.createElement('div'); b.id = 'saveBadge';
+    b.style.cssText = 'position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:9999;max-width:90%;text-align:center;font:17px Cinzel,serif;letter-spacing:1px;padding:14px 22px;border-radius:18px;background:rgba(14,21,34,.95);border:1px solid var(--gold);color:var(--gold);box-shadow:0 0 24px rgba(212,175,55,.25);transition:opacity .6s';
+    document.body.appendChild(b); }
+  clearTimeout(b._t);
+  if (n > 0) {
+    if (!_saveSince) _saveSince = Date.now();
+    var slow = Date.now() - _saveSince > 20000;
+    b.style.borderColor = slow ? '#e0a050' : 'var(--gold)';
+    b.innerHTML = slow
+      ? '⚠ Still saving your journey…<div style="font-size:13px;opacity:.85;margin-top:4px">Wi-Fi is slow. Please leave this screen open, it will keep trying.</div>'
+      : '… Saving your journey<div style="font-size:13px;opacity:.8;margin-top:4px">please keep this screen open a moment</div>';
+    b.style.opacity = '1';
+  } else {
+    _saveSince = 0;
+    b.style.borderColor = '#7fd3a0'; b.style.color = '#bff0cf';
+    b.innerHTML = '✓ Your journey is saved<div style="font-size:13px;opacity:.8;margin-top:4px">thank you for sharing</div>';
+    b.style.opacity = '1';
+    b._t = setTimeout(function(){ b.style.opacity = '0'; b.style.borderColor = 'var(--gold)'; b.style.color = 'var(--gold)'; }, 5000);
   }
 }
+function flushOutbox() {
+  var ob; try { ob = JSON.parse(localStorage.getItem('ehp_outbox') || '[]'); } catch (e) { return; }
+  if (!ob.length) { return; }
+  if (_flushing) { setSaveBadge(ob.length); return; }
+  _flushing = true; setSaveBadge(ob.length);
+  var jobs = ob.map(function(d) {
+    var rec = Object.assign({}, d); delete rec._k;
+    var w = [db.ref('sessions/' + d.session + '/checkins/' + d._k).set(rec)];
+    if (d.name) {
+      var userKey = d.name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      w.push(db.ref('users/' + userKey + '/checkins/' + d._k).set(rec));
+      w.push(db.ref('users/' + userKey + '/profile').update({ displayName: d.name, lastSeen: Date.now(), lastSession: d.session }));
+    }
+    return Promise.all(w).then(function(){ return d._k; }, function(err){ console.warn('save retry later', err); return null; });
+  });
+  Promise.all(jobs).then(function(done) {
+    var ok = done.filter(Boolean);
+    try { var cur = JSON.parse(localStorage.getItem('ehp_outbox') || '[]').filter(function(x){ return ok.indexOf(x._k) < 0; });
+      localStorage.setItem('ehp_outbox', JSON.stringify(cur)); setSaveBadge(cur.length); } catch (e) {}
+    _flushing = false;
+  });
+}
+setInterval(flushOutbox, 15000);
+window.addEventListener('online', flushOutbox);
+try { db.ref('.info/connected').on('value', function(s){ if (s.val() === true) flushOutbox(); }); } catch (e) {}
 
 // Auto-join session from URL or localStorage
 try { joinSession(sessionId); } catch (e) { console.warn("joinSession failed", e); }
@@ -2365,7 +2411,7 @@ setTimeout(fitScreens, 0);
 
 
 // ==================== REFRESH / RESET (Oct 10) ====================
-var PORTAL_VERSION = '13';
+var PORTAL_VERSION = '14';
 function hardReset() {
   try { ['ehp_session','ehp_username','ehp_data','ehp_community'].forEach(function(k){ localStorage.removeItem(k); }); } catch(e) {}
   location.replace(location.pathname + '?v=' + Date.now());
