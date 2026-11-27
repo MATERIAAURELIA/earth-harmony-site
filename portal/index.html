@@ -2032,15 +2032,45 @@ function flushOutbox() {
       w.push(db.ref('users/' + userKey + '/checkins/' + d._k).set(rec));
       w.push(db.ref('users/' + userKey + '/profile').update({ displayName: d.name, lastSeen: Date.now(), lastSession: d.session }));
     }
-    return Promise.all(w).then(function(){ return d._k; }, function(err){ console.warn('save retry later', err); return null; });
+    return Promise.all(w).then(function(){ return db.ref('sessions/' + d.session + '/checkins/' + d._k).once('value'); })
+      .then(function(snap){ if (snap && snap.exists()) { _landed[d._k] = true; return d._k; } return null; }, function(err){ console.warn('save retry later', err); return null; });
   });
   Promise.all(jobs).then(function(done) {
     var ok = done.filter(Boolean);
     try { var cur = JSON.parse(localStorage.getItem('ehp_outbox') || '[]').filter(function(x){ return ok.indexOf(x._k) < 0; });
       localStorage.setItem('ehp_outbox', JSON.stringify(cur)); setSaveBadge(cur.length); } catch (e) {}
+    updateCloudStatus();
     _flushing = false;
   });
 }
+var _landed = {}; var _lastMine = null; var _room = {ins: 0, outs: 0};
+// LANDED INDICATOR (Marcus, Nov 26): after "done", show proof the journey is IN the cloud (read back), not just sent.
+function updateCloudStatus() {
+  var ob = []; try { ob = JSON.parse(localStorage.getItem('ehp_outbox') || '[]'); } catch (e) {}
+  var r = document.getElementById('cloudStatus');
+  if (r && _lastMine) {
+    if (_landed[_lastMine]) { r.innerHTML = '\u2601\ufe0f\u2713 Landed in the cloud'; r.style.color = '#bff0cf'; r.style.borderColor = '#7fd3a0'; }
+    else { r.innerHTML = '\u2601\ufe0f Sending to the cloud\u2026'; r.style.color = 'var(--gold)'; r.style.borderColor = 'var(--gold)'; }
+  }
+  var h = document.getElementById('cloudRoom');
+  if (h) h.textContent = 'In the cloud tonight: ' + _room.ins + ' arrived \u00b7 ' + _room.outs + ' checked out' + (ob.length ? ' \u00b7 \u26a0 ' + ob.length + ' waiting on this iPad' : ' \u00b7 nothing waiting \u2713');
+}
+function watchCloudRoom() {
+  try { db.ref('sessions/' + sessionId + '/checkins').on('value', function(s){
+    var v = s.val() || {}; var ins = {}, outs = {};
+    Object.keys(v).forEach(function(k){ var d = v[k] || {}; var n = (d.name || '').toLowerCase(); if (d.type === 'checkin') ins[n] = 1; if (d.type === 'complete') outs[n] = 1; /* never mark landed here: the listener also sees unsent local writes */ });
+    _room = {ins: Object.keys(ins).length, outs: Object.keys(outs).length}; updateCloudStatus();
+  }); } catch (e) {}
+}
+document.addEventListener('DOMContentLoaded', function(){
+  var v = document.getElementById('verTag');
+  if (v && !document.getElementById('cloudRoom')) { var h = document.createElement('div'); h.id = 'cloudRoom'; h.style.cssText = 'font-size:12px;opacity:.6;margin-top:4px;'; v.parentNode.insertBefore(h, v.nextSibling); }
+  var res = document.getElementById('s-results');
+  if (res && !document.getElementById('cloudStatus')) { var c = document.createElement('div'); c.id = 'cloudStatus';
+    c.style.cssText = 'margin:10px auto 4px;display:table;padding:8px 16px;border:1px solid var(--gold);border-radius:14px;font:15px Cinzel,serif;letter-spacing:1px;color:var(--gold);';
+    res.insertBefore(c, res.firstChild); }
+  watchCloudRoom(); updateCloudStatus();
+});
 setInterval(flushOutbox, 15000);
 window.addEventListener('online', flushOutbox);
 try { db.ref('.info/connected').on('value', function(s){ if (s.val() === true) flushOutbox(); }); } catch (e) {}
@@ -2415,7 +2445,7 @@ setTimeout(fitScreens, 0);
 
 
 // ==================== REFRESH / RESET (Oct 10) ====================
-var PORTAL_VERSION = '15';
+var PORTAL_VERSION = '16';
 function hardReset() {
   try { ['ehp_session','ehp_username','ehp_data','ehp_community'].forEach(function(k){ localStorage.removeItem(k); }); } catch(e) {}
   location.replace(location.pathname + '?v=' + Date.now());
@@ -2881,6 +2911,7 @@ function submitPostCheckin() {
   };
   allData.push(completeData);
   pushCheckin(completeData);
+  _lastMine = completeData._k; updateCloudStatus();
 
   // Update community profile
   let profile = community.find(c => c.name.toLowerCase() === state.user.toLowerCase());
